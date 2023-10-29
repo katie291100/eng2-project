@@ -1,0 +1,94 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.0.4"
+    id("io.micronaut.test-resources") version "4.0.4"
+    id("io.micronaut.aot") version "4.0.4"
+    id("jacoco")
+
+}
+
+version = "0.1"
+group = "uk.ac.york.eng2.videos"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    testImplementation 'org.mockito:mockito-junit-jupiter'
+
+    // HTTP request validation
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    implementation("io.micronaut.validation:micronaut-validation")
+    // Data mapping via Hibernate and JPA to a MariaDB database
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation("io.micronaut.sql:micronaut-hibernate-jpa")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+
+    // Declarative HTTP client and circuit breaker
+    implementation("io.micronaut:micronaut-http-client")
+
+    // Basic Kafka support
+    implementation("io.micronaut.kafka:micronaut-kafka")
+
+    // Kafka Streams support (requires having at least one stream, or build will fail)
+    implementation("io.micronaut.kafka:micronaut-kafka-streams")
+
+    // Logging via Logback
+    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.yaml:snakeyaml")
+    // Type hints for native-image
+    annotationProcessor("io.micronaut:micronaut-graal")
+    compileOnly("org.graalvm.nativeimage:svm")
+    testImplementation("org.awaitility:awaitility:4.2.0")
+
+    // Caching and any other useful data structures
+    implementation("com.google.guava:guava:32.1.2-jre")
+}
+
+application {
+    mainClass.set("uk.ac.york.eng2.videos.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("uk.ac.york.eng2.videos.*")
+    }
+    testResources {
+        sharedServer = true
+    }
+    aot {
+        // Please review carefully the optimizations enabled below
+        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+    }
+}
+
+test{
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+}
+
+
