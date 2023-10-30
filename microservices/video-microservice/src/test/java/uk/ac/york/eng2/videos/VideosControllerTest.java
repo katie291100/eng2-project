@@ -2,25 +2,28 @@ package uk.ac.york.eng2.videos;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.annotation.Body;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import uk.ac.york.eng2.videos.domain.Hashtag;
 import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
 
 import uk.ac.york.eng2.videos.events.VideoProducer;
+import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
 import uk.ac.york.eng2.videos.repositories.UsersRepository;
 import uk.ac.york.eng2.videos.repositories.VideosRepository;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@MicronautTest(transactional = false, environments = "no_streams")
+@MicronautTest(transactional = false)
 public class VideosControllerTest {
 
     @Inject
@@ -32,21 +35,54 @@ public class VideosControllerTest {
     @Inject
     UsersRepository userRepo;
 
+    @Inject
+    HashtagsRepository hashtagsRepo;
+
     User poster = new User();
+    Hashtag hashtag = new Hashtag();
 
     Map<Long, Video> postsAdded = new java.util.HashMap<>();
     @MockBean(VideoProducer.class)
     VideoProducer videoProducer() {
-        return (key, value) -> { postsAdded.put(key, value); };
-    }
+        return new VideoProducer() {
+            @Override
+            public void postVideo(Long key, Video b) {
+                postsAdded.put(key, b);
+            }
 
-    @BeforeEach()
+            @Override
+            public void watchVideo(Long key, Video b) {
+                postsAdded.put(key, b);
+
+            }
+
+            @Override
+            public void likeVideo(Long key, Video b) {
+                postsAdded.put(key, b);
+
+            }
+
+            @Override
+            public void dislikeVideo(Long key, Video b) {
+                postsAdded.put(key, b);
+
+            }
+            };
+        };
+
+
+    @BeforeEach
     void setup() {
         videosRepo.deleteAll();
         userRepo.deleteAll();
+        hashtagsRepo.deleteAll();
         postsAdded.clear();
         poster.setName("Test User");
-        userRepo.save(poster);}
+        userRepo.save(poster);
+
+        hashtag.setName("hashtag1");
+        hashtagsRepo.save(hashtag);
+    }
 
 
     @Test
@@ -91,13 +127,16 @@ public class VideosControllerTest {
         video1.setTitle("Test Video1");
         video1.setPostedBy(poster);
 
+        HashSet<Hashtag> hashtags = new HashSet<>();
+        hashtags.add(hashtag);
+        video1.setHashtags(hashtags);
+
         Video video2 = new Video();
         video2.setTitle("Test Video2");
         video2.setPostedBy(poster);
 
-        videosRepo.save(video1);
+        video1 = videosRepo.save(video1);
         videosRepo.save(video2);
-        System.out.println(client.list().toString());
 
         assertEquals(video1.getId(), client.getVideo(video1.getId()).getId());
         assertEquals(video1.getTitle(), client.getVideo(video1.getId()).getTitle());
@@ -108,7 +147,7 @@ public class VideosControllerTest {
         Video video = new Video();
         video.setTitle("Test Video");
         video.setPostedBy(poster);
-        videosRepo.save(video);
+        video = videosRepo.save(video);
 
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video2");
@@ -123,6 +162,38 @@ public class VideosControllerTest {
         else{
             assert false;
         }
+
+    }
+
+    @Test
+    public void updateVideoNoVideo() {
+        VideoDTO videoDTO = new VideoDTO();
+        videoDTO.setTitle("Test Video2");
+
+        HttpResponse<Void> response = client.updateVideo(1L, videoDTO);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
+    }
+
+    @Test
+    public void listVideosByHashtag(){
+
+        Video video = new Video();
+        video.setTitle("Test Video");
+        Video video2 = new Video();
+        video2.setTitle("Test Video2");
+
+        HashSet<Hashtag> hashtags = new HashSet<>();
+        hashtags.add(hashtag);
+        video.setHashtags(hashtags);
+        videosRepo.save(video);
+        videosRepo.save(video2);
+
+        List<Video> iterVideos = client.listVideosByHashtag("hashtag1");
+
+        assertEquals(1, iterVideos.size());
+        assertTrue(iterVideos.get(0).getHashtags().contains(hashtag));
+        assertEquals("Test Video", iterVideos.get(0).getTitle());
 
     }
 

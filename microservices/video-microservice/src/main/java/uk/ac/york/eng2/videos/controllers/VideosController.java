@@ -3,7 +3,9 @@ package uk.ac.york.eng2.videos.controllers;
 
 import java.net.URI;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
@@ -37,15 +39,19 @@ public class VideosController {
     }
 
     @Get("/hashtag/{hashtag}")
-    public Iterable<Video> listVideosByHashtag( String hashtag) {
-        Iterable<Video> videos = repo.findAll();
-        videos.iterator();
-        return repo.findAll();
+    public List<Video> listVideosByHashtag(String hashtag) {
+        Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).orElse(null);
+        if (hashtagRecord == null){
+            return null;
+        }
+        List<Video> videos = repo.findAll();
+        Stream<Video> filteredVideos = videos.stream().filter(video -> video.getHashtags().contains(hashtagRecord));
+
+        return videos;
     }
 
     @Get("/{id}") //TODO: make return 404 if not found?
     public Video getVideo(Long id) {
-
         return repo.findById(id).orElse(null);
     }
 
@@ -55,14 +61,17 @@ public class VideosController {
         System.out.println(videoDetails.getHashtags());
 
         Set<Hashtag> hashtags = new HashSet<>();
-        for (HashtagDTO hashtag : videoDetails.getHashtags()) {
-            Hashtag hashtagEntity = hashtagRepo.findByName(hashtag.getName()).orElse(null);
-            if (hashtagEntity == null) {
-                hashtagEntity = new Hashtag();
-                hashtagEntity.setName(hashtag.getName());
-                hashtagRepo.save(hashtagEntity);
+        Iterable<HashtagDTO> hashtagDTOs = videoDetails.getHashtags();
+        if (hashtagDTOs != null){
+            for (HashtagDTO hashtag : hashtagDTOs) {
+                Hashtag hashtagEntity = hashtagRepo.findByName(hashtag.getName()).orElse(null);
+                if (hashtagEntity == null) {
+                    hashtagEntity = new Hashtag();
+                    hashtagEntity.setName(hashtag.getName());
+                    hashtagRepo.save(hashtagEntity);
+                }
+                hashtags.add(hashtagEntity);
             }
-            hashtags.add(hashtagEntity);
         }
 
         Video video = new Video();
@@ -100,7 +109,6 @@ public class VideosController {
 
             videoRecord.setPostedBy(poster);
         }
-
         repo.update(videoRecord);
         return HttpResponse.ok();
     }

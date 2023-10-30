@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
 
+import java.util.List;
+
 @Client("/videos")
 public interface VideosClient {
     @Get("/")
@@ -23,4 +25,7 @@ public interface VideosClient {
 
     @Put("/{id}")
     HttpResponse<Void> updateVideo(Long id, @Body VideoDTO video);
+
+    @Get("/hashtag/{hashtag}")
+    List<Video> listVideosByHashtag(String hashtag);
 }
