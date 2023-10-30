@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +18,10 @@ public class Video {
 
     @Column(nullable = false)
     private String title;
+
+
+    @ManyToMany
+    private Set<Hashtag> hashtags;
 
     @ManyToOne
     private User postedBy;
@@ -69,5 +74,13 @@ public class Video {
 
     public void setPostedBy(User poster) {
         this.postedBy = poster;
+    }
+
+    public Set<Hashtag> getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(Set<Hashtag> hashtags) {
+        this.hashtags = hashtags;
     }
 }

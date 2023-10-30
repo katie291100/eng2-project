@@ -12,4 +12,9 @@ public class VideoConsumer {
     void notifyNewVdeo(@KafkaKey long id, Video video) {
         System.out.printf("video posted: %s %s", id, video.getTitle());
     }
+
+    @Topic("new-video")
+    void notifyWatchedVideo(@KafkaKey long id, Video video) {
+        System.out.printf("video watched by user: %s with title: %s", id, video.getTitle());
+    }
 }

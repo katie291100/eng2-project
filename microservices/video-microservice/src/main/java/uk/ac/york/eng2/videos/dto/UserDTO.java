@@ -10,8 +10,6 @@ public class UserDTO {
 
     private String name;
 
-    private Set<Video> watchedVideos;
-
     public String getName() {
         return name;
     }
@@ -20,11 +18,5 @@ public class UserDTO {
         this.name = name;
     }
 
-    public Set<Video> getWatchedVideos() {
-        return watchedVideos;
-    }
 
-    public void setWatchedVideos(Set<Video> watchedVideos) {
-        this.watchedVideos = watchedVideos;
-    }
 }

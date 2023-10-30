@@ -14,7 +14,7 @@ import org.apache.kafka.streams.kstream.*;
 import uk.ac.york.eng2.videos.domain.Video;
 
 @Factory
-public class BooksStream {
+public class VideoStream {
     @Inject
     private CompositeSerdeRegistry serdeRegistry;
 
