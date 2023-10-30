@@ -3,6 +3,7 @@ package uk.ac.york.eng2.videos.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -19,9 +20,14 @@ public class Video {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private Long likes = 0L;
+
+    @Column(nullable = false)
+    private Long dislikes = 0L;
 
     @ManyToMany
-    private Set<Hashtag> hashtags;
+    private Set<Hashtag> hashtags = new HashSet<>();
 
     @ManyToOne
     private User postedBy;
@@ -83,4 +89,21 @@ public class Video {
     public void setHashtags(Set<Hashtag> hashtags) {
         this.hashtags = hashtags;
     }
+
+    public Long getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Long likes) {
+        this.likes = likes;
+    }
+
+    public Long getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(Long dislikes) {
+        this.dislikes = dislikes;
+    }
+
 }

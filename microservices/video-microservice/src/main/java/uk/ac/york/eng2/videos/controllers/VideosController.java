@@ -30,8 +30,16 @@ public class VideosController {
     @Inject
     private HashtagsRepository hashtagRepo;
 
+    @Transactional
     @Get("/")
     public Iterable<Video> listVideos() {
+        return repo.findAll();
+    }
+
+    @Get("/hashtag/{hashtag}")
+    public Iterable<Video> listVideosByHashtag( String hashtag) {
+        Iterable<Video> videos = repo.findAll();
+        videos.iterator();
         return repo.findAll();
     }
 
@@ -48,7 +56,6 @@ public class VideosController {
 
         Set<Hashtag> hashtags = new HashSet<>();
         for (HashtagDTO hashtag : videoDetails.getHashtags()) {
-            System.out.println("Making hashtag");
             Hashtag hashtagEntity = hashtagRepo.findByName(hashtag.getName()).orElse(null);
             if (hashtagEntity == null) {
                 hashtagEntity = new Hashtag();
@@ -95,6 +102,42 @@ public class VideosController {
         }
 
         repo.update(videoRecord);
+        return HttpResponse.ok();
+    }
+
+    @Transactional
+    @Put("/{id}/like/{userId}")
+    public HttpResponse<Void> likeVideo(long id, long userId) {
+        Video videoRecord = repo.findById(id).orElse(null);
+
+        if (videoRecord == null) {
+            return HttpResponse.notFound();
+        }
+        if (videoRecord.getTitle() != null) {
+            videoRecord.setLikes(videoRecord.getLikes() + 1);
+        }
+
+        repo.update(videoRecord);
+        kafkaClient.likeVideo(userId, videoRecord);
+        return HttpResponse.ok();
+    }
+
+
+    @Transactional
+    @Put("/{id}/dislike/{userId}")
+    public HttpResponse<Void> dislikeVideo(long id, long userId) {
+        Video videoRecord = repo.findById(id).orElse(null);
+
+        if (videoRecord == null) {
+            return HttpResponse.notFound();
+        }
+        if (videoRecord.getTitle() != null) {
+            videoRecord.setDislikes(videoRecord.getDislikes() + 1);
+        }
+
+        repo.update(videoRecord);
+        kafkaClient.dislikeVideo(userId, videoRecord);
+
         return HttpResponse.ok();
     }
 

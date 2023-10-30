@@ -8,11 +8,6 @@ import java.util.Set;
 
 @Serdeable
 public record HashtagDTO(String name) {
-    public HashtagDTO {
-        if (name == null) {
-            throw new IllegalArgumentException("name cannot be null");
-        }
-    }
 
     public String getName() {
         return name;

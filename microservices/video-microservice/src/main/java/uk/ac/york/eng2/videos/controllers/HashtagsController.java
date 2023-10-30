@@ -19,6 +19,7 @@ import java.net.URI;
 @Controller("/hashtags")
 public class HashtagsController {
 
+    @Inject
     HashtagsRepository repo;
 
     @Get("/")

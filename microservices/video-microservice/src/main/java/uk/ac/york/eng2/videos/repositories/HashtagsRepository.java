@@ -10,6 +10,5 @@ import java.util.Optional;
 @Repository
 public interface HashtagsRepository extends CrudRepository<Hashtag, Long> {
 
-
     Optional<Hashtag> findByName(String name);
 }
