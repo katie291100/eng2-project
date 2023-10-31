@@ -1,4 +1,0 @@
-kafka:
-    streams:
-        default:
-            start-kafka-streams: false

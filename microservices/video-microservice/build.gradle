@@ -38,8 +38,8 @@ dependencies {
     // Basic Kafka support
     implementation("io.micronaut.kafka:micronaut-kafka")
 
-    // Kafka Streams support (requires having at least one stream, or build will fail)
-    implementation("io.micronaut.kafka:micronaut-kafka-streams")
+//    // Kafka Streams support (requires having at least one stream, or build will fail)
+//    implementation("io.micronaut.kafka:micronaut-kafka-streams")
 
     // Logging via Logback
     runtimeOnly("ch.qos.logback:logback-classic")
