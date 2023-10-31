@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: videoMicroservice
+  serde:
+    maximum-nesting-depth: 100
 datasources:
   default:
     driver-class-name: org.mariadb.jdbc.Driver

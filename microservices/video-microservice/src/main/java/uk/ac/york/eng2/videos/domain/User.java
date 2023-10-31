@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
+import java.util.HashSet;
 import java.util.Set;
 import jakarta.persistence.*;
 
@@ -24,7 +25,7 @@ public class User {
 
     @JsonIgnore
     @ManyToMany
-    private Set<Video> watchedVideos;
+    private Set<Video> watchedVideos = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "postedBy")
@@ -49,6 +50,10 @@ public class User {
 
     public Set<Video> getWatchedVideos() {
         return watchedVideos;
+    }
+
+    public void addWatchedVideo(Video watchedVideo) {
+        watchedVideos.add(watchedVideo);
     }
 
     public void setWatchedVideos(Set<Video> watchedVideos) {

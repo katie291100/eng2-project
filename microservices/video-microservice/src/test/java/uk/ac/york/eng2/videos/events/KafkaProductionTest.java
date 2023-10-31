@@ -11,7 +11,7 @@ import jakarta.inject.Inject;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import uk.ac.york.eng2.videos.VideosClient;
+import uk.ac.york.eng2.videos.clients.VideosClient;
 import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
@@ -24,7 +24,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@MicronautTest(transactional = false, environments = "no_streams")
+@MicronautTest(transactional = false)
 @Property(name = "spec.name", value = "KafkaProductionTest")
 public class KafkaProductionTest {
 

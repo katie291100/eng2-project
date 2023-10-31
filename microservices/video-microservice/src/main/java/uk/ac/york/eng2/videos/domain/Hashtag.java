@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
 import java.util.Set;
-import jakarta.persistence.*;
 
 @Serdeable
 @Entity
@@ -53,5 +52,14 @@ public class Hashtag {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Hashtag)) {
+            return false;
+        }
+        Hashtag hashtag = (Hashtag) o;
+        return hashtag.getId().equals(this.getId());
     }
 }

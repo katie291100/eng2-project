@@ -1,11 +1,9 @@
-package uk.ac.york.eng2.videos;
+package uk.ac.york.eng2.videos.clients;
 
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.*;
 import io.micronaut.http.client.annotation.Client;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
@@ -28,4 +26,13 @@ public interface VideosClient {
 
     @Get("/hashtag/{hashtag}")
     List<Video> listVideosByHashtag(String hashtag);
+
+    @Put("/{id}/like/{userId}")
+    HttpResponse<Void> likeVideo(Long id, Long userId);
+
+    @Put("/{id}/dislike/{userId}")
+    HttpResponse<Void> dislikeVideo(Long id, Long userId);
+
+    @Delete("/{id}")
+    HttpResponse<Void> deleteVideo(Long id);
 }

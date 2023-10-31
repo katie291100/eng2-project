@@ -45,8 +45,7 @@ public class VideosController {
             return null;
         }
         List<Video> videos = repo.findAll();
-        Stream<Video> filteredVideos = videos.stream().filter(video -> video.getHashtags().contains(hashtagRecord));
-
+        videos.removeIf(video -> !video.getHashtags().stream().toList().contains(hashtagRecord));
         return videos;
     }
 
@@ -117,8 +116,9 @@ public class VideosController {
     @Put("/{id}/like/{userId}")
     public HttpResponse<Void> likeVideo(long id, long userId) {
         Video videoRecord = repo.findById(id).orElse(null);
+        User userRecord = userRepo.findById(userId).orElse(null);
 
-        if (videoRecord == null) {
+        if (videoRecord == null || userRecord == null) {
             return HttpResponse.notFound();
         }
         if (videoRecord.getTitle() != null) {
@@ -135,8 +135,9 @@ public class VideosController {
     @Put("/{id}/dislike/{userId}")
     public HttpResponse<Void> dislikeVideo(long id, long userId) {
         Video videoRecord = repo.findById(id).orElse(null);
+        User userRecord = userRepo.findById(userId).orElse(null);
 
-        if (videoRecord == null) {
+        if (videoRecord == null || userRecord == null) {
             return HttpResponse.notFound();
         }
         if (videoRecord.getTitle() != null) {

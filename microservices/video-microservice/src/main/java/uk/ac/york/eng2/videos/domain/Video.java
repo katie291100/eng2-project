@@ -29,7 +29,7 @@ public class Video {
     @ManyToMany
     private Set<Hashtag> hashtags = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User postedBy;
 
     @JsonIgnore
