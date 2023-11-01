@@ -16,6 +16,7 @@ import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.HashtagDTO;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
+import uk.ac.york.eng2.videos.events.HashtagProducer;
 import uk.ac.york.eng2.videos.events.VideoProducer;
 import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
 import uk.ac.york.eng2.videos.repositories.UsersRepository;
@@ -31,6 +32,9 @@ public class VideosController {
     private VideoProducer kafkaClient;
     @Inject
     private HashtagsRepository hashtagRepo;
+
+    @Inject
+    private HashtagProducer hashtagKafkaClient;
 
     @Transactional
     @Get("/")
@@ -127,6 +131,10 @@ public class VideosController {
 
         repo.update(videoRecord);
         kafkaClient.likeVideo(userId, videoRecord);
+
+        videoRecord.getHashtags().stream().toList().forEach(hashtag -> {
+            hashtagKafkaClient.likeHashtag(hashtag.getId(), hashtag);
+        });
         return HttpResponse.ok();
     }
 

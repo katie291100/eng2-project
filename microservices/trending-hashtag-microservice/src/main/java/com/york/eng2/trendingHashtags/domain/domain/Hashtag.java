@@ -1,12 +1,8 @@
-package uk.ac.york.eng2.videos.domain;
+package com.york.eng2.trendingHashtags.domain.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.Set;
 
@@ -62,5 +58,4 @@ public class Hashtag {
         Hashtag hashtag = (Hashtag) o;
         return hashtag.getId().equals(this.getId());
     }
-
 }

@@ -1,0 +1,26 @@
+micronaut:
+  application:
+    name: trendingHashtagMicroservice
+  serde:
+    maximum-nesting-depth: 100
+  server:
+    port: 8082
+jpa:
+  default:
+    entity-scan:
+      packages:
+        - uk.ac.york.eng2.trendingHashtags.domain
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+netty:
+  default:
+    allocator:
+      max-order: 3
+kafka:
+  bootstrap:
+    servers:
+      - localhost:9094
+      - localhost:9095
+      - localhost:9096
