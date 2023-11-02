@@ -1,4 +1,4 @@
-package com.york.eng2.trendingHashtags.domain.domain;
+package com.york.eng2.trendingHashtags.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;

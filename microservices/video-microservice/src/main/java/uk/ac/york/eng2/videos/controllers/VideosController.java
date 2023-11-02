@@ -44,10 +44,13 @@ public class VideosController {
 
     @Get("/hashtag/{hashtag}")
     public List<Video> listVideosByHashtag(String hashtag) {
-        Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).orElse(null);
-        if (hashtagRecord == null){
+        try{
+            Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).get(0);
+        }catch (Exception e){
             return null;
         }
+        Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).get(0);
+
         List<Video> videos = repo.findAll();
         videos.removeIf(video -> !video.getHashtags().stream().toList().contains(hashtagRecord));
         return videos;
@@ -67,7 +70,14 @@ public class VideosController {
         Iterable<HashtagDTO> hashtagDTOs = videoDetails.getHashtags();
         if (hashtagDTOs != null){
             for (HashtagDTO hashtag : hashtagDTOs) {
-                Hashtag hashtagEntity = hashtagRepo.findByName(hashtag.getName()).orElse(null);
+                Hashtag hashtagEntity;
+
+                try{
+                    hashtagEntity = hashtagRepo.findByName(hashtag.getName()).get(0);
+                }catch (Exception e){
+                    hashtagEntity = null;
+                }
+
                 if (hashtagEntity == null) {
                     hashtagEntity = new Hashtag();
                     hashtagEntity.setName(hashtag.getName());
@@ -133,7 +143,7 @@ public class VideosController {
         kafkaClient.likeVideo(userId, videoRecord);
 
         videoRecord.getHashtags().stream().toList().forEach(hashtag -> {
-            hashtagKafkaClient.likeHashtag(hashtag.getId(), hashtag);
+            kafkaClient.likeHashtag(hashtag.getId(), hashtag);
         });
         return HttpResponse.ok();
     }

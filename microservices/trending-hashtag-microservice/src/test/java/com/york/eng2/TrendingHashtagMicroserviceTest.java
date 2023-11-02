@@ -18,4 +18,5 @@ class TrendingHashtagMicroserviceTest {
         Assertions.assertTrue(application.isRunning());
     }
 
+
 }

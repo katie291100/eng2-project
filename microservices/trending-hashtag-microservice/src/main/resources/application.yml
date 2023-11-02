@@ -9,7 +9,7 @@ jpa:
   default:
     entity-scan:
       packages:
-        - uk.ac.york.eng2.trendingHashtags.domain
+        - com.york.eng2.trendingHashtags.domain
     properties:
       hibernate:
         hbm2ddl:
