@@ -11,7 +11,6 @@ import java.util.Set;
 public class Hashtag {
 
     @Id
-    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)

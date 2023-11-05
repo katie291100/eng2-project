@@ -11,7 +11,22 @@ services:
       - mariadb_data:/var/lib/mysql
     ports:
       - 3306:3306
+  db2:
+    image: mariadb:11
+    environment:
+      MARIADB_USER: &dbuser todo
+      MARIADB_PASSWORD: &dbpass todosecret
+      MARIADB_ROOT_PASSWORD: iamroot
+      MARIADB_DATABASE: &dbname hashtags
+      MYSQL_TCP_PORT: 3307
+      MYSQL_UNIX_PORT: 3307
 
+    volumes:
+      - mariadb_data2:/var/lib/mysql
+    ports:
+      - 3307:3307
+    depends_on:
+      - db
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     ports:
@@ -106,3 +121,4 @@ volumes:
   kafka_0_data:
   kafka_1_data:
   kafka_2_data:
+  mariadb_data2:
