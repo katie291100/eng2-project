@@ -2,5 +2,3 @@ kafka:
   streams:
     default:
       start-kafka-streams: false
-videos:
-  url: /videos

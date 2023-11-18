@@ -4,9 +4,6 @@ jpa:
       hibernate:
         hbm2ddl:
           auto: create-drop
-videos:
-  url: /videos
-
 kafka:
   default:
     embedded:

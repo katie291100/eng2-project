@@ -2,6 +2,7 @@ package com.york.eng2.trendingHashtags.events;
 
 import com.york.eng2.WindowedIdentifier;
 import com.york.eng2.trendingHashtags.domain.Hashtag;
+import com.york.eng2.trendingHashtags.domain.Video;
 import com.york.eng2.trendingHashtags.repositories.HashtagsRepository;
 import io.micronaut.configuration.kafka.serde.CompositeSerdeRegistry;
 import io.micronaut.configuration.kafka.streams.ConfiguredStreamBuilder;
@@ -47,7 +48,8 @@ public class ExampleFactory {
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Long().getClass().getName());
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Long().getClass().getName());
         Materialized<Long, Long, KeyValueStore<Bytes, byte[]>> materialized = Materialized.as("trending-hashtag-store");
-        KStream<WindowedIdentifier, Long> stream = builder.stream("liked-hashtag", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Hashtag.class)))
+        KStream<WindowedIdentifier, Long> stream = builder.stream("like-video", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Video.class)))
+                .flatMapValues(Video::getHashtags)
                 .flatMap((key, value) -> {
                     @NonNull List<Hashtag> hashtags = hashtagsRepository.findAll();
 
@@ -60,7 +62,6 @@ public class ExampleFactory {
                             hashtagMap.add(new KeyValue<>(hashtag.getId(), 0L));
                         }
                     }
-
                     return hashtagMap;
                 })
                 .groupByKey(Grouped.with(Serdes.Long(), Serdes.Long()))
