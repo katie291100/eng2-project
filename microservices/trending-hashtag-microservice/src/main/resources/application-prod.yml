@@ -14,21 +14,12 @@ jpa:
       hibernate:
         hbm2ddl:
           auto: update
-datasources:
-  default:
-    driver-class-name: org.mariadb.jdbc.Driver
-    db-type: mariadb
-    dialect: MYSQL
-    url: jdbc:mariadb://localhost:3307/${DB_NAME:hashtags}
-    username: todo
-    password: todosecret
 netty:
   default:
     allocator:
       max-order: 3
 kafka:
+kafka:
   bootstrap:
     servers:
-      - localhost:9094
-      - localhost:9095
-      - localhost:9096
+      - ${KAFKA_BOOTSTRAP_SERVERS:`localhost:9092`}

@@ -24,6 +24,7 @@ dependencies {
     annotationProcessor("io.micronaut:micronaut-http-validation")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.validation:micronaut-validation")
+
     // Data mapping via Hibernate and JPA to a MariaDB database
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
@@ -40,6 +41,7 @@ dependencies {
 
 //    // Kafka Streams support (requires having at least one stream, or build will fail)
 //    implementation("io.micronaut.kafka:micronaut-kafka-streams")
+    testImplementation("io.micronaut:micronaut-http-server-netty")
 
     // Logging via Logback
     runtimeOnly("ch.qos.logback:logback-classic")
@@ -85,10 +87,14 @@ micronaut {
     }
 }
 
+
+
 test{
     finalizedBy jacocoTestReport
 }
-
+tasks.named("dockerfile") {
+    baseImage = "amazoncorretto:17-alpine3.17"
+}
 jacocoTestReport {
     dependsOn test
 }

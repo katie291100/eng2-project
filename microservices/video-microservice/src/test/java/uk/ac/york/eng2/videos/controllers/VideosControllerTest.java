@@ -26,7 +26,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@MicronautTest(transactional = false)
+@MicronautTest(transactional = false, environments = "no_streams")
 public class VideosControllerTest {
 
     @Inject
@@ -127,7 +127,7 @@ public class VideosControllerTest {
         HttpResponse<Void> response = client.add(videoDTO);
         Iterable<Video> iterVideos = client.list();
 
-        assert hashtagsRepo.findByName("hashtag1").isPresent();
+        assert !hashtagsRepo.findByName("hashtag1").isEmpty();
         assertEquals(201, response.getStatus().getCode());
         assertEquals("Test Video", iterVideos.iterator().next().getTitle());
         assertEquals("hashtag1", iterVideos.iterator().next().getHashtags().iterator().next().getName());

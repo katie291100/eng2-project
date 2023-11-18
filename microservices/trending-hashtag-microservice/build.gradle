@@ -88,6 +88,9 @@ micronaut {
 test{
     finalizedBy jacocoTestReport
 }
+tasks.named("dockerfile") {
+    baseImage = "amazoncorretto:17-alpine3.17"
+}
 
 jacocoTestReport {
     dependsOn test

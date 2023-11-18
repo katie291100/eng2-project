@@ -1,5 +1,6 @@
-package com.york.eng2;
+package com.york.eng2.trendingHashtags.events;
 
+import com.york.eng2.WindowedIdentifier;
 import com.york.eng2.trendingHashtags.domain.Hashtag;
 import com.york.eng2.trendingHashtags.repositories.HashtagsRepository;
 import io.micronaut.configuration.kafka.serde.CompositeSerdeRegistry;
@@ -46,7 +47,7 @@ public class ExampleFactory {
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Long().getClass().getName());
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Long().getClass().getName());
         Materialized<Long, Long, KeyValueStore<Bytes, byte[]>> materialized = Materialized.as("trending-hashtag-store");
-        KStream<Windowed<Long>, Long> stream = builder.stream("liked-hashtag", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Hashtag.class)))
+        KStream<WindowedIdentifier, Long> stream = builder.stream("liked-hashtag", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Hashtag.class)))
                 .flatMap((key, value) -> {
                     @NonNull List<Hashtag> hashtags = hashtagsRepository.findAll();
 
@@ -55,7 +56,7 @@ public class ExampleFactory {
                     for (Hashtag hashtag : hashtags) {
                         if (hashtag.getId().equals(value.getId())) {
                             hashtagMap.add(new KeyValue<>(hashtag.getId(), 1L));
-                        } else {
+                            } else {
                             hashtagMap.add(new KeyValue<>(hashtag.getId(), 0L));
                         }
                     }
@@ -64,22 +65,15 @@ public class ExampleFactory {
                 })
                 .groupByKey(Grouped.with(Serdes.Long(), Serdes.Long()))
                 .windowedBy(SlidingWindows.ofTimeDifferenceAndGrace(Duration.ofMinutes(5), Duration.ofMinutes(1)))
-                .aggregate(() -> 0L, (k, v, count) -> count + v).toStream();
-        // maybe shoule produce events as updates and then consume and save to db if end of window is > current window in db
-//                .selectKey((key,value) -> key.key()).toTable().toStream();
-//        KTable<Windowed<Long>, Long> stream =
-//                builder.stream("liked-hashtag", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Hashtag.class)))
-//                        .groupByKey(Grouped.with(Serdes.Long(), serdeRegistry.getSerde(Hashtag.class)))
-//                        .windowedBy(SlidingWindows.ofTimeDifferenceAndGrace(Duration.ofMinutes(60), Duration.ofMinutes(1)))
-//                        .windowedBy(SlidingWindows.ofTimeDifferenceAndGrace(Duration.ofMinutes(60), Duration.ofMinutes(1)))
-//                        .count(Materialized.as("trending-hashtag-store"));
-        KStream<WindowedIdentifier, Long> streamWindowed = stream.selectKey((windowedHashtagId, count) -> new WindowedIdentifier(
-                windowedHashtagId.key(),
-                windowedHashtagId.window().start(),
-                windowedHashtagId.window().end())).mapValues((key, value) -> value);
-        stream.selectKey((key, value) -> key.key()).toTable(materialized);
-        streamWindowed.to("trending-hashtag", Produced.with(serdeRegistry.getSerde(WindowedIdentifier.class), Serdes.Long()));
-        streamWindowed.print(Printed.toSysOut());
-        return streamWindowed;
+                .aggregate(() -> 0L, (k, v, count) -> count + v).toStream().selectKey((windowedHashtagId, count) -> new WindowedIdentifier(
+                        windowedHashtagId.key(),
+                        windowedHashtagId.window().start(),
+                        windowedHashtagId.window().end()));
+
+        stream.selectKey((key, value) -> key.getId()).toTable(materialized);
+
+        stream.to("trending-hashtag", Produced.with(serdeRegistry.getSerde(WindowedIdentifier.class), Serdes.Long()));
+        stream.print(Printed.toSysOut());
+        return stream;
     }
 }

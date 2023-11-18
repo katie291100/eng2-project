@@ -1,4 +1,4 @@
-package com.york.eng2;
+package com.york.eng2.trendingHashtags.events;
 
 import com.york.eng2.trendingHashtags.domain.Hashtag;
 import com.york.eng2.trendingHashtags.repositories.HashtagsRepository;
