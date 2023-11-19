@@ -6,8 +6,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import jakarta.inject.Inject;
-import org.graalvm.nativebridge.In;
-import org.graalvm.shadowed.org.jcodings.util.Hash;
+
 import uk.ac.york.eng2.videos.domain.Hashtag;
 import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.dto.HashtagDTO;
