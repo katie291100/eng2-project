@@ -6,7 +6,6 @@ import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
 import jakarta.inject.Inject;
-import org.graalvm.nativebridge.In;
 
 /**
  * kafka-streams requires at least one listener

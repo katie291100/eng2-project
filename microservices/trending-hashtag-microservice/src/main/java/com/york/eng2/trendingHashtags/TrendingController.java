@@ -12,7 +12,7 @@ import org.apache.kafka.streams.state.ValueAndTimestamp;
 
 import java.time.Instant;
 
-@Controller("/Trending")
+@Controller("/trending")
 public class TrendingController {
     
     @Inject

@@ -7,7 +7,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
 
 
-@Client("/hashtags")
+@Client("/trending")
 public interface TrendingClient {
     @Get("/")
     public void list();

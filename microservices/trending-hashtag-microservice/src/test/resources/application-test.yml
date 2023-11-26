@@ -1,0 +1,16 @@
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create-drop
+trending:
+  url: /trending
+
+kafka:
+  default:
+    embedded:
+      enabled: true
+  streams:
+    default:
+      start-kafka-streams: true

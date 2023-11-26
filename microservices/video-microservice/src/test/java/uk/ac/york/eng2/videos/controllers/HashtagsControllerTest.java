@@ -17,6 +17,7 @@ import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
 import uk.ac.york.eng2.videos.repositories.UsersRepository;
 import uk.ac.york.eng2.videos.repositories.VideosRepository;
 
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,15 +31,11 @@ public class HashtagsControllerTest {
     @Inject
     HashtagsRepository hashtagsRepo;
 
+
     @BeforeEach
     void setup() {
         hashtagsRepo.deleteAll();
     }
-//    static Map<Long, Video>
-//            postsAdded,
-//            watchVideo,
-//            likeVideo,
-//            dislikeVideo = new java.util.HashMap<>();
     @Test
     public void testListHashtags() {
         HashtagDTO hashtagDTO = new HashtagDTO("hashtag1");
@@ -69,32 +66,7 @@ public class HashtagsControllerTest {
         assertTrue(hashtags.iterator().next().getName().equals("hashtag1"));
     }
 
-//    @Test
-//    private VideoProducer getVideoProducer() {
-//        return new VideoProducer() {
-//            @Override
-//            public void postVideo(Long key, Video b) {
-//                postsAdded.put(key, b);
-//            }
-//
-//            @Override
-//            public void watchVideo(Long key, Video b) {
-//                watchVideo.put(key, b);
-//            }
-//
-//            @Override
-//            public void likeVideo(Long key, Video b) {
-//                likeVideo.put(key, b);
-//
-//            }
-//
-//            @Override
-//            public void dislikeVideo(Long key, Video b) {
-//                dislikeVideo.put(key, b);
-//
-//            }
-//        };
-//    }
+
 
 
 

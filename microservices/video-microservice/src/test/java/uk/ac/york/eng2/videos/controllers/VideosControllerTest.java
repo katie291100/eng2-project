@@ -44,38 +44,43 @@ public class VideosControllerTest {
     User poster = new User();
     Hashtag hashtag = new Hashtag();
 
-//    static Map<Long, Video>
-//            postsAdded,
-//            watchVideo,
-//            likeVideo,
-//            dislikeVideo = new HashMap<>();
+    Map<Long, Video> postsAdded = new HashMap<>();
+    Map<Long, Video> watchVideo = new HashMap<>();
+    Map<Long, Video> likeVideo = new HashMap<>();
+    Map<Long, Video> dislikeVideo = new HashMap<>();
+    Map<Long, Hashtag> hashtagLike = new HashMap<>();
 
-//    @MockBean(VideoProducer.class)
-//    VideoProducer videoProducer() {
-//        return new VideoProducer() {
-//            @Override
-//            public void postVideo(Long key, Video b) {
-//                postsAdded.put(key, b);
-//            }
-//
-//            @Override
-//            public void watchVideo(Long key, Video b) {
-//                watchVideo.put(key, b);
-//            }
-//
-//            @Override
-//            public void likeVideo(Long key, Video b) {
-//                likeVideo.put(key, b);
-//
-//            }
-//
-//            @Override
-//            public void dislikeVideo(Long key, Video b) {
-//                dislikeVideo.put(key, b);
-//
-//            }
-//        };
-//    }
+    @MockBean(VideoProducer.class)
+    VideoProducer videoProducer() {
+        return new VideoProducer() {
+            @Override
+            public void postVideo(Long key, Video b) {
+                postsAdded.put(key, b);
+            }
+
+            @Override
+            public void watchVideo(Long key, Video b) {
+                watchVideo.put(key, b);
+            }
+
+            @Override
+            public void likeVideo(Long key, Video b) {
+                likeVideo.put(key, b);
+
+            }
+
+            @Override
+            public void dislikeVideo(Long key, Video b) {
+                dislikeVideo.put(key, b);
+
+            }
+
+            @Override
+            public void likeHashtag(Long key, Hashtag h) {
+                hashtagLike.put(key, h);
+            }
+        };
+    }
 
 
     @BeforeEach
@@ -83,7 +88,7 @@ public class VideosControllerTest {
         videosRepo.deleteAll();
         userRepo.deleteAll();
         hashtagsRepo.deleteAll();
-//        postsAdded.clear();
+
         poster.setName("Test User");
         userRepo.save(poster);
 
@@ -110,7 +115,7 @@ public class VideosControllerTest {
 
         assertEquals(201, response.getStatus().getCode());
         assertEquals("Test Video", iterVideos.iterator().next().getTitle());
-//        assertTrue(postsAdded.containsKey(iterVideos.iterator().next().getPostedBy().getId()));
+        assertTrue(postsAdded.containsKey(iterVideos.iterator().next().getPostedBy().getId()));
     }
 
     @Test
@@ -131,6 +136,7 @@ public class VideosControllerTest {
         assertEquals(201, response.getStatus().getCode());
         assertEquals("Test Video", iterVideos.iterator().next().getTitle());
         assertEquals("hashtag1", iterVideos.iterator().next().getHashtags().iterator().next().getName());
+        assertTrue(postsAdded.containsKey(iterVideos.iterator().next().getPostedBy().getId()));
     }
 
     @Test
