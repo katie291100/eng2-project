@@ -1,11 +1,5 @@
-jpa:
-  default:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: create-drop
-trending:
-  url: /trending
+trendingHashtags:
+  url: /trendingHashtags
 
 kafka:
   default:

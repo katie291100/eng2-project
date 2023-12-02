@@ -1,7 +1,7 @@
-package com.york.eng2.trendingHashtags.events;
+package uk.ac.york.eng2.trendingHashtags.events;
 
-import com.york.eng2.trendingHashtags.domain.Hashtag;
-import com.york.eng2.trendingHashtags.repositories.HashtagsRepository;
+import uk.ac.york.eng2.trendingHashtags.domain.Hashtag;
+import uk.ac.york.eng2.trendingHashtags.repositories.HashtagsRepository;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;

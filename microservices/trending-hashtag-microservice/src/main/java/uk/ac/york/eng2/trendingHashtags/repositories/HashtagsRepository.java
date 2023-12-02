@@ -1,6 +1,6 @@
-package com.york.eng2.trendingHashtags.repositories;
+package uk.ac.york.eng2.trendingHashtags.repositories;
 
-import com.york.eng2.trendingHashtags.domain.Hashtag;
+import uk.ac.york.eng2.trendingHashtags.domain.Hashtag;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 

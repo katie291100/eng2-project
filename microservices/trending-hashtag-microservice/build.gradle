@@ -3,15 +3,13 @@ plugins {
     id("io.micronaut.aot") version "4.0.4"
     id("io.micronaut.test-resources") version "4.1.1"
     id("jacoco")
-
+}
+repositories{
+    mavenCentral()
 }
 
 version = "0.1"
-group = "com.york.eng2.eng2"
-
-repositories {
-    mavenCentral()
-}
+group = "uk.ac.york.eng2.trendingHashtags"
 
 dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
@@ -27,29 +25,30 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     runtimeOnly("org.yaml:snakeyaml")
-
     testImplementation("org.awaitility:awaitility:4.2.0")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:3.6.0")
     testImplementation("io.micronaut:micronaut-http-server-netty")
+    testImplementation('org.mockito:mockito-core:3.11.2')
+    testImplementation('org.mockito:mockito-junit-jupiter:3.11.2')
 }
 
 
 application {
-    mainClass.set("com.york.eng2.Application")
+    mainClass.set("uk.ac.york.eng2.trendingHashtags.Application")
+}
+
+jar{
+    exclude("logback.xml")
 }
 
 run{
     systemProperties([
-            'datasources.default.url': 'jdbc:mariadb://localhost:3307/trending',
+            'datasources.default.url': 'jdbc:mariadb://localhost:3306/trendingHashtags',
             'datasources.default.username': 'todo',
             'datasources.default.password': 'todosecret',
             'kafka.bootstrap.servers': 'localhost:9094,localhost:9095,localhost:9096',
-
+            'micronaut.server.port': '8082'
     ])
-}
-java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
 }
 
 graalvmNative.toolchainDetection = false
@@ -58,32 +57,15 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("com.york.eng2.*")
-    }
-    testResources {
-        sharedServer = true
-    }
-    aot {
-        // Please review carefully the optimizations enabled below
-        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
-        optimizeServiceLoading = false
-        convertYamlToJava = false
-        precomputeOperations = true
-        cacheEnvironment = true
-        optimizeClassLoading = true
-        deduceEnvironment = true
-        optimizeNetty = true
+        annotations("uk.ac.york.eng2.trendingHashtags.*")
     }
 }
 
 test{
     finalizedBy jacocoTestReport
 }
-tasks.named("dockerfile") {
-    baseImage = "amazoncorretto:17-alpine3.17"
-}
 
-jacocoTestReport {
+jacocoTestReport{
     dependsOn test
 }
 

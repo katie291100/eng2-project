@@ -3,29 +3,19 @@ micronaut:
     name: trendingHashtagMicroservice
   serde:
     maximum-nesting-depth: 100
-  server:
-    port: 8082
 jpa:
   default:
     entity-scan:
       packages:
-        - com.york.eng2.trendingHashtags.domain
+        - uk.ac.york.eng2.trendingHashtags.domain
     properties:
       hibernate:
         hbm2ddl:
           auto: update
 datasources:
   default:
-    driver-class-name: org.mariadb.jdbc.Driver
     db-type: mariadb
-    dialect: MYSQL
 netty:
   default:
     allocator:
       max-order: 3
-kafka:
-  bootstrap:
-    servers:
-      - localhost:9094
-      - localhost:9095
-      - localhost:9096

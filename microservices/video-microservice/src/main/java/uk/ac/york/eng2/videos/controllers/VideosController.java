@@ -33,9 +33,6 @@ public class VideosController {
     @Inject
     private HashtagsRepository hashtagRepo;
 
-    @Inject
-    private HashtagProducer hashtagKafkaClient;
-
     @Transactional
     @Get("/")
     public Iterable<Video> listVideos() {

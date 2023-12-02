@@ -1,4 +1,4 @@
-package com.york.eng2.trendingHashtags.domain;
+package uk.ac.york.eng2.trendingHashtags.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
@@ -34,32 +34,12 @@ public class Video {
     @ManyToMany(mappedBy = "watchedVideos")
     private Set<User> watchers = new HashSet<>();
 
-
-    public Set<User> getWatchers() {
-        return watchers;
-    }
-
-    public void setWatchers(Set<User> watchers) {
-        this.watchers = watchers;
-    }
-
-    public void addWatcher(User watcher) {
-        this.watchers.add(watcher);
-    }
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     @Override
@@ -71,37 +51,12 @@ public class Video {
                 '}';
     }
 
-
-    public User getPostedBy() {
-        return postedBy;
-    }
-
-    public void setPostedBy(User poster) {
-        this.postedBy = poster;
-    }
-
     public Set<Hashtag> getHashtags() {
         return hashtags;
     }
 
     public void setHashtags(Set<Hashtag> hashtags) {
         this.hashtags = hashtags;
-    }
-
-    public Long getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Long likes) {
-        this.likes = likes;
-    }
-
-    public Long getDislikes() {
-        return dislikes;
-    }
-
-    public void setDislikes(Long dislikes) {
-        this.dislikes = dislikes;
     }
 
 }

@@ -1,13 +1,11 @@
-package com.york.eng2.trendingHashtags.events;
+package uk.ac.york.eng2.trendingHashtags.events;
 
-import com.york.eng2.WindowedIdentifier;
-import com.york.eng2.trendingHashtags.domain.Hashtag;
-import com.york.eng2.trendingHashtags.domain.Video;
-import com.york.eng2.trendingHashtags.repositories.HashtagsRepository;
+import uk.ac.york.eng2.trendingHashtags.domain.Hashtag;
+import uk.ac.york.eng2.trendingHashtags.domain.Video;
+import uk.ac.york.eng2.trendingHashtags.repositories.HashtagsRepository;
 import io.micronaut.configuration.kafka.serde.CompositeSerdeRegistry;
 import io.micronaut.configuration.kafka.streams.ConfiguredStreamBuilder;
 import io.micronaut.configuration.kafka.streams.InteractiveQueryService;
-import io.micronaut.context.annotation.Configuration;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.core.annotation.NonNull;
 import jakarta.inject.Inject;
@@ -21,16 +19,12 @@ import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.state.KeyValueStore;
-import org.apache.kafka.streams.state.QueryableStoreTypes;
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
-import org.apache.kafka.streams.state.ReadOnlyWindowStore;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
 
 @Factory
-public class ExampleFactory {
+public class TrendingStreams {
     @Inject
     InteractiveQueryService interactiveQueryService;
     @Inject
@@ -40,7 +34,7 @@ public class ExampleFactory {
 
     @Singleton
     @Named("liked-hashtag")
-    KStream<WindowedIdentifier, Long> hashtagStream(ConfiguredStreamBuilder builder) {
+    public KStream<WindowedIdentifier, Long> hashtagStream(ConfiguredStreamBuilder builder) {
 
         Properties props = builder.getConfiguration();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "trending-hashtag-metrics");
@@ -51,8 +45,12 @@ public class ExampleFactory {
         KStream<WindowedIdentifier, Long> stream = builder.stream("like-video", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Video.class)))
                 .flatMapValues(Video::getHashtags)
                 .flatMap((key, value) -> {
+                    if (hashtagsRepository.findById(value.getId()).orElse(null) == null){
+                        hashtagsRepository.save(value);
+                    }
+                    System.out.println("liked-hashtag");
                     @NonNull List<Hashtag> hashtags = hashtagsRepository.findAll();
-
+                    System.out.println(value);
                     List<KeyValue<Long, Long>> hashtagMap = new ArrayList<>();
 
                     for (Hashtag hashtag : hashtags) {
@@ -74,7 +72,7 @@ public class ExampleFactory {
         stream.selectKey((key, value) -> key.getId()).toTable(materialized);
 
         stream.to("trending-hashtag", Produced.with(serdeRegistry.getSerde(WindowedIdentifier.class), Serdes.Long()));
-        stream.print(Printed.toSysOut());
+
         return stream;
     }
 }

@@ -6,7 +6,6 @@ jpa:
           auto: create-drop
 videos:
   url: /videos
-
 kafka:
   default:
     embedded:

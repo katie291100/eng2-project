@@ -1,4 +1,4 @@
-package com.york.eng2;
+package uk.ac.york.eng2.trendingHashtags.events;
 
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -19,26 +19,6 @@ public class WindowedIdentifier {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getStartMillis() {
-        return startMillis;
-    }
-
-    public void setStartMillis(Long startMillis) {
-        this.startMillis = startMillis;
-    }
-
-    public Long getEndMillis() {
-        return endMillis;
-    }
-
-    public void setEndMillis(Long endMillis) {
-        this.endMillis = endMillis;
     }
 
     @Override

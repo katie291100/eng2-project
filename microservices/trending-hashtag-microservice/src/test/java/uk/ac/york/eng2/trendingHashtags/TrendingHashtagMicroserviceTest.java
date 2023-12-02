@@ -1,4 +1,4 @@
-package com.york.eng2;
+package uk.ac.york.eng2.trendingHashtags;
 
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions;
 
 import jakarta.inject.Inject;
 
-@MicronautTest
+@MicronautTest()
 class TrendingHashtagMicroserviceTest {
 
     @Inject

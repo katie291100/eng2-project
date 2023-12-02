@@ -1,4 +1,4 @@
-package com.york.eng2;
+package uk.ac.york.eng2.trendingHashtags;
 
 import io.micronaut.runtime.Micronaut;
 

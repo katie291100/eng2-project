@@ -72,7 +72,7 @@ public class UsersController {
     }
     @Put("/{id}/watchedVideo/{videoId}")
     @Transactional
-    public HttpResponse<Void> watchedVideo(long id, long videoId) {
+    public HttpResponse<Void> watchVideo(long id, long videoId) {
         User user = repo.findById(id).orElse(null);
         Video video = videoRepo.findById(videoId).orElse(null);
         if (user == null || video == null) {
@@ -80,6 +80,7 @@ public class UsersController {
         }
         user.addWatchedVideo(video);
         repo.save(user);
+        kafkaClient.watchVideo(user.getId(), video);
         return HttpResponse.ok();
     }
     @Delete("/{id}")

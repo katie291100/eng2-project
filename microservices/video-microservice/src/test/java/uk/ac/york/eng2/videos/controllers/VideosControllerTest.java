@@ -59,11 +59,6 @@ public class VideosControllerTest {
             }
 
             @Override
-            public void watchVideo(Long key, Video b) {
-                watchVideo.put(key, b);
-            }
-
-            @Override
             public void likeVideo(Long key, Video b) {
                 likeVideo.put(key, b);
 
@@ -94,6 +89,13 @@ public class VideosControllerTest {
 
         hashtag.setName("hashtag1");
         hashtagsRepo.save(hashtag);
+
+        postsAdded.clear();
+        watchVideo.clear();
+        likeVideo.clear();
+        dislikeVideo.clear();
+        hashtagLike.clear();
+
     }
 
 
@@ -151,6 +153,7 @@ public class VideosControllerTest {
 
         assertEquals(404, response.getStatus().getCode());
         assertFalse(iterVideos.iterator().hasNext());
+        assertTrue(postsAdded.isEmpty());
     }
 
     @Test
@@ -217,7 +220,6 @@ public class VideosControllerTest {
     @Test
     public void testDeleteVideoNoVideo() {
         HttpResponse<Void> response = client.deleteVideo(1L);
-
         assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
     }
 
@@ -327,12 +329,15 @@ public class VideosControllerTest {
         else{
             assert false;
         }
+        assertTrue(dislikeVideo.containsKey(poster.getId()));
+        assertEquals(video.getId(), dislikeVideo.get(poster.getId()).getId());
+
     }
 
     @Test
     public void testDislikeVideoNoVideo() {
         HttpResponse<Void> response = client.dislikeVideo(1L, poster.getId());
-
+        assertTrue(dislikeVideo.isEmpty());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
     }
 
@@ -342,7 +347,7 @@ public class VideosControllerTest {
         video.setTitle("Test Video");
         video.setPostedBy(poster);
         video = videosRepo.save(video);
-
+        assertTrue(dislikeVideo.isEmpty());
         HttpResponse<Void> response = client.dislikeVideo(video.getId(), poster.getId()+1);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
