@@ -1,0 +1,33 @@
+rule Microservice2Graphviz
+    transform n : Y3877930::Microservice {
+
+    template : "microservice2graphviz.egl"
+
+    parameters : Map{
+        "path" = Sequence{"Microservice"},
+        "icon" = "diagram-ffffff",
+        "format" = "graphviz-circo",
+        "layers" = Sequence {
+            Map {"id"="entities", "active"=true}
+        },
+        "entities" = n.entities
+    }
+
+}
+
+rule Entity2Graphviz
+    transform e : Y3877930::Entity {
+
+    template : "microservice2graphviz.egl"
+
+    parameters : Map{
+        "path" = Sequence{"Social Network", e.name},
+        "icon" = "diagram-c0c0c0",
+        "format" = "graphviz-dot",
+        "layers" = Sequence {
+            Map {"id"="entities", "active"=true}
+        },
+        "entities" = Sequence(p)
+    }
+
+}

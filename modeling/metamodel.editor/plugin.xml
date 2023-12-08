@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated Y3877930 -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="Y3877930.presentation.Y3877930ModelWizardID"
+            name="%_UI_Y3877930ModelWizard_label"
+            class="Y3877930.presentation.Y3877930ModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/Y3877930ModelFile.gif">
+         <description>%_UI_Y3877930ModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated Y3877930 -->
+      <editor
+            id="Y3877930.presentation.Y3877930EditorID"
+            name="%_UI_Y3877930Editor_label"
+            icon="icons/full/obj16/Y3877930ModelFile.gif"
+            extensions="y3877930"
+            class="Y3877930.presentation.Y3877930Editor"
+            contributorClass="Y3877930.presentation.Y3877930ActionBarContributor">
+      </editor>
+   </extension>
+</plugin>

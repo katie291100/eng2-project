@@ -1,0 +1,26 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque"]
+
+    edge[penwidth=3, style=tapered, arrowhead=none]
+    
+	[%for (p in entities){%]
+	
+	    [%=p.name%] [%if (entities.size()==1){%][fillcolor="azure2"][%}%]
+	    [%=p.name%] -> [%=p.name%] [color="#2A6C41"]
+	
+	[%}%]
+
+}
+
+[%
+operation isLayerActive(id : String) {
+    var layer = layers.selectOne(l|l.id = id);
+    if (layer.isDefined()) {
+        return layer.active;
+    }
+    else {
+        return true;
+    }
+}
+%]

@@ -1,0 +1,4 @@
+<?nsuri Y3877930?>
+<?render-egx ../metamodel/Y3877930.egx?>
+<microservice name="video-microservice">
+</microservice>
