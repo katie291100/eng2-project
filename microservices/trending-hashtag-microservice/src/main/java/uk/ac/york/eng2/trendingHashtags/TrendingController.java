@@ -12,7 +12,7 @@ import org.apache.kafka.streams.state.ValueAndTimestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller("/trendingHashtags")
+@Controller("/trending")
 public class TrendingController {
     
     @Inject

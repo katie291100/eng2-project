@@ -115,7 +115,8 @@ services:
       - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka-2 -Dcom.sun.management.jmxremote.rmi.port=9997
     volumes:
       - kafka_2_data:/bitnami/kafka
-
+  client:
+    image: client:latest
 volumes:
   mariadb_data:
   kafka_0_data:

@@ -43,7 +43,7 @@ jar{
 
 run{
     systemProperties([
-            'datasources.default.url': 'jdbc:mariadb://localhost:3306/trendingHashtags',
+            'datasources.default.url': 'jdbc:mariadb://localhost:3307/hashtags',
             'datasources.default.username': 'todo',
             'datasources.default.password': 'todosecret',
             'kafka.bootstrap.servers': 'localhost:9094,localhost:9095,localhost:9096',
