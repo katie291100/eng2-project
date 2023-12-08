@@ -1,0 +1,69 @@
+@namespace(uri="microservice", prefix="")
+package microservice;
+
+class Microservice {
+	attr String name;
+	val Database database;
+	val Entity[*] entities;
+	val Consumer[*] comsumers;
+	val Controller[*] controllers;
+	val DTO[*] dtos;
+	val Producer[*] producers;
+}
+
+class Database{
+	attr String name;
+	val Repository[*] repositories;
+}
+
+class Controller{
+	attr String name;
+	val Endpoint[*] endpoints;
+}
+
+class Endpoint{
+	attr EndpointType type;
+	ref Entity entity;
+}
+
+class Entity {
+	attr String name;
+	val Attribute[*] attributes;
+	ref DTO dto;
+}
+
+class DTO {
+	attr String name;
+	val Attribute[*] attributes;
+}
+
+class Repository {
+	attr String name;
+	ref Entity entity;
+}
+
+class Attribute{
+	attr Type type;
+	attr String name;
+}
+
+class Consumer{
+	attr String name;	
+}
+
+class Producer{
+	attr String name;
+}
+
+enum Type {
+  String;
+  Integer;
+  Array;
+}
+
+enum EndpointType {
+  List;
+  Update;
+  Delete;
+  Get;
+}
