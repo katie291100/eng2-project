@@ -1,0 +1,19 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque"]
+
+	[%=c.name%] 
+
+}
+
+[%
+operation isLayerActive(id : String) {
+    var layer = layers.selectOne(l|l.id = id);
+    if (layer.isDefined()) {
+        return layer.active;
+    }
+    else {
+        return true;
+    }
+}
+%]

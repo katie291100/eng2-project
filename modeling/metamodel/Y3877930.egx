@@ -6,28 +6,68 @@ rule Microservice2Graphviz
     parameters : Map{
         "path" = Sequence{"Microservice"},
         "icon" = "diagram-ffffff",
-        "format" = "graphviz-circo",
+        "format" = "text",
+        "microservice" = n,
+        "entities" = n.entities,
+        "producers" = n.producers,
+        "controllers" = n.controllers,
         "layers" = Sequence {
-            Map {"id"="entities", "active"=true}
-        },
-        "entities" = n.entities
+            Map {"id"="entities", "active"=true},
+            Map {"id"="producers", "active"=true}
+        }
+        
     }
-
 }
+
 
 rule Entity2Graphviz
     transform e : Y3877930::Entity {
 
-    template : "microservice2graphviz.egl"
+    template : "entity2graphviz.egl"
 
     parameters : Map{
-        "path" = Sequence{"Social Network", e.name},
+        "path" = Sequence{"Entities", e.name},
         "icon" = "diagram-c0c0c0",
-        "format" = "graphviz-dot",
+        "format" = "text",
+        "attributes" = e.attributes,
         "layers" = Sequence {
-            Map {"id"="entities", "active"=true}
-        },
-        "entities" = Sequence(p)
+            Map {"id"="attributes", "title"="has", "active"=true}
+            
+        }
     }
 
 }
+rule ControllerGraphviz
+    transform c : Y3877930::Controller {
+
+    template : "controller2graphviz.egl"
+
+    parameters : Map{
+        "path" = Sequence{"Controllers", c.name},
+        "icon" = "diagram-c0c0c0",
+        "format" = "text",
+        "endpoints" = c.endpoints,
+        "layers" = Sequence {
+            Map {"id"="endpoints", "title"="exposes endpoint", "active"=true}
+            
+        }
+    }
+
+}
+//rule DTO2Graphviz
+//    transform d : Y3877930::DTO {
+//
+//    template : "dto2graphviz.egl"
+//
+//    parameters : Map{
+//        "path" = Sequence{"Entities", e.name},
+//        "icon" = "diagram-c0c0c0",
+//        "format" = "text",
+//        "attributes" = e.attributes,
+//        "layers" = Sequence {
+//            Map {"id"="attributes", "title"="has", "active"=true}
+//            
+//        }
+//    }
+//
+//}

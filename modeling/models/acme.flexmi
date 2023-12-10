@@ -1,4 +1,15 @@
 <?nsuri Y3877930?>
 <?render-egx ../metamodel/Y3877930.egx?>
-<microservice name="video-microservice">
+<microservice name="videomicroservice">
+<entity name = "video1"><attribute name = "name"></attribute> </entity>
+
+<entity name = "user"> </entity>
+<producer name = "videoliked"> </producer>
+<producer name = "videodisliked"> </producer>
+<controller name = "videoControllers"> 
+	<endpoint name = "listAll" type = "GET" entity = "user"></endpoint>
+		<endpoint name = "create" type = "PUT" entity = "user"></endpoint>
+	
+</controller>
+
 </microservice>

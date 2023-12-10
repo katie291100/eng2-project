@@ -25,7 +25,7 @@ public class TrendingController {
         queryableStore.all().forEachRemaining((keyValue) -> {
             keys.add(keyValue.key);
         });
-
+        //TODO: Use a db query to get the top 10 trending hashtags
         return keys.subList(0,10);
     }
 
