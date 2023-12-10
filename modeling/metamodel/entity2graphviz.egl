@@ -1,0 +1,29 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque"]
+    cluster=true;
+
+	[%=e.name%] 
+	[%for (a in attributes){%]
+		
+	    [%=a.name%] [%if (attributes.size()==1){%][label="[%=a.name%]([%=a.type%])" fillcolor="azure2"][%}%]
+	    
+	    [%if (isLayerActive("attributes")){%]
+            [%=e.name%] -> [%=a.name%] [color="#2A6C41" label="has"]
+    	[%}%]
+	    
+	[%}%]
+	
+}
+
+[%
+operation isLayerActive(id : String) {
+    var layer = layers.selectOne(l|l.id = id);
+    if (layer.isDefined()) {
+        return layer.active;
+    }
+    else {
+        return true;
+    }
+}
+%]
