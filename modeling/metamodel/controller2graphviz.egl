@@ -3,9 +3,20 @@ digraph G {
         gradientangle="270", fillcolor="bisque"]
 
 	[%=c.name%] 
-
+	[%for (e in endpoints){%]
+		
+	    [%=e.name%] [%if (endpoints.size()==1){%][label="[%=a.name%]([%=a.type%])" fillcolor="azure2"][%}%]
+	    [%if (isLayerActive("endpoints")){%]
+	    	[%if (e.name.matches(".*All")){%]
+        		[%=c.name%] -> [%=e.name%] [color="#2A6C41" label="[%=e.type%] [%=e.entity.name%]s"]
+	   		[%}%]
+	   		[%else{%]
+	   		   [%=c.name%] -> [%=e.name%] [color="#2A6C41" label="[%=e.type%] [%=e.entity.name%]"]
+	   		[%}%]
+	    [%}%]
+	    
+	[%}%]
 }
-
 [%
 operation isLayerActive(id : String) {
     var layer = layers.selectOne(l|l.id = id);

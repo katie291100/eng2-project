@@ -1,25 +1,53 @@
 digraph G {
     node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
         gradientangle="270", fillcolor="bisque"]
-
-	[%=n.name%] 
-	 subgraph entities {
-	    cluster=true;
-	    color=blue;
-		[%for (e in entities){%]
-		
-		    [%=e.name%] [%if (entities.size()==1){%][fillcolor="azure2"][%}%]
+	
+	 subgraph microservice {
+	  	cluster=true;
+	    color=pink;
+	    label="Microservice"
+		 subgraph entities {
+		    cluster=true;
+		    color=blue;
+		    label="Entities"
+			[%for (e in entities){%]
+			
+			    [%=e.name%] [fillcolor="azure2"]
+			    
+			[%}%]		
+			
+		}
+		subgraph dtos {
+		    cluster=true;
+		    color=blue;
+		    label="DTOs"
+			[%for (d in dtos){%]
+			
+			    [%=d.name%]dto [label = "[%=d.name%]" fillcolor="azure2"]
+			    
+			[%}%]		
+			
+		}
+		subgraph producers {
+		    cluster=true;
+		    color=red;
+		    label="Producers"
 		    
-		[%}%]
-		
-	}
-	subgraph producers {
-	    cluster=true;
-	    color=red;
-	[%for (p in producers){%]
-		
-	    [%=p.name%] [%if (producers.size()==1){%][fillcolor="azure2"][%}%]
-	[%}%]
+			[%for (p in producers){%]
+				
+			    [%=p.name%]Producer [label="[%=p.name%]" fillcolor="azure2"]
+			[%}%]
+			
+		}
+		subgraph consumers {
+		    cluster=true;
+		    color=green;
+		    label="Consumers"
+		    
+			[%for (c in consumers){%]
+			    [%=c.name%]Consumer [label = "[%=c.name%]" fillcolor="azure2"]
+			[%}%]
+		}
 	}
 }
 
