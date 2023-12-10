@@ -1,18 +1,13 @@
-@namespace(uri="microservice", prefix="")
-package microservice;
+@namespace(uri="Y3877930", prefix="")
+package Y3877930;
 
 class Microservice {
 	attr String name;
-	val Database database;
 	val Entity[*] entities;
 	val Consumer[*] comsumers;
+	val Producer[*] producers;
 	val Controller[*] controllers;
 	val DTO[*] dtos;
-	val Producer[*] producers;
-}
-
-class Database{
-	attr String name;
 	val Repository[*] repositories;
 }
 
@@ -22,6 +17,7 @@ class Controller{
 }
 
 class Endpoint{
+	attr String name;
 	attr EndpointType type;
 	ref Entity entity;
 }
@@ -55,7 +51,7 @@ class Producer{
 	attr String name;
 }
 
-enum Type {
+enum Type{
   String;
   Integer;
   Array;
