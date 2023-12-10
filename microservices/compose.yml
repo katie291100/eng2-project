@@ -6,12 +6,27 @@ services:
       MARIADB_USER: &dbuser todo
       MARIADB_PASSWORD: &dbpass todosecret
       MARIADB_ROOT_PASSWORD: iamroot
-      MARIADB_DATABASE: &dbname books
+      MARIADB_DATABASE: &dbname videos
     volumes:
       - mariadb_data:/var/lib/mysql
     ports:
       - 3306:3306
+  db2:
+    image: mariadb:11
+    environment:
+      MARIADB_USER: *dbuser
+      MARIADB_PASSWORD: *dbpass
+      MARIADB_ROOT_PASSWORD: iamroot
+      MARIADB_DATABASE: hashtags
+      MYSQL_TCP_PORT: 3307
+      MYSQL_UNIX_PORT: 3307
 
+    volumes:
+      - mariadb_data2:/var/lib/mysql
+    ports:
+      - 3307:3307
+    depends_on:
+      - db
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     ports:
@@ -100,9 +115,11 @@ services:
       - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka-2 -Dcom.sun.management.jmxremote.rmi.port=9997
     volumes:
       - kafka_2_data:/bitnami/kafka
-
+  client:
+    image: client:latest
 volumes:
   mariadb_data:
   kafka_0_data:
   kafka_1_data:
   kafka_2_data:
+  mariadb_data2:

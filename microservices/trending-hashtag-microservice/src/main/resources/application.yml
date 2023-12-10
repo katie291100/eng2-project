@@ -1,0 +1,21 @@
+micronaut:
+  application:
+    name: trendingHashtagMicroservice
+  serde:
+    maximum-nesting-depth: 100
+jpa:
+  default:
+    entity-scan:
+      packages:
+        - uk.ac.york.eng2.trendingHashtags.domain
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+datasources:
+  default:
+    db-type: mariadb
+netty:
+  default:
+    allocator:
+      max-order: 3

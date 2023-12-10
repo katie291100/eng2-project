@@ -16,6 +16,7 @@ import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.HashtagDTO;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
+import uk.ac.york.eng2.videos.events.HashtagProducer;
 import uk.ac.york.eng2.videos.events.VideoProducer;
 import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
 import uk.ac.york.eng2.videos.repositories.UsersRepository;
@@ -40,10 +41,13 @@ public class VideosController {
 
     @Get("/hashtag/{hashtag}")
     public List<Video> listVideosByHashtag(String hashtag) {
-        Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).orElse(null);
-        if (hashtagRecord == null){
+        try{
+            Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).get(0);
+        }catch (Exception e){
             return null;
         }
+        Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).get(0);
+
         List<Video> videos = repo.findAll();
         videos.removeIf(video -> !video.getHashtags().stream().toList().contains(hashtagRecord));
         return videos;
@@ -63,7 +67,14 @@ public class VideosController {
         Iterable<HashtagDTO> hashtagDTOs = videoDetails.getHashtags();
         if (hashtagDTOs != null){
             for (HashtagDTO hashtag : hashtagDTOs) {
-                Hashtag hashtagEntity = hashtagRepo.findByName(hashtag.getName()).orElse(null);
+                Hashtag hashtagEntity;
+
+                try{
+                    hashtagEntity = hashtagRepo.findByName(hashtag.getName()).get(0);
+                }catch (Exception e){
+                    hashtagEntity = null;
+                }
+
                 if (hashtagEntity == null) {
                     hashtagEntity = new Hashtag();
                     hashtagEntity.setName(hashtag.getName());
@@ -127,6 +138,10 @@ public class VideosController {
 
         repo.update(videoRecord);
         kafkaClient.likeVideo(userId, videoRecord);
+
+        videoRecord.getHashtags().stream().toList().forEach(hashtag -> {
+            kafkaClient.likeHashtag(hashtag.getId(), hashtag);
+        });
         return HttpResponse.ok();
     }
 

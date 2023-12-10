@@ -46,6 +46,8 @@ public class KafkaProductionTest {
         userRepo.deleteAll();
         poster.setName("Test User");
         userRepo.save(poster);}
+
+
     @Test
     public void addVideoUser() {
         VideoDTO videoDTO = new VideoDTO();
@@ -55,20 +57,19 @@ public class KafkaProductionTest {
 
         HttpResponse<Void> response = client.add(videoDTO);
         Iterable<Video> iterVideos = client.list();
+
+        assertEquals(201, response.getStatus().getCode());
+        assertEquals("Test Video", iterVideos.iterator().next().getTitle());
         Awaitility.await()
                 .atMost(Duration.ofSeconds(30))
                 .until(() -> postsAdded.containsKey(poster.getId()));
-        assertEquals(201, response.getStatus().getCode());
-        assertEquals("Test Video", iterVideos.iterator().next().getTitle());
-
-
     }
     @Requires(property = "spec.name", value = "KafkaProductionTest")
     @KafkaListener(groupId = "kafka-production-test")
     static class TestConsumer {
 
         @Topic(VideoProducer.TOPIC_ADD_VIDEO)
-        void readBook(@KafkaKey Long id, Video video)
+        void addVideo(@KafkaKey Long id, Video video)
         {    postsAdded.put(id, video);  }}
 
 }

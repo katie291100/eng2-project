@@ -1,0 +1,17 @@
+package uk.ac.york.eng2.trendingHashtags;
+
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.client.annotation.Client;
+
+import java.util.List;
+
+
+@Client("/trending")
+public interface TrendingClient {
+    @Get("/")
+    List<Long> list();
+
+}

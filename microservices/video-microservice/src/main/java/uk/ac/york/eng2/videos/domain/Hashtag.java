@@ -62,4 +62,5 @@ public class Hashtag {
         Hashtag hashtag = (Hashtag) o;
         return hashtag.getId().equals(this.getId());
     }
+
 }

@@ -10,9 +10,13 @@ import uk.ac.york.eng2.videos.domain.Video;
 public interface UserProducer {
 
     String TOPIC_ADD_VIDEO = "new-user";
+    String TOPIC_WATCH_VIDEO = "watch-video";
 
     @Topic(TOPIC_ADD_VIDEO)
     void newUser(@KafkaKey Long key, User b);
+
+    @Topic(TOPIC_WATCH_VIDEO)
+    void watchVideo(@KafkaKey Long key, Video b);
 
 }
 

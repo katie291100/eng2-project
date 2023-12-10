@@ -2,6 +2,7 @@ package uk.ac.york.eng2.videos.controllers;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,15 +11,19 @@ import uk.ac.york.eng2.videos.clients.UsersClient;
 import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.UserDTO;
+import uk.ac.york.eng2.videos.events.UserProducer;
+import uk.ac.york.eng2.videos.events.VideoProducer;
 import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
 import uk.ac.york.eng2.videos.repositories.UsersRepository;
 import uk.ac.york.eng2.videos.repositories.VideosRepository;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@MicronautTest(transactional = false)
+@MicronautTest(transactional = false, environments = "no_streams")
 public class UsersControllerTest {
 
     @Inject
@@ -33,17 +38,17 @@ public class UsersControllerTest {
     @Inject
     HashtagsRepository hashtagsRepo;
 
+    Map<Long, Video> watchedVideo = new HashMap<>();
+    Map<Long, Video> newUser = new HashMap<>();
+
     @BeforeEach
     void setup() {
         videosRepo.deleteAll();
         userRepo.deleteAll();
         hashtagsRepo.deleteAll();
+        watchedVideo.clear();
+        newUser.clear();
     }
-//    static Map<Long, Video>
-//            postsAdded,
-//            watchVideo,
-//            likeVideo,
-//            dislikeVideo = new java.util.HashMap<>();
 
     @Test
     public void testListUsers() {
@@ -124,6 +129,7 @@ public class UsersControllerTest {
 
         User user2 = client.getUser(1L);
         assertNull(user2);
+        assertEquals(watchedVideo.size(), 0);
     }
 
     @Test
@@ -141,6 +147,8 @@ public class UsersControllerTest {
         Set<Video> videos = client.getWatchedByUser(user.getId());
         assertTrue(videos.iterator().hasNext());
         assertEquals(video.getId(), videos.iterator().next().getId());
+        assertEquals(1, watchedVideo.size());
+        assertEquals(video.getId(), watchedVideo.get(user.getId()).getId());
     }
 
     @Test
@@ -167,33 +175,22 @@ public class UsersControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
     }
 
-//    @Test
-//    private VideoProducer getVideoProducer() {
-//        return new VideoProducer() {
-//            @Override
-//            public void postVideo(Long key, Video b) {
-//                postsAdded.put(key, b);
-//            }
-//
-//            @Override
-//            public void watchVideo(Long key, Video b) {
-//                watchVideo.put(key, b);
-//            }
-//
-//            @Override
-//            public void likeVideo(Long key, Video b) {
-//                likeVideo.put(key, b);
-//
-//            }
-//
-//            @Override
-//            public void dislikeVideo(Long key, Video b) {
-//                dislikeVideo.put(key, b);
-//
-//            }
-//        };
-//    }
+    @MockBean(UserProducer.class)
+    UserProducer userProducer() {
+        return new UserProducer() {
+            @Override
+            public void newUser(Long key, User b) {
+
+            }
+
+            @Override
+            public void watchVideo(Long key, Video b) {
+                watchedVideo.put(key, b);
+            }
+
+        };
+    }
 
 
 
-}
+    }

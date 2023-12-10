@@ -25,22 +25,6 @@ public class WindowedIdentifier {
 		this.id = id;
 	}
 
-	public Long getStartMillis() {
-		return startMillis;
-	}
-
-	public void setStartMillis(Long startMillis) {
-		this.startMillis = startMillis;
-	}
-
-	public Long getEndMillis() {
-		return endMillis;
-	}
-
-	public void setEndMillis(Long endMillis) {
-		this.endMillis = endMillis;
-	}
-
 	@Override
 	public String toString() {
 		return "WindowedIdentifier [id=" + id + ", startMillis=" + startMillis + ", endMillis=" + endMillis + "]";

@@ -3,7 +3,6 @@ package uk.ac.york.eng2.videos.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.Arrays;
 import java.util.HashSet;
