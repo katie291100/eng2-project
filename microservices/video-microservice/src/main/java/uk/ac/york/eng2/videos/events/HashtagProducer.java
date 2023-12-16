@@ -16,8 +16,5 @@ public interface HashtagProducer {
     @Topic(TOPIC_NEW_HASH)
     void newHashtag(@KafkaKey Long key, Hashtag h);
 
-    @Topic(TOPIC_LIKED_HASH)
-    void likeHashtag(@KafkaKey Long key, Hashtag h);
-
 }
 

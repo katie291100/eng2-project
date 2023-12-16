@@ -1,4 +1,4 @@
-package uk.ac.york.eng2.trendingHashtags;
+package uk.ac.york.eng2.trendingHashtags.controllers;
 
 
 import io.micronaut.configuration.kafka.streams.InteractiveQueryService;

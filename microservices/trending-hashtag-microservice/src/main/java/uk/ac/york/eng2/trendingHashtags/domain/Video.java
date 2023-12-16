@@ -27,13 +27,6 @@ public class Video {
     @ManyToMany
     private Set<Hashtag> hashtags = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    private User postedBy;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "watchedVideos")
-    private Set<User> watchers = new HashSet<>();
-
     public Long getId() {
         return id;
     }
@@ -47,7 +40,6 @@ public class Video {
         return "Video{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", postedBy=" + postedBy.getName() +
                 '}';
     }
 

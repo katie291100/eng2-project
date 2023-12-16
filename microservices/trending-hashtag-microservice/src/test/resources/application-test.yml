@@ -1,6 +1,5 @@
 trendingHashtags:
   url: /trendingHashtags
-
 kafka:
   default:
     embedded:

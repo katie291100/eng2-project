@@ -5,6 +5,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="eventStreams" upperBound="-1"
         eType="#//EventStream" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="microservices" upperBound="-1"
+        eType="#//Microservice" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Microservice">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -61,11 +63,18 @@
         eType="#//EventStream"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventStream">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//KeyType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//ValueType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeyType" eSuperTypes="#//EventType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueType" eSuperTypes="#//EventType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EventType" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Type"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyType" eType="#//Type"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueType" eType="#//Type"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyName" eType="#//Type"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueName" eType="#//Type"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Type">
     <eLiterals name="String"/>

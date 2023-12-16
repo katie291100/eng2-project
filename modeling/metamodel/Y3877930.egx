@@ -67,20 +67,31 @@ rule ControllerGraphviz
     }
 
 }
-//rule DTO2Graphviz
-//    transform d : Y3877930::DTO {
-//
-//    template : "dto2graphviz.egl"
-//
-//    parameters : Map{
-//        "path" = Sequence{"Entities", e.name},
-//        "icon" = "diagram-c0c0c0",
-//        "format" = "text",
-//        "attributes" = e.attributes,
-//        "layers" = Sequence {
-//            Map {"id"="attributes", "title"="has", "active"=true}
-//            
-//        }
-//    }
-//
-//}
+
+rule ConsumersGraphviz
+    transform c : Y3877930::Consumer {
+
+    template : "event2graphviz.egl"
+
+    parameters : Map{
+        "path" = Sequence{"Microservices", c.eContainer().name, "EventStreams",  c.name+"Consumer"},
+        "icon" = "diagram-c0c0c0",
+         "format" = "graphviz-dot",
+        "eventStreams" = c.eventStreams
+    }
+
+}
+
+rule ProducersGraphviz
+    transform c : Y3877930::Producer {
+
+    template : "event2graphviz.egl"
+
+    parameters : Map{
+        "path" = Sequence{"Microservices", c.eContainer().name, "EventStreams",  c.name+"Producer"},
+        "icon" = "diagram-c0c0c0",
+         "format" = "graphviz-dot",
+         "eventStreams" = c.eventStreams
+    }
+
+}

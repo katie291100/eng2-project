@@ -46,7 +46,7 @@ class Repository {
 }
 
 class Attribute{
-	attr Type type;
+	attr String type;
 	attr String name;
 }
 
@@ -61,6 +61,8 @@ class Producer{
 }
 
 class EventStream{
+	attr String name;
+	attr Boolean isStream = false;
 	val KeyType key;
 	val ValueType value;
 }
@@ -69,14 +71,8 @@ class KeyType extends EventType{}
 class ValueType extends EventType{}
 
 abstract class EventType{
-	attr Type type;
 	attr String name;
-}
-
-enum Type{
-  String;
-  Integer;
-  Array;
+	attr String type;
 }
 
 enum EndpointType {

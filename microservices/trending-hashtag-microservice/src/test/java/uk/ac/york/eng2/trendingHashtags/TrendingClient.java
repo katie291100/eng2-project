@@ -9,7 +9,7 @@ import io.micronaut.http.client.annotation.Client;
 import java.util.List;
 
 
-@Client("/trending")
+@Client("/trendingHashtags")
 public interface TrendingClient {
     @Get("/")
     List<Long> list();

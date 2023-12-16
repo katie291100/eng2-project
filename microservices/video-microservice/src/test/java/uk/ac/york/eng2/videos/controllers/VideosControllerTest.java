@@ -48,7 +48,6 @@ public class VideosControllerTest {
     Map<Long, Video> watchVideo = new HashMap<>();
     Map<Long, Video> likeVideo = new HashMap<>();
     Map<Long, Video> dislikeVideo = new HashMap<>();
-    Map<Long, Hashtag> hashtagLike = new HashMap<>();
 
     @MockBean(VideoProducer.class)
     VideoProducer videoProducer() {
@@ -68,11 +67,6 @@ public class VideosControllerTest {
             public void dislikeVideo(Long key, Video b) {
                 dislikeVideo.put(key, b);
 
-            }
-
-            @Override
-            public void likeHashtag(Long key, Hashtag h) {
-                hashtagLike.put(key, h);
             }
         };
     }
@@ -94,7 +88,6 @@ public class VideosControllerTest {
         watchVideo.clear();
         likeVideo.clear();
         dislikeVideo.clear();
-        hashtagLike.clear();
 
     }
 

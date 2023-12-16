@@ -37,7 +37,9 @@ public class KafkaProductionTest {
     @Inject
     UsersRepository userRepo;
 
-    static Map<Long, Video> postsAdded = new java.util.HashMap<>();
+    static Map<Long, Video> videoAdded = new java.util.HashMap<>();
+    static Map<Long, Video> videoLiked = new java.util.HashMap<>();
+    static Map<Long, Video> videoDisliked = new java.util.HashMap<>();
 
     User poster = new User();
     @BeforeEach()
@@ -45,7 +47,11 @@ public class KafkaProductionTest {
         videosRepo.deleteAll();
         userRepo.deleteAll();
         poster.setName("Test User");
-        userRepo.save(poster);}
+        userRepo.save(poster);
+        videoAdded.clear();
+        videoLiked.clear();
+        videoDisliked.clear();
+    }
 
 
     @Test
@@ -62,14 +68,58 @@ public class KafkaProductionTest {
         assertEquals("Test Video", iterVideos.iterator().next().getTitle());
         Awaitility.await()
                 .atMost(Duration.ofSeconds(30))
-                .until(() -> postsAdded.containsKey(poster.getId()));
+                .until(() -> videoAdded.containsKey(poster.getId()));
+    }
+
+    @Test
+    public void likeVideoUser() {
+        VideoDTO videoDTO = new VideoDTO();
+        videoDTO.setTitle("Test Video");
+
+        videoDTO.setPostedBy(poster.getId());
+
+        HttpResponse<Void> response = client.add(videoDTO);
+        Video video = client.list().iterator().next();
+        client.likeVideo(video.getId(), poster.getId());
+        assertEquals(201, response.getStatus().getCode());
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(30))
+                .until(() -> videoLiked.containsKey(poster.getId()));
+    }
+
+    @Test
+    public void dislikeVideoUser() {
+        VideoDTO videoDTO = new VideoDTO();
+        videoDTO.setTitle("Test Video");
+
+        videoDTO.setPostedBy(poster.getId());
+
+        HttpResponse<Void> response = client.add(videoDTO);
+        Video video = client.list().iterator().next();
+        client.dislikeVideo(video.getId(), poster.getId());
+        assertEquals(201, response.getStatus().getCode());
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(30))
+                .until(() -> videoDisliked.containsKey(poster.getId()));
     }
     @Requires(property = "spec.name", value = "KafkaProductionTest")
     @KafkaListener(groupId = "kafka-production-test")
     static class TestConsumer {
 
         @Topic(VideoProducer.TOPIC_ADD_VIDEO)
-        void addVideo(@KafkaKey Long id, Video video)
-        {    postsAdded.put(id, video);  }}
+        void postVideo(@KafkaKey Long key, Video b) {
+            videoAdded.put(key, b);
+        }
+
+        @Topic(VideoProducer.TOPIC_LIKE_VIDEO)
+        void likeVideo(@KafkaKey Long key, Video b){
+            videoLiked.put(key, b);
+        }
+
+        @Topic(VideoProducer.TOPIC_DISLIKE_VIDEO)
+        void dislikeVideo(@KafkaKey Long key, Video b){
+            videoDisliked.put(key, b);
+        }
+    }
 
 }

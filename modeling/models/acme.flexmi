@@ -1,58 +1,142 @@
 <?nsuri Y3877930?>
 <?render-egx ../metamodel/Y3877930.egx?>
-<system name = "Social Media" >
- 	<eventStream></eventStream>
-	<microservice name="videomicroservice">
-	<entity name = "video1"><attribute name = "name"></attribute> </entity>
-	
-	<entity name = "Video"> </entity>
-	<entity name = "User"> </entity>
-	<consumer name = "videodisliked"> </consumer>
-	
-	<producer name = "videoliked"> </producer>
-	<producer name = "videodisliked"> </producer>
-	<controller name = "videoControllers"> 
-		<endpoint name = "listAll" type = "list" entity = "Video"></endpoint>
-		<endpoint name = "createVideo" type = "Update" entity = "Video"></endpoint>
-		<endpoint name = "deleteVideo" type = "Delete" entity = "Video"></endpoint>
-		<endpoint name = "updateVideoe" type = "Update" entity = "Video"></endpoint>
-		
-	</controller>
-	<controller name = "userControllers"> 
-		<endpoint name = "listAll" type = "list" entity = "User"></endpoint>
-		<endpoint name = "createVideo" type = "Update" entity = "User"></endpoint>
-		<endpoint name = "deleteVideo" type = "Delete" entity = "User"></endpoint>
-		<endpoint name = "updateVideo" type = "Update" entity = "User"></endpoint>
-		<endpoint name = "updateVideo" type = "Get" entity = "User"></endpoint>
-	
-	</controller>
+<system name="Social Media">
+    <eventStream name="newVideo">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <eventStream name="likeVideo">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <eventStream name="dislikeVideo">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <eventStream name="newHashtag">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <eventStream name="newUser">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <eventStream name="watchVideo">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <eventStream name="likeHashtag">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <eventStream name="subscribeHashtag">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <eventStream name="unsubscribeHashtag">
+        <keyType name="video" type="String"/>
+        <valueType name="video" type="Video"/>
+    </eventStream>
+    <microservice name="videomicroservice">
+        <entity name="Video" dto ="VideoDTO">    
+           	<attribute name="id" type="Long"/>
+            
+        	<attribute name="title" type="String"/>
+        	<attribute name="postedBy" type="Long"/>
+        	
+        </entity>
+        <dto name="VideoDTO">        
+        	<attribute name="title" type="String"/>
+        	<attribute name="postedBy" type="Long"/>
+        </dto>
+        <dto name="UserDTO">        
+        	<attribute name="name" type="String"/>
+        </dto>
+       
+        <entity name="User" dto="UserDTO">
+          	<attribute name="id" type="Long"/>
+            <attribute name="name" type="String"/>
+        </entity>
+        <entity name="Hashtag" dto="HashtagDTO">
+          	<attribute name="id" type="Long"/>
+            <attribute name="name" type="String"/>
+        </entity>
+        <dto name="HashtagDTO">        
+        	<attribute name="name" type="String"/>
+        </dto>
+        <producer name="video" eventStreams="newVideo, likeVideo, dislikeVideo"/>
+        <producer name="user" eventStreams="newUser, watchVideo"/>
+        <producer name="hashtag" eventStreams="newHashtag"/>
 
-	</microservice>
-		<microservice name="videomicroservice2">
-	<entity name = "video1"><attribute name = "name"></attribute> </entity>
-	
-	<entity name = "Video"> </entity>
-	<entity name = "User"> </entity>
-	<consumer name = "videodisliked"> </consumer>
-	
-	<producer name = "videoliked"> </producer>
-	<producer name = "videodisliked"> </producer>
-	<controller name = "videoControllers"> 
-		<endpoint name = "listAll" type = "list" entity = "Video"></endpoint>
-		<endpoint name = "createVideo" type = "Update" entity = "Video"></endpoint>
-		<endpoint name = "deleteVideo" type = "Delete" entity = "Video"></endpoint>
-		<endpoint name = "updateVideoe" type = "Update" entity = "Video"></endpoint>
-		
-	</controller>
-	<controller name = "userControllers"> 
-		<endpoint name = "listAll" type = "list" entity = "User"></endpoint>
-		<endpoint name = "createVideo" type = "Update" entity = "User"></endpoint>
-		<endpoint name = "deleteVideo" type = "Delete" entity = "User"></endpoint>
-		<endpoint name = "updateVideo" type = "Update" entity = "User"></endpoint>
-		<endpoint name = "updateVideo" type = "Get" entity = "User"></endpoint>
-	
-	</controller>
+        <controller name="videoControllers">
+            <endpoint name="listAll" type="list" entity="Video"/>
+            <endpoint name="createVideo" type="Update" entity="Video"/>
+            <endpoint name="deleteVideo" type="Delete" entity="Video"/>
+            <endpoint name="updateVideoe" type="Update" entity="Video"/>
 
-	</microservice>
-	<eventStream></eventStream>
+        </controller>
+        <controller name="userControllers">
+            <endpoint name="listAll" type="list" entity="User"></endpoint>
+            <endpoint name="createUser" type="Update" entity="User"></endpoint>
+            <endpoint name="deleteUser" type="Delete" entity="User"></endpoint>
+            <endpoint name="updateUser" type="Update" entity="User"></endpoint>
+            <endpoint name="getUser" type="Get" entity="User"></endpoint>
+
+        </controller>
+
+    </microservice>
+    <microservice name="TrendingHashtagMicroservice">
+                <entity name="Hashtag" dto="HashtagDTO">
+          	<attribute name="id" type="Long"/>
+            <attribute name="name" type="String"/>
+        </entity>
+        <dto name="HashtagDTO">        
+        	<attribute name="name" type="String"/>
+        </dto>
+        <consumer name="hashtagConsumer" eventStreams="newHashtag"/>
+        <consumer name="trendingStream" eventStreams="likeVideo" isStream = "True"/>
+
+        <controller name="videoController">
+            <endpoint name="listAll" type="list" entity="Video"></endpoint>
+            <endpoint name="createVideo" type="Update" entity="Video"></endpoint>
+            <endpoint name="deleteVideo" type="Delete" entity="Video"></endpoint>
+            <endpoint name="updateVideoe" type="Update" entity="Video"></endpoint>
+
+        </controller>
+        <controller name="userController">
+            <endpoint name="listAll" type="list" entity="User"></endpoint>
+            <endpoint name="createVideo" type="Update" entity="User"></endpoint>
+            <endpoint name="deleteVideo" type="Delete" entity="User"></endpoint>
+            <endpoint name="updateVideo" type="Update" entity="User"></endpoint>
+            <endpoint name="updateVideo" type="Get" entity="User"></endpoint>
+
+        </controller>
+
+    </microservice>
+    <microservice name="SubscriptionMicroservice">
+
+        <entity name="Video" dto="VideoDTO">
+        	<attribute name="title" type="String"/>
+        	<attribute name="postedBy" type="Long"/>
+        	
+        </entity>
+        <dto name="UserDTO"></dto>
+        <dto name="VideoDTO"></dto>
+       
+        <entity name="User" dto="UserDTO"></entity>
+        
+        <consumer name="subscriptionConsumer" eventStreams="subscribeHashtag, unsubscribeHashtag"/>
+        
+        <consumer name="videoStream" eventStreams="newVideo" isStream = "True"/>
+        <producer name="subscriptionProducer" eventStreams="subscribeHashtag, unsubscribeHashtag"/>
+
+        <controller name="subscriptionControllers">
+            <endpoint name="listAll" type="list" entity="Video"></endpoint>
+            <endpoint name="createVideo" type="Update" entity="Video"></endpoint>
+            <endpoint name="deleteVideo" type="Delete" entity="Video"></endpoint>
+            <endpoint name="updateVideoe" type="Update" entity="Video"></endpoint>
+
+        </controller>
+
+    </microservice>
 </system>

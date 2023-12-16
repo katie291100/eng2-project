@@ -11,9 +11,7 @@ public interface VideoProducer {
 
     String TOPIC_ADD_VIDEO = "new-video";
     String TOPIC_LIKE_VIDEO = "like-video";
-    String TOPIC_DISLIKE_VIDEO = "like-video";
-    String TOPIC_LIKED_HASH = "liked-hashtag";
-
+    String TOPIC_DISLIKE_VIDEO = "dislike-video";
 
     @Topic(TOPIC_ADD_VIDEO)
     void postVideo(@KafkaKey Long key, Video b);
@@ -23,8 +21,6 @@ public interface VideoProducer {
     @Topic(TOPIC_DISLIKE_VIDEO)
     void dislikeVideo(@KafkaKey Long key, Video b);
 
-    @Topic(TOPIC_LIKED_HASH)
-    void likeHashtag(@KafkaKey Long key, Hashtag h);
 }
 
 

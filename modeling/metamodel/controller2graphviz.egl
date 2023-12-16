@@ -1,18 +1,15 @@
 digraph G {
     node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
-        gradientangle="270", fillcolor="bisque"]
-
-	[%=c.name%] 
+        gradientangle="270", fillcolor="bisque", colorscheme="pastel19"]
+    colorscheme="pastel19"
+    
+	splines=line
+	[%=c.name%] [fillcolor="1"]
 	[%for (e in endpoints){%]
 		
-	    [%=e.name%] [%if (endpoints.size()==1){%][label="[%=a.name%]([%=a.type%])" fillcolor="azure2"][%}%]
+	    [%=e.name%] [label="[%=e.name%]([%=e.type%])" fillcolor="#95f0e7" ]
 	    [%if (isLayerActive("endpoints")){%]
-	    	[%if (e.name.matches(".*All")){%]
-        		[%=c.name%] -> [%=e.name%] [color="#2A6C41" label="[%=e.type%] [%=e.entity.name%]s"]
-	   		[%}%]
-	   		[%else{%]
-	   		   [%=c.name%] -> [%=e.name%] [color="#2A6C41" label="[%=e.type%] [%=e.entity.name%]"]
-	   		[%}%]
+   		   [%=c.name%] -> [%=e.name%] [color="#2A6C41" label="[%=e.type%] [%=e.entity.name%][%if (e.name.matches(".*All")){%]s[%}%]" ]
 	    [%}%]
 	    
 	[%}%]

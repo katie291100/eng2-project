@@ -2,6 +2,7 @@ package uk.ac.york.eng2.videos.controllers;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +14,13 @@ import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.HashtagDTO;
 import uk.ac.york.eng2.videos.dto.UserDTO;
+import uk.ac.york.eng2.videos.events.HashtagProducer;
+import uk.ac.york.eng2.videos.events.VideoProducer;
 import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
 import uk.ac.york.eng2.videos.repositories.UsersRepository;
 import uk.ac.york.eng2.videos.repositories.VideosRepository;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +35,18 @@ public class HashtagsControllerTest {
     @Inject
     HashtagsRepository hashtagsRepo;
 
+    Map<Long, Hashtag> newHashtag = new HashMap<>();
+
+
+    @MockBean(HashtagProducer.class)
+    HashtagProducer hashtagProducer() {
+        return new HashtagProducer() {
+            @Override
+            public void newHashtag(Long id, Hashtag hashtag) {
+                newHashtag.put(id, hashtag);
+            }
+        };
+    }
 
     @BeforeEach
     void setup() {
@@ -42,7 +58,7 @@ public class HashtagsControllerTest {
         client.add(hashtagDTO);
         Iterable<Hashtag> hashtags = client.list();
         assert (hashtags.iterator().hasNext());
-        assertTrue(hashtags.iterator().next().getName().equals("hashtag1"));
+        assertEquals("hashtag1", hashtags.iterator().next().getName());
     }
 
     @Test
@@ -61,9 +77,9 @@ public class HashtagsControllerTest {
 
         assertEquals(HttpStatus.CREATED, response.getStatus());
         Iterable<Hashtag> hashtags = client.list();
-
+        assertTrue(newHashtag.containsKey(hashtags.iterator().next().getId()));
         assert (hashtags.iterator().hasNext());
-        assertTrue(hashtags.iterator().next().getName().equals("hashtag1"));
+        assertEquals("hashtag1", hashtags.iterator().next().getName());
     }
 
 

@@ -11,17 +11,17 @@ import jakarta.inject.Inject;
  * kafka-streams requires at least one listener
  */
 @KafkaListener(groupId = "ExampleListener")
-public class ExampleListener {
+public class HashtagConsumer {
 
     @Inject
     HashtagsRepository hashtagsRepository;
 
-    @Topic("liked-hashtag")
-    void example(@KafkaKey long id, Hashtag hashtag) {
+    @Topic("new-hashtag")
+    void newHashtag(@KafkaKey long id, Hashtag hashtag) {
         if (hashtagsRepository.findById(hashtag.getId()).orElse(null) == null){
             hashtagsRepository.save(hashtag);
         }
-        System.out.println("liked-hashtag");
+        System.out.println("new-hashtag");
     }
 
 }

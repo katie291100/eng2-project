@@ -14,6 +14,7 @@ import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import uk.ac.york.eng2.trendingHashtags.repositories.HashtagsRepository;
 
 
 import java.util.List;
@@ -36,17 +37,19 @@ public class TrendingControllerTest {
     @Inject
     KafkaStreams kStreams;
 
+    @Inject
+    HashtagsRepository hashtagsRepository;
+
     @BeforeEach
     public void setUp() {
 //        Awaitility.await().atMost(30, TimeUnit.SECONDS).until(() -> kStreams.state().equals(KafkaStreams.State.RUNNING));
+        hashtagsRepository.deleteAll();
     }
 
 
     @Test
     public void testListEmpty() {
         List<Long> result = trendingClient.list();
-
         assertNull(result);
     }
-
 }

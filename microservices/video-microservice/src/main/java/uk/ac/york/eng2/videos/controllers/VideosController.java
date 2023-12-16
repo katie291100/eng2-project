@@ -61,8 +61,6 @@ public class VideosController {
     @Transactional
     @Post("/")
     public HttpResponse<Void> addVideo(@Body VideoDTO videoDetails) {
-        System.out.println(videoDetails.getHashtags());
-
         Set<Hashtag> hashtags = new HashSet<>();
         Iterable<HashtagDTO> hashtagDTOs = videoDetails.getHashtags();
         if (hashtagDTOs != null){
@@ -139,9 +137,6 @@ public class VideosController {
         repo.update(videoRecord);
         kafkaClient.likeVideo(userId, videoRecord);
 
-        videoRecord.getHashtags().stream().toList().forEach(hashtag -> {
-            kafkaClient.likeHashtag(hashtag.getId(), hashtag);
-        });
         return HttpResponse.ok();
     }
 

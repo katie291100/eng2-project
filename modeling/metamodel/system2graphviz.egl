@@ -1,11 +1,51 @@
 digraph G {
     node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
         gradientangle="270", fillcolor="bisque"]
+    rankdir="TB"
 		[%for (m in microservices){%]
-		
-			 [%=m.name%] [label = "[%=m.name%]" fillcolor="azure2"]
-	
-		[%}%]		
+		 [%=m.name%] [label = "[%=m.name%]" fillcolor="azure2"]
+			 	[%}%]
+
+    	 subgraph kafka {
+	  	cluster=true;
+	    color="9";
+	    label="Topics"
+		[%for (m in microservices){%]
+
+			 
+			 [%for (e in m.producers){%]
+			 	[%for (t in e.eventStreams){%]
+			 		[%=t.name%] [shape="box3d"]
+			 		
+			 	[%}%]
+			 [%}%]
+			 [%for (e in m.consumers){%]
+			 	[%for (t in e.eventStreams){%]
+			 		[%=t.name%][shape="box3d"] 		
+			 	[%}%]
+			 [%}%]
+			 
+			
+		[%}%]	
+		}	
+		[%for (m in microservices){%]
+
+			 
+			 [%for (e in m.producers){%]
+			 	[%for (t in e.eventStreams){%]
+			 		[%=m.name%] -> [%=t.name%] [color="#2A6C41" label="Produces to"]
+			 		
+			 	[%}%]
+			 [%}%]
+			 [%for (e in m.consumers){%]
+			 	[%for (t in e.eventStreams){%]
+			 		[%=t.name%] -> [%=m.name%] [color="#2A6C41" label="Consumes from"]
+			 		
+			 	[%}%]
+			 [%}%]
+			 
+			
+		[%}%]	
 		
 }
 
