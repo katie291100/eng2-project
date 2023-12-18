@@ -1,5 +1,7 @@
 package uk.ac.york.eng2.trendingHashtags.events;
 
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import uk.ac.york.eng2.trendingHashtags.domain.Hashtag;
 import uk.ac.york.eng2.trendingHashtags.domain.Video;
 import uk.ac.york.eng2.trendingHashtags.repositories.HashtagsRepository;
@@ -37,16 +39,28 @@ public class TrendingStreams {
     public KStream<WindowedIdentifier, Long> hashtagStream(ConfiguredStreamBuilder builder) {
 
         Properties props = builder.getConfiguration();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "trending-hashtag-metrics");
         props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_V2);
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Long().getClass().getName());
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Long().getClass().getName());
+
+        try (AdminClient client = AdminClient.create(builder.getConfiguration())) {
+            if (!client.listTopics().names().get().contains("like-video")) {
+                client.createTopics(List.of(
+                        new NewTopic("like-video", 3, (short) 1)
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Materialized<Long, Long, KeyValueStore<Bytes, byte[]>> materialized = Materialized.as("trending-hashtag-store");
         KStream<WindowedIdentifier, Long> stream = builder.stream("like-video", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Video.class)))
                 .flatMapValues(Video::getHashtags)
                 .flatMap((key, value) -> {
+
                     if (hashtagsRepository.findById(value.getId()).orElse(null) == null){
-                        hashtagsRepository.save(value);
+                        hashtagsRepository.save(value); //TODO: check if this is correct, value is id null
+
                     }
                     System.out.println("liked-hashtag");
                     @NonNull List<Hashtag> hashtags = hashtagsRepository.findAll();
@@ -63,7 +77,7 @@ public class TrendingStreams {
                     return hashtagMap;
                 })
                 .groupByKey(Grouped.with(Serdes.Long(), Serdes.Long()))
-                .windowedBy(SlidingWindows.ofTimeDifferenceAndGrace(Duration.ofMinutes(5), Duration.ofMinutes(1)))
+                .windowedBy(SlidingWindows.ofTimeDifferenceAndGrace(Duration.ofMinutes(60), Duration.ofMinutes(1)))
                 .aggregate(() -> 0L, (k, v, count) -> count + v).toStream().selectKey((windowedHashtagId, count) -> new WindowedIdentifier(
                         windowedHashtagId.key(),
                         windowedHashtagId.window().start(),

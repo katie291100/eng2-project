@@ -4,6 +4,3 @@ kafka:
   default:
     embedded:
       enabled: true
-  streams:
-    default:
-      start-kafka-streams: true

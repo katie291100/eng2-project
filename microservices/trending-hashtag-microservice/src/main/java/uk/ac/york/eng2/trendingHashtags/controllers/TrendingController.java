@@ -5,14 +5,16 @@ import io.micronaut.configuration.kafka.streams.InteractiveQueryService;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import jakarta.inject.Inject;
+import jakarta.persistence.Tuple;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.apache.kafka.streams.state.ValueAndTimestamp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-@Controller("/trending")
+@Controller("/trendingHashtags")
 public class TrendingController {
     
     @Inject
@@ -21,12 +23,19 @@ public class TrendingController {
     @Get("/")
     public List<Long> list() {
         ReadOnlyKeyValueStore<Long, ValueAndTimestamp<Long>>  queryableStore = getStore();
-        List<Long> keys = new ArrayList<>();
+        HashMap<Long, Long> values = new HashMap<>();
         queryableStore.all().forEachRemaining((keyValue) -> {
-            keys.add(keyValue.key);
+            values.put(keyValue.key, keyValue.value.value());
         });
         //TODO: Use a db query to get the top 10 trending hashtags
-        return keys.subList(0,10);
+        List<Long> keys = new ArrayList<>(values.keySet());
+        keys.sort((o1, o2) -> values.get(o2).compareTo(values.get(o1)));
+        if (values.keySet().size() > 10) {
+            return keys.subList(0,10);
+        }
+        else {
+            return keys;
+        }
     }
 
     private ReadOnlyKeyValueStore<Long, ValueAndTimestamp<Long>> getStore() {

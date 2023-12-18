@@ -1,4 +1,4 @@
-package uk.ac.york.eng2.trendingHashtags.events;
+package uk.ac.york.eng2.trendingHashtags;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,6 +7,7 @@ import io.micronaut.configuration.kafka.serde.SerdeRegistry;
 import io.micronaut.configuration.kafka.streams.ConfiguredStreamBuilder;
 import io.micronaut.configuration.kafka.streams.InteractiveQueryService;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.extensions.junit5.annotation.TestResourcesScope;
 import jakarta.inject.Inject;
 
 import java.time.Duration;
@@ -23,6 +24,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.ac.york.eng2.trendingHashtags.domain.Hashtag;
 import uk.ac.york.eng2.trendingHashtags.domain.Video;
+import uk.ac.york.eng2.trendingHashtags.events.TrendingStreams;
+import uk.ac.york.eng2.trendingHashtags.events.WindowedIdentifier;
 import uk.ac.york.eng2.trendingHashtags.repositories.HashtagsRepository;
 
 /**
@@ -30,7 +33,8 @@ import uk.ac.york.eng2.trendingHashtags.repositories.HashtagsRepository;
  * Kafka cluster. We use a simulated Kafka Streams driver included with KS: the {@code
  * TopologyTestDriver}.
  */
-@MicronautTest(environments = "no_streams") // TODO fix during lab
+@TestResourcesScope("myscope")
+@MicronautTest(transactional = false, environments = "no_streams")
 public class TrendingStreamsDoubleTest {
 
     @Inject
@@ -47,12 +51,16 @@ public class TrendingStreamsDoubleTest {
     @BeforeEach
     public void setup() {
         props = new Properties();
-        builder = new ConfiguredStreamBuilder(new Properties());
+        builder = new ConfiguredStreamBuilder(props);
         streams.hashtagStream(builder);
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Long().getClass().getName());
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Long().getClass().getName());
+        hashtagsRepository.deleteAll();
     }
 
+    /**
+     * Test that the topology is correct at startup.
+     */
     @Test
     public void topologyCheckEmpty() {
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
@@ -66,6 +74,9 @@ public class TrendingStreamsDoubleTest {
         }
     }
 
+    /**
+     * Test that the topology keeps track of likes correctly when a video with one hashtag is liked 3 times.
+     */
     @Test
     public void topologyCheck() {
 
@@ -94,6 +105,9 @@ public class TrendingStreamsDoubleTest {
         }
     }
 
+    /**
+     * Test that the topology keeps track of likes correctly when a video with one hashtag is liked 3 times.
+     */
 
     @Test
     public void multiHashtagTopologyCheck() {
@@ -106,7 +120,6 @@ public class TrendingStreamsDoubleTest {
             Hashtag hashtag1 = new Hashtag();
             hashtag1.setName("test");
             hashtag1.setId(1L);
-            hashtagsRepository.save(hashtag1);
 
             video1.setHashtags(Set.of(hashtag1));
             video1.setId(1L);
@@ -117,7 +130,6 @@ public class TrendingStreamsDoubleTest {
             Hashtag hashtag2 = new Hashtag();
             hashtag2.setName("test2");
             hashtag2.setId(2L);
-            hashtagsRepository.save(hashtag2);
             video2.setHashtags(Set.of(hashtag2));
             video2.setId(2L);
             inputTopic.pipeInput(video2.getId(), video2);
@@ -144,32 +156,43 @@ public class TrendingStreamsDoubleTest {
                     testDriver.createInputTopic(
                             "like-video", new LongSerializer(), serdeRegistry.getSerializer(Video.class));
 
-            Video video1 = new Video();
-            Hashtag hashtag1 = new Hashtag();
-            hashtag1.setName("test");
-            hashtag1.setId(1L);
-            hashtagsRepository.save(hashtag1);
-
-            video1.setHashtags(Set.of(hashtag1));
-            video1.setId(1L);
-            inputTopic.pipeInput(video1.getId(), video1);
-            inputTopic.advanceTime(Duration.of(4, ChronoUnit.MINUTES));
-            inputTopic.pipeInput(video1.getId(), video1);
-
             TestOutputTopic<WindowedIdentifier, Long> outputTopic =
                     testDriver.createOutputTopic(
                             "trending-hashtag",
                             serdeRegistry.getDeserializer(WindowedIdentifier.class),
                             new LongDeserializer());
 
+            Video video1 = new Video();
+            Hashtag hashtag1 = new Hashtag();
+            hashtag1.setName("test");
+            hashtag1.setId(1L);
+
+            video1.setHashtags(Set.of(hashtag1));
+            video1.setId(1L);
+            inputTopic.pipeInput(1L, video1);
+            inputTopic.pipeInput(1L, video1);
+            inputTopic.pipeInput(1L, video1);
+
+            Video video2 = new Video();
+            Hashtag hashtag2 = new Hashtag();
+            hashtag2.setName("test");
+            hashtag2.setId(2L);
+
+            video2.setHashtags(Set.of(hashtag2));
+            video2.setId(2L);
+            inputTopic.pipeInput(1L, video2);
 
             ReadOnlyKeyValueStore<Object, Object> store = testDriver.getKeyValueStore("trending-hashtag-store");
 
             assertNotNull(store);
-            assertEquals(2L, store.get(hashtag1.getId()));
+            assertEquals(3L, store.get(hashtag1.getId()));
+            assertEquals(1L, store.get(hashtag2.getId()));
 
-            inputTopic.advanceTime(Duration.of(62, ChronoUnit.MINUTES));
-            assertEquals(2L, store.get(hashtag1.getId()));
+            inputTopic.advanceTime(Duration.of(64, ChronoUnit.MINUTES));
+            inputTopic.pipeInput(1L, video1);
+
+            assertEquals(1L, store.get(hashtag1.getId()));
+            assertEquals(0L, store.get(hashtag2.getId()));
 
         }
     }

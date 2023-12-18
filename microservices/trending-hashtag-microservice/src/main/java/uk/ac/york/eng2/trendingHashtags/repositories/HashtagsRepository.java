@@ -10,6 +10,4 @@ import java.util.List;
 @Repository
 public interface HashtagsRepository extends CrudRepository<Hashtag, Long> {
 
-    List<Hashtag> findByName(String name);
-
 }

@@ -25,6 +25,7 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     runtimeOnly("org.yaml:snakeyaml")
+    testImplementation("io.micronaut.testresources:micronaut-test-resources-extensions-junit-platform")
     testImplementation("org.awaitility:awaitility:4.2.0")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:3.6.0")
     testImplementation("io.micronaut:micronaut-http-server-netty")

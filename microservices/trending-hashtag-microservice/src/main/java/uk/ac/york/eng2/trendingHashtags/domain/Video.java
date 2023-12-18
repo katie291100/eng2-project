@@ -35,6 +35,11 @@ public class Video {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+
     @Override
     public String toString() {
         return "Video{" +
@@ -51,4 +56,7 @@ public class Video {
         this.hashtags = hashtags;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
