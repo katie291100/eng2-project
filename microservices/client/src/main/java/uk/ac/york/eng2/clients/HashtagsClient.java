@@ -12,12 +12,12 @@ import uk.ac.york.eng2.dto.HashtagDTO;
 @Client("${hashtags.url:`http://localhost:8080/hashtags`}")
 public interface HashtagsClient {
     @Get("/")
-    public Iterable<Hashtag> list();
+    Iterable<Hashtag> list();
 
     @Get("/{id}")
-    public Hashtag getHashtag(Long id);
+    Hashtag getHashtag(Long id);
 
     @Post("/")
-    public HttpResponse<Void> add(@Body HashtagDTO hashtagDTO);
+    HttpResponse<Void> add(@Body HashtagDTO hashtagDTO);
 
 }
