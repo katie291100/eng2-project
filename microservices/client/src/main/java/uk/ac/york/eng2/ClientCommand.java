@@ -7,10 +7,15 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-import uk.ac.york.eng2.commands.AddUserCommand;
+import uk.ac.york.eng2.commands.*;
 
 @Command(name = "client", description = "...",
-        mixinStandardHelpOptions = true, subcommands = AddUserCommand.class)
+        mixinStandardHelpOptions = true,
+        subcommands = {AddUserCommand.class,
+                PostVideoCommand.class,
+                LikeVideoCommand.class,
+                DislikeVideoCommand.class,
+                TrendingHashtagsCommand.class})
 public class ClientCommand implements Runnable {
 
     @Option(names = {"-v", "--verbose"}, description = "...")

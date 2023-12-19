@@ -20,7 +20,7 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @JsonIgnore
@@ -62,10 +62,6 @@ public class User {
 
     public Set<Video> getPostedVideos() {
         return postedVideos;
-    }
-
-    public void setPostedVideos(Set<Video> postedVideos) {
-        this.postedVideos = postedVideos;
     }
 
     @Override

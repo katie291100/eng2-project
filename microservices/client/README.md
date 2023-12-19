@@ -13,4 +13,5 @@
 
 - [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
 
-
+Dev cli run command:
+```./gradlew run --args='get-trending-hashtags'```

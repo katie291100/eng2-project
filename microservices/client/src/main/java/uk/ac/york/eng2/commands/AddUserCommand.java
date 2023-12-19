@@ -23,9 +23,12 @@ public class AddUserCommand implements Runnable {
         UserDTO newUser = new UserDTO();
         newUser.setName(name);
         HttpResponse<Void> result = client.add(newUser);
+        Long userId = result.code() == HttpStatus.CREATED.getCode() ? Long.parseLong(result.header("location").split("/")[2]) : null;
 
         if (result.code() == HttpStatus.CREATED.getCode()) {
             System.out.println("Successfully created user with name " + name);
+            System.out.println("Remember your user ID " + userId);
+
         }
     }
 }

@@ -94,4 +94,14 @@ public class UsersController {
 
         return HttpResponse.ok();
     }
+
+    @Get("/{id}/postedVideos")
+    @Transactional
+    public Set<Video> getPostedByUser(long id) {
+        User user = repo.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        return user.getPostedVideos();
+    }
 }

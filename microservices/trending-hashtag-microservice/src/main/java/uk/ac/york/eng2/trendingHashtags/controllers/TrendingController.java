@@ -27,7 +27,6 @@ public class TrendingController {
         queryableStore.all().forEachRemaining((keyValue) -> {
             values.put(keyValue.key, keyValue.value.value());
         });
-        //TODO: Use a db query to get the top 10 trending hashtags
         List<Long> keys = new ArrayList<>(values.keySet());
         keys.sort((o1, o2) -> values.get(o2).compareTo(values.get(o1)));
         if (values.keySet().size() > 10) {
