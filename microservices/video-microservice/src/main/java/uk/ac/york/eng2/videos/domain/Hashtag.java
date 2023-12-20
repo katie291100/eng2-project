@@ -2,11 +2,7 @@ package uk.ac.york.eng2.videos.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.Set;
 
@@ -22,7 +18,7 @@ public class Hashtag {
     private String name;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "hashtags")
+    @ManyToMany(mappedBy = "hashtags", fetch = FetchType.EAGER)
     private Set<Video> videos;
 
 

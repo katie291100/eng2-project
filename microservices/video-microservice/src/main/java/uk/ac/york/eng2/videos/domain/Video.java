@@ -25,7 +25,7 @@ public class Video {
     @Column(nullable = false)
     private Long dislikes = 0L;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Hashtag> hashtags = new HashSet<>();
 
     @ManyToOne(optional = false)

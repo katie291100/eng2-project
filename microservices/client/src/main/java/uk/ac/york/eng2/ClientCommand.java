@@ -1,12 +1,9 @@
 package uk.ac.york.eng2;
 
 import io.micronaut.configuration.picocli.PicocliRunner;
-import io.micronaut.context.ApplicationContext;
 
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 import uk.ac.york.eng2.commands.*;
 
 @Command(name = "client", description = "...",
@@ -15,7 +12,10 @@ import uk.ac.york.eng2.commands.*;
                 PostVideoCommand.class,
                 LikeVideoCommand.class,
                 DislikeVideoCommand.class,
-                TrendingHashtagsCommand.class})
+                TrendingHashtagsCommand.class,
+        ListVideosCommand.class,
+        ListUsersCommand.class,
+        GetVideoCommand.class})
 public class ClientCommand implements Runnable {
 
     @Option(names = {"-v", "--verbose"}, description = "...")

@@ -7,6 +7,7 @@ import uk.ac.york.eng2.domain.Video;
 import uk.ac.york.eng2.dto.VideoDTO;
 
 import java.util.List;
+import java.util.Set;
 
 @Client("${videos.url:`http://localhost:8080/videos`}")
 public interface VideosClient {
@@ -23,7 +24,7 @@ public interface VideosClient {
     HttpResponse<Void> updateVideo(Long id, @Body VideoDTO video);
 
     @Get("/hashtag/{hashtag}")
-    List<Video> listVideosByHashtag(String hashtag);
+    Set<Video> listVideosByHashtag(String hashtag);
 
     @Put("/{id}/like/{userId}")
     HttpResponse<Void> likeVideo(Long id, Long userId);

@@ -21,6 +21,9 @@ public interface UsersClient {
     @Get("/{id}/watchedVideos")
     Set<Video> getWatchedByUser(long id);
 
+    @Get("/{id}/postedVideos")
+    Set<Video> getPostedByUser(long id);
+
     @Post("/")
     HttpResponse<Void> add(@Body UserDTO userDetails);
 
@@ -32,4 +35,6 @@ public interface UsersClient {
 
     @Delete("/{id}")
     HttpResponse<Void> deleteUser(long id);
+
+
 }

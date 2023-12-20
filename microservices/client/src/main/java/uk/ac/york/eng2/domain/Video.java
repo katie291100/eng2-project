@@ -59,6 +59,21 @@ public class Video {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Video)) {
+            return false;
+        }
+        Video video = (Video) o;
+        return video.getId().equals(this.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
 
     public User getPostedBy() {
         return postedBy;

@@ -29,9 +29,8 @@ public class PostVideoCommand implements Runnable {
     private String title;
     @CommandLine.Parameters(index = "1")
     private Long userId;
-    @CommandLine.Parameters(index = "2")
+    @CommandLine.Parameters(index = "2..")
     private List<String> hashtags;
-
 
     @Override
     public void run() {

@@ -40,17 +40,13 @@ public class VideosController {
     }
 
     @Get("/hashtag/{hashtag}")
-    public List<Video> listVideosByHashtag(String hashtag) {
-        try{
-            Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).get(0);
-        }catch (Exception e){
-            return null;
-        }
+    public Set<Video> listVideosByHashtag(String hashtag) {
+
         Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).get(0);
 
         List<Video> videos = repo.findAll();
         videos.removeIf(video -> !video.getHashtags().stream().toList().contains(hashtagRecord));
-        return videos;
+        return hashtagRecord.getVideos();
     }
 
     @Get("/{id}") //TODO: make return 404 if not found?

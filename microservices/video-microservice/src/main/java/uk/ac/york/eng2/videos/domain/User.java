@@ -28,7 +28,7 @@ public class User {
     private Set<Video> watchedVideos = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "postedBy")
+    @OneToMany(mappedBy = "postedBy", fetch = FetchType.EAGER)
     private Set<Video> postedVideos;
 
 
