@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @CommandLine.Command(
         name = "like-video",
-        description = "adds a new video record to the database",
+        description = "likes a video as a user",
         mixinStandardHelpOptions = true)
 public class LikeVideoCommand implements Runnable {
     @Inject
@@ -38,8 +38,8 @@ public class LikeVideoCommand implements Runnable {
             return;
         }
         Video video = client.getVideo(videoId);
-        if (user == null) {
-            System.out.println("Video with id " + userId + " does not exist");
+        if (video == null) {
+            System.out.println("Video with id " + videoId + " does not exist");
             return;
         }
         HttpResponse<Void> result = client.likeVideo(videoId, userId);

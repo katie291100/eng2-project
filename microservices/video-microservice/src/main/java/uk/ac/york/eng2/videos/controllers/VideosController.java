@@ -42,11 +42,14 @@ public class VideosController {
     @Get("/hashtag/{hashtag}")
     public Set<Video> listVideosByHashtag(String hashtag) {
 
-        Hashtag hashtagRecord = hashtagRepo.findByName(hashtag).get(0);
-
+        List<Hashtag> hashtagRecords = hashtagRepo.findByName(hashtag);
+        if (hashtagRecords.isEmpty()){
+            return null;
+        }
+        Hashtag hashtags = hashtagRecords.get(0);
         List<Video> videos = repo.findAll();
-        videos.removeIf(video -> !video.getHashtags().stream().toList().contains(hashtagRecord));
-        return hashtagRecord.getVideos();
+        videos.removeIf(video -> !video.getHashtags().stream().toList().contains(hashtags));
+        return hashtags.getVideos();
     }
 
     @Get("/{id}") //TODO: make return 404 if not found?
@@ -59,6 +62,10 @@ public class VideosController {
     public HttpResponse<Void> addVideo(@Body VideoDTO videoDetails) {
         Set<Hashtag> hashtags = new HashSet<>();
         Iterable<HashtagDTO> hashtagDTOs = videoDetails.getHashtags();
+
+        if (videoDetails.getTitle() == null || videoDetails.getPostedBy() == null){
+            return HttpResponse.badRequest();
+        }
         if (hashtagDTOs != null){
             for (HashtagDTO hashtag : hashtagDTOs) {
                 Hashtag hashtagEntity;

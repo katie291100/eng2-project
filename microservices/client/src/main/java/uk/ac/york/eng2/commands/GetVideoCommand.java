@@ -12,7 +12,7 @@ import java.util.Set;
 
 @CommandLine.Command(
         name = "get-video",
-        description = "lists videos in the database",
+        description = "gets a video by id, or gets all videos posted by a user or with a hashtag",
         mixinStandardHelpOptions = true)
 public class GetVideoCommand implements Runnable {
     @Inject
@@ -34,7 +34,7 @@ public class GetVideoCommand implements Runnable {
                 System.out.println("Video with id " + id + " does not exist");
                 return;
             }
-            System.out.println(video.getId() + " - " + video.getTitle() + " - " + video.getHashtags());
+            System.out.println(video.getId() + " - " + video.getTitle() + " - " + "[" + video.getHashtags().stream().map(h -> h.getName()).reduce("", (a, b) -> a + ", " + b).substring(2) + "]");
             return;
         }
         Set<Video> videos = new HashSet<>();
@@ -48,10 +48,18 @@ public class GetVideoCommand implements Runnable {
                 return;
             }
             postedVideos = userClient.getPostedByUser(userId);
+            if (postedVideos.isEmpty()){
+                System.out.println("User with id " + userId + " has not posted any videos");
+                return;
+            }
         }
 
         if (hashtag != null){
             hashtagVideos = client.listVideosByHashtag(hashtag);
+            if (hashtagVideos == null){
+                System.out.println("Video with hashtag " + hashtag + " does not exist");
+                return;
+            }
         }
 
         if (userId != null && hashtag != null){

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @CommandLine.Command(
         name = "get-trending-hashtags",
-        description = "adds a new video record to the database",
+        description = "gets top 10 trending hashtags",
         mixinStandardHelpOptions = true)
 public class TrendingHashtagsCommand implements Runnable {
 

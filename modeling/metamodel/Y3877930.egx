@@ -43,6 +43,25 @@ rule Entity2Graphviz
         "icon" = "diagram-c0c0c0",
          "format" = "graphviz-dot",
         "attributes" = e.attributes,
+        "isDTO" = false,
+        "layers" = Sequence {
+            Map {"id"="attributes", "active"=true}
+        }
+    }
+
+}
+
+rule DTO2Graphviz
+    transform e : Y3877930::DTO {
+
+    template : "entity2graphviz.egl"
+
+    parameters : Map{
+        "path" = Sequence{"Microservices", e.eContainer().name, "DTOs",  e.name},
+        "icon" = "diagram-c0c0c0",
+        "format" = "graphviz-dot",
+        "isDTO" = true,
+        "attributes" = e.attributes,
         "layers" = Sequence {
             Map {"id"="attributes", "active"=true}
         }
@@ -74,7 +93,7 @@ rule ConsumersGraphviz
     template : "event2graphviz.egl"
 
     parameters : Map{
-        "path" = Sequence{"Microservices", c.eContainer().name, "EventStreams",  c.name+"Consumer"},
+        "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name+"Consumer"},
         "icon" = "diagram-c0c0c0",
          "format" = "graphviz-dot",
         "eventStreams" = c.eventStreams
@@ -88,7 +107,7 @@ rule ProducersGraphviz
     template : "event2graphviz.egl"
 
     parameters : Map{
-        "path" = Sequence{"Microservices", c.eContainer().name, "EventStreams",  c.name+"Producer"},
+        "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name+"Producer"},
         "icon" = "diagram-c0c0c0",
          "format" = "graphviz-dot",
          "eventStreams" = c.eventStreams

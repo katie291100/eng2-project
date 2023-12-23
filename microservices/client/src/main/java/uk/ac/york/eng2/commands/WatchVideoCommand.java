@@ -10,10 +10,10 @@ import uk.ac.york.eng2.domain.User;
 import uk.ac.york.eng2.domain.Video;
 
 @CommandLine.Command(
-        name = "dislike-video",
-        description = "dislike a video as a user",
+        name = "watch-video",
+        description = "watch a video as a user",
         mixinStandardHelpOptions = true)
-public class DislikeVideoCommand implements Runnable {
+public class WatchVideoCommand implements Runnable {
     @Inject
     private VideosClient client;
 
@@ -33,12 +33,13 @@ public class DislikeVideoCommand implements Runnable {
         }
         Video video = client.getVideo(videoId);
         if (video == null) {
-            System.out.println("Video with id " + videoId + " does not exist");
+            System.out.println("Video with id " + userId + " does not exist");
             return;
         }
-        HttpResponse<Void> result = client.dislikeVideo(videoId, userId);
+        HttpResponse<Void> result = userClient.watchedVideo(userId, videoId);
+        System.out.println(result.code());
         if (result.code() == HttpStatus.OK.getCode()) {
-            System.out.println("Successfully disliked video with id " + videoId);
+            System.out.println("Successfully watched video with id " + videoId);
         }
     }
 }

@@ -1,6 +1,7 @@
 package uk.ac.york.eng2.videos.controllers;
 
 
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.runtime.EmbeddedApplication;
@@ -13,11 +14,11 @@ public class HealthcheckController{
     EmbeddedApplication<?> application;
 
     @Get("/")
-    public String check(){
+    public HttpResponse<Void> check(){
         if (application.isRunning()){
-            return "OK";
+            return HttpResponse.ok();
         }
-        return "NOT RUNNING";
+        return HttpResponse.serverError();
     }
 
 }

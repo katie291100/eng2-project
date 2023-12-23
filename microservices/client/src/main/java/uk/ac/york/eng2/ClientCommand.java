@@ -15,7 +15,8 @@ import uk.ac.york.eng2.commands.*;
                 TrendingHashtagsCommand.class,
         ListVideosCommand.class,
         ListUsersCommand.class,
-        GetVideoCommand.class})
+        GetVideoCommand.class,
+        WatchVideoCommand.class})
 public class ClientCommand implements Runnable {
 
     @Option(names = {"-v", "--verbose"}, description = "...")
