@@ -52,7 +52,6 @@ public class UsersController {
     public HttpResponse<Void> add(@Body UserDTO userDetails) {
         User newUser = new User();
         newUser.setName(userDetails.getName());
-
         repo.save(newUser);
         kafkaClient.newUser(newUser.getId(), newUser);
         return HttpResponse.created(URI.create("/users/" + newUser.getId()));

@@ -7,11 +7,11 @@ import io.micronaut.context.env.Environment;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.ClassRule;
+import org.junit.jupiter.api.*;
 
-import org.junit.jupiter.api.TestInstance;
+import org.testcontainers.containers.ComposeContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import uk.ac.york.eng2.clients.UsersClient;
 import uk.ac.york.eng2.clients.VideosClient;
 import uk.ac.york.eng2.domain.Hashtag;
@@ -22,6 +22,7 @@ import uk.ac.york.eng2.dto.UserDTO;
 import uk.ac.york.eng2.dto.VideoDTO;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Set;
@@ -36,16 +37,32 @@ public class GetVideoCommandTest {
   VideosClient videosClient;
 
   @Inject
-  UsersClient userClient;
+  UsersClient usersClient;
 
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
+  @ClassRule
+  public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
+          .withExposedService("video-microservice", 8080, Wait.forHttp("/healthcheck").forStatusCode(200))
+          .withExposedService("trending-hashtag-microservice", 8081, Wait.forHttp("/healthcheck").forStatusCode(200))
+          .withLogConsumer("video-microservice", (outputFrame) -> {
+            System.out.println(outputFrame.getUtf8String());
+          });
+
+  @BeforeAll
+  public static void waitForServices() {
+    environment.start();
+  }
 
   @BeforeEach
   public void clearSysOut() {
     baos.reset();
   }
 
+  @AfterAll
+  public static void stopEnvironment() {
+    environment.stop();
+  }
   private Long videoId;
   private Long userId;
 
@@ -53,7 +70,7 @@ public class GetVideoCommandTest {
   public void setup() {
     VideoDTO videoDTO = new VideoDTO();
     UserDTO userDTO = new UserDTO("TestUser");
-    HttpResponse<Void> response = userClient.add(userDTO);
+    HttpResponse<Void> response = usersClient.add(userDTO);
     userId = Long.parseLong(response.header("location").split("/")[2]);
 
     videoDTO.setTitle("Video Test Title");
@@ -128,8 +145,8 @@ public class GetVideoCommandTest {
   @Test
   public void cannotGetByUserNotPosted() {
     System.setOut(new PrintStream(baos));
-    UserDTO userDTO = new UserDTO("TestUser");
-    HttpResponse<Void> response = userClient.add(userDTO);
+    UserDTO userDTO = new UserDTO("TestUser2");
+    HttpResponse<Void> response = usersClient.add(userDTO);
     Long userIdNew = Long.parseLong(response.header("location").split("/")[2]);
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {

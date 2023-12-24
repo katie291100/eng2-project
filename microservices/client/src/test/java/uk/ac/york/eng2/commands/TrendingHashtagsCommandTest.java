@@ -12,13 +12,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.ComposeContainer;
-import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.shaded.org.awaitility.Awaitility;
-import uk.ac.york.eng2.DockerComposeReset;
 import uk.ac.york.eng2.clients.TrendingClient;
 import uk.ac.york.eng2.clients.UsersClient;
 import uk.ac.york.eng2.clients.VideosClient;
+import uk.ac.york.eng2.commands.TrendingHashtagsCommand;
 import uk.ac.york.eng2.domain.Hashtag;
 import uk.ac.york.eng2.domain.Video;
 import uk.ac.york.eng2.dto.HashtagDTO;
@@ -30,10 +29,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -57,25 +56,42 @@ public class TrendingHashtagsCommandTest {
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
             .withExposedService("video-microservice", 8080)
-            .withExposedService("trending-hashtag-microservice", 8081);
+            .withExposedService("trending-hashtag-microservice", 8081)
+            .withLogConsumer("trending-hashtag-microservice", (outputFrame) -> {
+            System.out.println(outputFrame.getUtf8String());
+          });
 
   @BeforeAll
-  public static void waitForServices() {
+  public static void startServices() {
       environment.start();
   }
 
   @BeforeEach
-  public void clearSysOut() throws IOException, InterruptedException {
+  public void clearSysOut(){
     baos.reset();
   }
-//  @AfterAll
-//  public static void stopEnvironment() {
-//    environment.stop();
-//  }
+
+  @AfterAll
+  public static void stopEnvironment() {
+    environment.stop();
+  }
 
   @Test
-  public void trendingHashtag10Hashtags() {
+  public void trendingHashtagNoHashtags() throws InterruptedException {
     System.setOut(new PrintStream(baos));
+    TimeUnit.SECONDS.sleep(30);
+    List<Long> response3 = trendingClient.list();
+    try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      PicocliRunner.run(TrendingHashtagsCommand.class, ctx);
+      assertTrue(baos.toString().contains("Top 10 trending hashtags:"));
+
+
+    }
+  }
+  @Test
+  public void trendingHashtag10Hashtags() throws InterruptedException {
+    System.setOut(new PrintStream(baos));
+    TimeUnit.SECONDS.sleep(30);
 
     UserDTO userDTO = new UserDTO("TestUser");
     HttpResponse<Void> responseUser = userClient.add(userDTO);
@@ -97,11 +113,15 @@ public class TrendingHashtagsCommandTest {
     Long videoID = Long.parseLong(response.header("location").split("/")[2]);
     Video video = videosClient.getVideo(videoID);
     HttpResponse<Void> response2 = videosClient.likeVideo(videoID, userId);
-    Awaitility.await().atLeast(Duration.ofSeconds(10)).atMost(Duration.ofSeconds(300)).until(() -> trendingClient.list().size() == 10);
+    if (response2.getStatus().getCode() != 200) {
+      throw new RuntimeException("Could not like video");
+    }
+    List<Long> response3 = trendingClient.list();
+    Awaitility.await().atMost(Duration.ofSeconds(300)).until(() -> trendingClient.list().size() == 10);
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
-      PicocliRunner.run(ListVideosCommand.class, ctx);
-
+      PicocliRunner.run(TrendingHashtagsCommand.class, ctx);
+      assertTrue(baos.toString().contains("Top 10 trending hashtags:"));
       for (Hashtag hashtag : video.getHashtags()) {
         assertTrue(baos.toString().contains(hashtag.getId() + " - " + hashtag.getName()));
       }

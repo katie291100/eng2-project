@@ -18,7 +18,7 @@ echo "Building Docker image for Trending Hashtag Microservice (THM)..."
 ./gradlew dockerBuild
 
 # Navigate to the /vm directory
-cd video-microservice || exit
+cd ../video-microservice || exit
 echo "Building Docker image for Video Microservice (VM)..."
 ./gradlew dockerBuild
 

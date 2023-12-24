@@ -31,10 +31,11 @@ public class TrendingHashtagsCommand implements Runnable {
 
     @Override
     public void run() {
-        trendingClient.list().forEach(hashtag -> {
-            Hashtag hashtag1 = hashtagsClient.getHashtag(hashtag);
-            if (hashtag1 != null){
-                System.out.println(hashtag1.getName());
+        System.out.println("Top 10 trending hashtags:");
+        trendingClient.list().forEach(hashtagId -> {
+            Hashtag hashtag = hashtagsClient.getHashtag(hashtagId);
+            if (hashtag != null){
+                System.out.println(hashtag.getId() + " - " + hashtag.getName());
             }
         });
 
