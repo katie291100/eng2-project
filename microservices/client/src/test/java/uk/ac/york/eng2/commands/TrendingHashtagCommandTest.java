@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +39,7 @@ public class TrendingHashtagCommandTest {
   @ClassRule
   public static DockerComposeContainer environment = new DockerComposeContainer(new File("src/test/resources/compose-test.yml"))
             .withExposedService("video-microservice", 8080, Wait.forHttp("/healthcheck")
-                    .forStatusCode(200))
+                    .forStatusCode(200).withStartupTimeout(Duration.ofSeconds(300)))
             .withExposedService("trending-hashtag-microservice", 8082);
 
 

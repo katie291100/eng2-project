@@ -32,20 +32,6 @@ services:
       - 3307:3307
     depends_on:
       - db
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    ports:
-      - 9000:8080
-    depends_on:
-      - kafka-0
-      - kafka-1
-      - kafka-2
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-0:9092
-      KAFKA_CLUSTERS_0_METRICS_PORT: 9997
-      DYNAMIC_CONFIG_ENABLED: 'true'
-
   video-microservice:
     image: video-microservice:latest
     restart: unless-stopped

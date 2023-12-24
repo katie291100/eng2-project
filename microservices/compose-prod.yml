@@ -22,7 +22,7 @@ services:
       MARIADB_USER: *dbuser
       MARIADB_PASSWORD: *dbpass
       MARIADB_ROOT_PASSWORD: iamroot
-      MARIADB_DATABASE: hashtags
+      MARIADB_DATABASE: trending
       MYSQL_TCP_PORT: 3307
       MYSQL_UNIX_PORT: 3307
     volumes:

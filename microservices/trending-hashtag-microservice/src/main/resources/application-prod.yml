@@ -23,7 +23,7 @@ datasources:
     driver-class-name: org.mariadb.jdbc.Driver
     db-type: mariadb
     dialect: MYSQL
-    url: jdbc:mariadb://${DB_HOST:db}:3307/${DB_NAME:trending
+    url: jdbc:mariadb://${DB_HOST:db}:3307/${DB_NAME:trending}
     username: todo
     password: todosecret
 kafka:
