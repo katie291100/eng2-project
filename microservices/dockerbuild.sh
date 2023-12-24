@@ -12,7 +12,7 @@ check_docker_daemon() {
 # Check if Docker daemon is running
 check_docker_daemon
 
-# Navigate to the /sm directory
+# Navigate to the /thm directory
 cd trending-hashtag-microservice || exit
 echo "Building Docker image for Trending Hashtag Microservice (THM)..."
 ./gradlew dockerBuild

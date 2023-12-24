@@ -23,6 +23,7 @@ public class AddUserCommandTest {
   @Inject
   UsersClient usersClient;
 
+
   @BeforeEach
   public void clearSysOut() {
     baos.reset();

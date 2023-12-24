@@ -48,7 +48,7 @@ run{
             'datasources.default.username': 'todo',
             'datasources.default.password': 'todosecret',
             'kafka.bootstrap.servers': 'localhost:9094,localhost:9095,localhost:9096',
-            'micronaut.server.port': '8082'
+            'micronaut.server.port': '8081'
     ])
 }
 
@@ -71,5 +71,6 @@ jacocoTestReport{
 }
 tasks.named("dockerfile") {
     baseImage = "amazoncorretto:17-alpine3.17"
+    instruction "RUN apk add --no-cache libstdc++ gcompat"
 }
 

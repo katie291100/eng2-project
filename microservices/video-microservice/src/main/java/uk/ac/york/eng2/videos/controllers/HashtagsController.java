@@ -38,6 +38,13 @@ public class HashtagsController {
 
     @Post("/")
     public HttpResponse<Void> add(@Body HashtagDTO hashtagDetails) {
+        if (hashtagDetails.getName() == null) {
+            return HttpResponse.badRequest();
+        }
+
+        if (repo.findByName(hashtagDetails.getName()) != null) {
+            return HttpResponse.badRequest();
+        }
         Hashtag newHashtag = new Hashtag();
         newHashtag.setName(hashtagDetails.getName());
 
