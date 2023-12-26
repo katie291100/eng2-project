@@ -44,5 +44,12 @@ micronaut {
     }
 }
 
+tasks.named("dockerfile") {
+    baseImage = "eclipse-temurin:17-jre-focal"
+    editDockerfile {
+        after("WORKDIR /home/app") {
+            insert("ENV LOG_LEVEL=ERROR")
+        }
+    }
 
-
+}

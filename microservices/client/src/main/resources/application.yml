@@ -1,0 +1,7 @@
+#Sat Dec 02 22:50:06 UTC 2023
+micronaut:
+  application:
+      name: client
+logging:
+  level:
+    io.micronaut.context.env.DefaultEnvironment: WARN
