@@ -42,7 +42,7 @@ public class HashtagsController {
             return HttpResponse.badRequest();
         }
 
-        if (repo.findByName(hashtagDetails.getName()) != null) {
+        if (!repo.findByName(hashtagDetails.getName()).isEmpty()) {
             return HttpResponse.badRequest();
         }
         Hashtag newHashtag = new Hashtag();

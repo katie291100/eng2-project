@@ -10,7 +10,7 @@ import jakarta.inject.Inject;
 /**
  * kafka-streams requires at least one listener
  */
-@KafkaListener(groupId = "ExampleListener")
+@KafkaListener(groupId = "HashtagConsumer")
 public class HashtagConsumer {
 
     @Inject

@@ -64,22 +64,22 @@ public class HashtagsControllerTest {
     @Test
     public void testGetHashtag() {
         Hashtag hashtag = new Hashtag();
-        hashtag.setName("hashtag1");
+        hashtag.setName("hashtag2");
         hashtagsRepo.save(hashtag);
         Hashtag retrievedHashtag = client.getHashtag(hashtag.getId());
-        assertEquals("hashtag1", retrievedHashtag.getName());
+        assertEquals("hashtag2", retrievedHashtag.getName());
     }
 
     @Test
     public void testAddHashtag() {
-        HashtagDTO hashtagDTO = new HashtagDTO("hashtag1");
+        HashtagDTO hashtagDTO = new HashtagDTO("hashtag3");
         HttpResponse<Void> response = client.add(hashtagDTO);
 
         assertEquals(HttpStatus.CREATED, response.getStatus());
         Iterable<Hashtag> hashtags = client.list();
         assertTrue(newHashtag.containsKey(hashtags.iterator().next().getId()));
         assert (hashtags.iterator().hasNext());
-        assertEquals("hashtag1", hashtags.iterator().next().getName());
+        assertEquals("hashtag3", hashtags.iterator().next().getName());
     }
 
 

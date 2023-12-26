@@ -29,9 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,6 +51,7 @@ public class TrendingHashtagsCommandTest {
   @Inject
   TrendingClient trendingClient;
 
+
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
             .withExposedService("video-microservice", 8080)
@@ -63,7 +62,12 @@ public class TrendingHashtagsCommandTest {
 
   @BeforeAll
   public static void startServices() {
-      environment.start();
+      if (!Objects.equals(System.getenv("USE_TEST_CONTAINERS"), "False")) {
+          environment.start();
+          return;
+      }
+      System.out.println("Warning: Not using test containers, using local services, TrendingHashtag tests will likely fail");
+
   }
 
   @BeforeEach
@@ -75,6 +79,7 @@ public class TrendingHashtagsCommandTest {
   public static void stopEnvironment() {
     environment.stop();
   }
+
 
   @Test
   public void trendingHashtagNoHashtags() throws InterruptedException {
