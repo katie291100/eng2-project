@@ -13,15 +13,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.domain.User;
-import uk.ac.york.eng2.dto.UserDTO;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.commands.ListUsersCommand;
+import uk.ac.york.eng2.cli.domain.User;
+import uk.ac.york.eng2.cli.dto.UserDTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -42,7 +42,12 @@ public class ListUserCommandTest {
 
   @BeforeAll
   public static void waitForServices() {
-    environment.start();
+    if (!Objects.equals(System.getenv("USE_TEST_CONTAINERS"), "false")) {
+      environment.start();
+      return;
+    }
+    System.out.println("Warning: Not using test containers, using local services, TrendingHashtag tests will likely fail");
+
   }
 
   @BeforeEach
@@ -72,5 +77,6 @@ public class ListUserCommandTest {
       }
 
     }
+
   }
 }

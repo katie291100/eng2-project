@@ -12,21 +12,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.ComposeContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.shaded.org.awaitility.Awaitility;
-import uk.ac.york.eng2.clients.TrendingClient;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.clients.VideosClient;
-import uk.ac.york.eng2.commands.TrendingHashtagsCommand;
-import uk.ac.york.eng2.domain.Hashtag;
-import uk.ac.york.eng2.domain.Video;
-import uk.ac.york.eng2.dto.HashtagDTO;
-import uk.ac.york.eng2.dto.UserDTO;
-import uk.ac.york.eng2.dto.VideoDTO;
+import uk.ac.york.eng2.cli.clients.TrendingClient;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.clients.VideosClient;
+import uk.ac.york.eng2.cli.commands.TrendingHashtagsCommand;
+import uk.ac.york.eng2.cli.domain.Hashtag;
+import uk.ac.york.eng2.cli.domain.Video;
+import uk.ac.york.eng2.cli.dto.HashtagDTO;
+import uk.ac.york.eng2.cli.dto.UserDTO;
+import uk.ac.york.eng2.cli.dto.VideoDTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.time.Duration;
 import java.util.*;
@@ -62,7 +60,7 @@ public class TrendingHashtagsCommandTest {
 
   @BeforeAll
   public static void startServices() {
-      if (!Objects.equals(System.getenv("USE_TEST_CONTAINERS"), "False")) {
+      if (!Objects.equals(System.getenv("USE_TEST_CONTAINERS"), "false")) {
           environment.start();
           return;
       }

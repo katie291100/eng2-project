@@ -1,12 +1,11 @@
-package uk.ac.york.eng2.clients;
+package uk.ac.york.eng2.cli.clients;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.client.annotation.Client;
-import uk.ac.york.eng2.domain.Video;
-import uk.ac.york.eng2.dto.VideoDTO;
+import uk.ac.york.eng2.cli.domain.Video;
+import uk.ac.york.eng2.cli.dto.VideoDTO;
 
-import java.util.List;
 import java.util.Set;
 
 @Client("${videos.url:`http://localhost:8080/videos`}")

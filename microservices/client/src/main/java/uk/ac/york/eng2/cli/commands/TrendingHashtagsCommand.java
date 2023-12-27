@@ -1,21 +1,10 @@
-package uk.ac.york.eng2.commands;
+package uk.ac.york.eng2.cli.commands;
 
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
 import jakarta.inject.Inject;
 import picocli.CommandLine;
-import uk.ac.york.eng2.clients.HashtagsClient;
-import uk.ac.york.eng2.clients.TrendingClient;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.clients.VideosClient;
-import uk.ac.york.eng2.domain.Hashtag;
-import uk.ac.york.eng2.domain.User;
-import uk.ac.york.eng2.dto.HashtagDTO;
-import uk.ac.york.eng2.dto.VideoDTO;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import uk.ac.york.eng2.cli.clients.HashtagsClient;
+import uk.ac.york.eng2.cli.clients.TrendingClient;
+import uk.ac.york.eng2.cli.domain.Hashtag;
 
 @CommandLine.Command(
         name = "get-trending-hashtags",

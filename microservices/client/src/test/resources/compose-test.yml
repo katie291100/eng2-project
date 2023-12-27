@@ -2,7 +2,7 @@ name: microservice-test
 
 services:
   # Our database management system
-  db:
+  db-test:
     image: mariadb:11
     environment:
       MARIADB_USER: &dbuser todo
@@ -10,79 +10,77 @@ services:
       MARIADB_ROOT_PASSWORD: iamroot
       MARIADB_DATABASE: &dbname videos
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - mariadb_data-test:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 4306:3306
     healthcheck:
       # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
       test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
       timeout: 10s
       retries: 3
-  db2:
+  db2-test:
     image: mariadb:11
     environment:
       MARIADB_USER: *dbuser
       MARIADB_PASSWORD: *dbpass
       MARIADB_ROOT_PASSWORD: iamroot
       MARIADB_DATABASE: hashtags
-      MYSQL_TCP_PORT: 3307
-      MYSQL_UNIX_PORT: 3307
     volumes:
-      - mariadb_data2:/var/lib/mysql
+      - mariadb_data2-test:/var/lib/mysql
     ports:
-      - 3307:3307
+      - 4307:3306
     healthcheck:
       # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
       test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
       timeout: 10s
       retries: 3
     depends_on:
-      - db
+      - db-test
   video-microservice:
     image: video-microservice:latest
     restart: unless-stopped
     ports:
-      - 8080:8080
+      - 9080:8080
     environment:
-      DB_HOST: db
+      DB_HOST: db-test
       DB_USER: *dbuser
       DB_PASSWORD: *dbpass
       DB_NAME: *dbname
       KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
-      MICRONAUT_ENVIRONMENTS: prod
+      MICRONAUT_ENVIRONMENTS: test-client
     healthcheck:
       # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
       test: ["CMD", "curl", "-f", "http://localhost:8080/healthcheck"]
       timeout: 10s
       retries: 3
     depends_on:
-      db:
+      db-test:
         condition: service_healthy
 
   trending-hashtag-microservice:
     image: trending-hashtag-microservice:latest
     ports:
-      - 8081:8081
+      - 9081:8081
     environment:
-      DB_HOST: db2
+      DB_HOST:  db2-test
       DB_USER: *dbuser
       DB_PASSWORD: *dbpass
       DB_NAME: hashtags
       KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
-      MICRONAUT_ENVIRONMENTS: prod
+      MICRONAUT_ENVIRONMENTS: test-client
     healthcheck:
       # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
       test: [ "CMD", "curl", "-f", "http://localhost:8081/healthcheck" ]
       timeout: 10s
       retries: 3
     depends_on:
-      db2:
+      db2-test:
         condition: service_healthy
 
+
   kafka-0:
-    image: docker.io/bitnami/kafka:3.5
-    ports:
-      - 9094:9094
+    image: docker.io/bitnami/kafka:3.6.1
+    restart: unless-stopped
     environment:
       # KRaft settings
       - KAFKA_CFG_NODE_ID=0
@@ -90,9 +88,9 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
       - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
       # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092,EXTERNAL://localhost:9094
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       # Default topic settings
@@ -102,15 +100,15 @@ services:
       - JMX_PORT=9997
       - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka-0 -Dcom.sun.management.jmxremote.rmi.port=9997
     volumes:
-      - kafka_0_data:/bitnami/kafka
+      - kafka_0_data-test:/bitnami/kafka
     healthcheck:
       test: [ 'CMD-SHELL', 'unset KAFKA_JMX_OPTS; export JMX_PORT=9999; kafka-topics.sh --bootstrap-server localhost:9092 --topic hc --create --if-not-exists && kafka-topics.sh --bootstrap-server localhost:9092 --topic hc --describe' ]
       timeout: 10s
       retries: 3
+
   kafka-1:
-    image: docker.io/bitnami/kafka:3.5
-    ports:
-      - 9095:9094
+    image: docker.io/bitnami/kafka:3.6.1
+    restart: unless-stopped
     environment:
       # KRaft settings
       - KAFKA_CFG_NODE_ID=1
@@ -118,9 +116,9 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
       - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
       # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092,EXTERNAL://localhost:9095
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       # Default topic settings
@@ -130,12 +128,11 @@ services:
       - JMX_PORT=9997
       - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka-1 -Dcom.sun.management.jmxremote.rmi.port=9997
     volumes:
-      - kafka_1_data:/bitnami/kafka
+      - kafka_1_data-test:/bitnami/kafka
 
   kafka-2:
-    image: docker.io/bitnami/kafka:3.5
-    ports:
-      - 9096:9094
+    image: docker.io/bitnami/kafka:3.6.1
+    restart: unless-stopped
     environment:
       # KRaft settings
       - KAFKA_CFG_NODE_ID=2
@@ -143,9 +140,9 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
       - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
       # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092,EXTERNAL://localhost:9096
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       # Default topic settings
@@ -155,10 +152,10 @@ services:
       - JMX_PORT=9997
       - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka-2 -Dcom.sun.management.jmxremote.rmi.port=9997
     volumes:
-      - kafka_2_data:/bitnami/kafka
+      - kafka_2_data-test:/bitnami/kafka
 volumes:
-  mariadb_data:
-  kafka_0_data:
-  kafka_1_data:
-  kafka_2_data:
-  mariadb_data2:
+  mariadb_data-test:
+  kafka_0_data-test:
+  kafka_1_data-test:
+  kafka_2_data-test:
+  mariadb_data2-test:

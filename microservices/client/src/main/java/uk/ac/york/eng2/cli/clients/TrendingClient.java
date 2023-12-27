@@ -1,4 +1,4 @@
-package uk.ac.york.eng2.clients;
+package uk.ac.york.eng2.cli.clients;
 
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.client.annotation.Client;

@@ -48,6 +48,7 @@ services:
 
   trending-hashtag-microservice:
     image: trending-hashtag-microservice:latest
+    restart: unless-stopped
     ports:
       - 8081:8081
     environment:
@@ -58,7 +59,7 @@ services:
         condition: service_healthy
 
   kafka-0:
-    image: docker.io/bitnami/kafka:3.5
+    image: docker.io/bitnami/kafka:3.6.1
     restart: unless-stopped
     environment:
       # KRaft settings
@@ -88,7 +89,7 @@ services:
       retries: 3
 
   kafka-1:
-    image: docker.io/bitnami/kafka:3.5
+    image: docker.io/bitnami/kafka:3.6.1
     restart: unless-stopped
     environment:
       # KRaft settings
@@ -114,7 +115,7 @@ services:
       - kafka_1_data:/bitnami/kafka
 
   kafka-2:
-    image: docker.io/bitnami/kafka:3.5
+    image: docker.io/bitnami/kafka:3.6.1
     restart: unless-stopped
     environment:
       # KRaft settings
@@ -139,7 +140,7 @@ services:
     volumes:
       - kafka_2_data:/bitnami/kafka
   init-kafka:
-    image: docker.io/bitnami/kafka:3.5
+    image: docker.io/bitnami/kafka:3.6.1
     depends_on:
       - kafka-0
     entrypoint: [ '/bin/sh', '-c' ]

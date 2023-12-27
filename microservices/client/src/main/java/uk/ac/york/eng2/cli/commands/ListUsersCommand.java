@@ -1,13 +1,13 @@
-package uk.ac.york.eng2.commands;
+package uk.ac.york.eng2.cli.commands;
 
 import jakarta.inject.Inject;
 import picocli.CommandLine;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.domain.User;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.domain.User;
 
 @CommandLine.Command(
-        name = "list-videos",
-        description = "lists all videos in the database",
+        name = "list-users",
+        description = "lists all users in the database",
         mixinStandardHelpOptions = true)
 public class ListUsersCommand implements Runnable {
     @Inject

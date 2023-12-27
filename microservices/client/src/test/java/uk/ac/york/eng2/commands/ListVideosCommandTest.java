@@ -13,17 +13,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.clients.VideosClient;
-import uk.ac.york.eng2.domain.User;
-import uk.ac.york.eng2.domain.Video;
-import uk.ac.york.eng2.dto.UserDTO;
-import uk.ac.york.eng2.dto.VideoDTO;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.clients.VideosClient;
+import uk.ac.york.eng2.cli.commands.ListVideosCommand;
+import uk.ac.york.eng2.cli.domain.Video;
+import uk.ac.york.eng2.cli.dto.UserDTO;
+import uk.ac.york.eng2.cli.dto.VideoDTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.util.Objects;
 
+import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest
@@ -45,7 +47,11 @@ public class ListVideosCommandTest {
 
   @BeforeAll
   public static void waitForServices() {
-    environment.start();
+    if (!Objects.equals(System.getenv("USE_TEST_CONTAINERS"), "false")) {
+      environment.start();
+      return;
+    }
+    System.out.println("Warning: Not using test containers, using local services, TrendingHashtag tests will likely fail");
   }
 
   @BeforeEach
@@ -77,11 +83,13 @@ public class ListVideosCommandTest {
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       PicocliRunner.run(ListVideosCommand.class, ctx);
-
+      sleep(1000);
       for (Video video : videos) {
         assertTrue(baos.toString().contains(video.getId() + " - " + video.getTitle()));
       }
 
+    } catch (InterruptedException e) {
+        throw new RuntimeException(e);
     }
   }
 }

@@ -1,0 +1,19 @@
+#Sat Dec 02 22:50:06 UTC 2023
+micronaut:
+  application:
+      name: client
+logging:
+  level:
+    io.micronaut.context.env.DefaultEnvironment: WARN
+hashtags:
+  url:
+    "http://localhost:9080/hashtags"
+videos:
+  url:
+    "http://localhost:9080/videos"
+users:
+  url:
+    "http://localhost:9080/users"
+trending:
+  url:
+    "http://localhost:9081/trendingHashtags"

@@ -1,11 +1,11 @@
-package uk.ac.york.eng2.commands;
+package uk.ac.york.eng2.cli.commands;
 
 import jakarta.inject.Inject;
 import picocli.CommandLine;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.clients.VideosClient;
-import uk.ac.york.eng2.domain.User;
-import uk.ac.york.eng2.domain.Video;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.clients.VideosClient;
+import uk.ac.york.eng2.cli.domain.User;
+import uk.ac.york.eng2.cli.domain.Video;
 
 import java.util.HashSet;
 import java.util.Set;

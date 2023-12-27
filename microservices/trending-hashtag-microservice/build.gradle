@@ -31,6 +31,10 @@ dependencies {
     testImplementation("io.micronaut:micronaut-http-server-netty")
     testImplementation('org.mockito:mockito-core:3.11.2')
     testImplementation('org.mockito:mockito-junit-jupiter:3.11.2')
+
+    // Due to a security advisory
+    implementation("io.netty:netty-codec-http2:4.1.100.Final")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
 }
 
 

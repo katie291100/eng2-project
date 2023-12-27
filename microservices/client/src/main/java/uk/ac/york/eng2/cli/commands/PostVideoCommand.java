@@ -1,15 +1,14 @@
-package uk.ac.york.eng2.commands;
+package uk.ac.york.eng2.cli.commands;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import jakarta.inject.Inject;
 import picocli.CommandLine;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.clients.VideosClient;
-import uk.ac.york.eng2.domain.User;
-import uk.ac.york.eng2.dto.HashtagDTO;
-import uk.ac.york.eng2.dto.UserDTO;
-import uk.ac.york.eng2.dto.VideoDTO;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.clients.VideosClient;
+import uk.ac.york.eng2.cli.domain.User;
+import uk.ac.york.eng2.cli.dto.HashtagDTO;
+import uk.ac.york.eng2.cli.dto.VideoDTO;
 
 import java.util.List;
 import java.util.Set;

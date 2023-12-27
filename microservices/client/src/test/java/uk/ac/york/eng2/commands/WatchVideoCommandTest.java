@@ -12,7 +12,7 @@ import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.clients.VideosClient;
-import uk.ac.york.eng2.cli.commands.LikeVideoCommand;
+import uk.ac.york.eng2.cli.commands.WatchVideoCommand;
 import uk.ac.york.eng2.cli.dto.HashtagDTO;
 import uk.ac.york.eng2.cli.dto.UserDTO;
 import uk.ac.york.eng2.cli.dto.VideoDTO;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @MicronautTest
-public class LikeVideoCommandTest {
+public class WatchVideoCommandTest {
 
   @Inject
   VideosClient videosClient;
@@ -93,7 +93,7 @@ public class LikeVideoCommandTest {
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       String[] args = new String[] {"0", "0"};
-      PicocliRunner.run(LikeVideoCommand.class, ctx, args);
+      PicocliRunner.run(WatchVideoCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("User with id 0 does not exist\n"));
     }
@@ -106,7 +106,7 @@ public class LikeVideoCommandTest {
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       String[] args = new String[] {userId.toString(), "0"};
-      PicocliRunner.run(LikeVideoCommand.class, ctx, args);
+      PicocliRunner.run(WatchVideoCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("Video with id 0 does not exist"));
     }
@@ -117,10 +117,9 @@ public class LikeVideoCommandTest {
   public void canLike() {
     System.setOut(new PrintStream(baos));
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
-      String[] args = new String[] {"", "hashtag2"};
-      PicocliRunner.run(LikeVideoCommand.class, userId.toString(), videoId.toString());
+      PicocliRunner.run(WatchVideoCommand.class, userId.toString(), videoId.toString());
 
-      assertTrue(baos.toString().contains("Successfully liked video with id " + videoId));
+      assertTrue(baos.toString().contains("Successfully watched video with id " + videoId));
     }
   }
 }

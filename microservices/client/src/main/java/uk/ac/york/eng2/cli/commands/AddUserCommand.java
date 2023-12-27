@@ -1,11 +1,11 @@
-package uk.ac.york.eng2.commands;
+package uk.ac.york.eng2.cli.commands;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import jakarta.inject.Inject;
 import picocli.CommandLine;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.dto.UserDTO;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.dto.UserDTO;
 
 @CommandLine.Command(
         name = "add-user",

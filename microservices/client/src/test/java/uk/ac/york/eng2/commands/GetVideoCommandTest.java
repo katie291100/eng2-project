@@ -2,7 +2,6 @@ package uk.ac.york.eng2.commands;
 
 import io.micronaut.configuration.picocli.PicocliRunner;
 import io.micronaut.context.ApplicationContext;
-import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.env.Environment;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -12,19 +11,17 @@ import org.junit.jupiter.api.*;
 
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.clients.VideosClient;
-import uk.ac.york.eng2.domain.Hashtag;
-import uk.ac.york.eng2.domain.User;
-import uk.ac.york.eng2.domain.Video;
-import uk.ac.york.eng2.dto.HashtagDTO;
-import uk.ac.york.eng2.dto.UserDTO;
-import uk.ac.york.eng2.dto.VideoDTO;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.clients.VideosClient;
+import uk.ac.york.eng2.cli.commands.GetVideoCommand;
+import uk.ac.york.eng2.cli.dto.HashtagDTO;
+import uk.ac.york.eng2.cli.dto.UserDTO;
+import uk.ac.york.eng2.cli.dto.VideoDTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -51,7 +48,12 @@ public class GetVideoCommandTest {
 
   @BeforeAll
   public static void waitForServices() {
-    environment.start();
+    if (!Objects.equals(System.getenv("USE_TEST_CONTAINERS"), "false")) {
+      environment.start();
+      return;
+    }
+    System.out.println("Warning: Not using test containers, using local services, TrendingHashtag tests will likely fail");
+
   }
 
   @BeforeEach

@@ -1,11 +1,11 @@
-package uk.ac.york.eng2.clients;
+package uk.ac.york.eng2.cli.clients;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.client.annotation.Client;
-import uk.ac.york.eng2.domain.User;
-import uk.ac.york.eng2.domain.Video;
-import uk.ac.york.eng2.dto.UserDTO;
+import uk.ac.york.eng2.cli.dto.UserDTO;
+import uk.ac.york.eng2.cli.domain.User;
+import uk.ac.york.eng2.cli.domain.Video;
 
 
 import java.util.Set;

@@ -34,6 +34,8 @@ public class TrendingStreams {
     @Inject
     private CompositeSerdeRegistry serdeRegistry;
 
+
+
     @Singleton
     @Named("liked-hashtag")
     public KStream<WindowedIdentifier, Long> hashtagStream(ConfiguredStreamBuilder builder) {

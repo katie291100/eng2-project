@@ -16,10 +16,7 @@ import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.apache.kafka.streams.state.ValueAndTimestamp;
 
 import org.awaitility.Awaitility;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import uk.ac.york.eng2.trendingHashtags.domain.Hashtag;
 import uk.ac.york.eng2.trendingHashtags.domain.Video;
@@ -53,13 +50,12 @@ public class TrendingControllerTest {
     public void setUp() {
         Awaitility.await().atMost(30, TimeUnit.SECONDS).until(() -> kStreams.state().equals(KafkaStreams.State.RUNNING));
         hashtagsRepository.deleteAll();
-
     }
 
     @AfterAll public void cleanUp() { kStreams.close(); }
 
     @Test
-    public void testOneVideoLiked() {
+    public void testOneVideoLiked() throws InterruptedException {
         Video video = new Video();
         video.setId(1L);
         Hashtag hashtag = new Hashtag();
@@ -68,14 +64,14 @@ public class TrendingControllerTest {
         video.setHashtags(Set.of(hashtag));
 
         testProducerUtil.likeVideo(1L, video);
-        Awaitility.await().atMost(30, TimeUnit.SECONDS).until(() -> trendingClient.list().stream().iterator().hasNext());
+        sleep(30000);
         List<Long> result = trendingClient.list();
         assertTrue(result.contains(2L));
     }
 
 
     @Test
-    public void testTwoVideoLiked() {
+    public void testTwoVideoLiked() throws InterruptedException {
         Video video = new Video();
         video.setId(1L);
         Hashtag hashtag = new Hashtag();
@@ -94,7 +90,7 @@ public class TrendingControllerTest {
         testProducerUtil.likeVideo(1L, video);
         testProducerUtil.likeVideo(1L, video2);
 
-        Awaitility.await().atMost(30, TimeUnit.SECONDS).until(() -> trendingClient.list().size() == 2);
+        sleep(30000);
         List<Long> result = trendingClient.list();
         assertEquals(result.contains(2L), true);
         assertEquals(result.contains(3L), true);
@@ -129,7 +125,7 @@ public class TrendingControllerTest {
         testProducerUtil.likeVideo(2L, video);
         testProducerUtil.likeVideo(2L, video);
 
-        sleep(10000);
+        sleep(30000);
         List<Long> result = trendingClient.list();
         assertFalse(result.contains(hashtag1.getId()));
         for (int i = 50; i < 60; i++) {

@@ -5,8 +5,8 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.annotation.Client;
-import uk.ac.york.eng2.domain.Hashtag;
-import uk.ac.york.eng2.dto.HashtagDTO;
+import uk.ac.york.eng2.cli.domain.Hashtag;
+import uk.ac.york.eng2.cli.dto.HashtagDTO;
 
 
 @Client("${hashtags.url:`http://localhost:8080/hashtags`}")

@@ -52,7 +52,7 @@ public class VideosController {
         return hashtags.getVideos();
     }
 
-    @Get("/{id}") //TODO: make return 404 if not found?
+    @Get("/{id}")
     public Video getVideo(Long id) {
         return repo.findById(id).orElse(null);
     }

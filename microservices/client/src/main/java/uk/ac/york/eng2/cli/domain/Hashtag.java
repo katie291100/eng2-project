@@ -1,4 +1,4 @@
-package uk.ac.york.eng2.domain;
+package uk.ac.york.eng2.cli.domain;
 
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -31,23 +31,6 @@ public class Hashtag {
 
     public Set<Video> getVideos() {
         return videos;
-    }
-
-    @Override
-    public String toString() {
-        return "Hashtag{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Hashtag)) {
-            return false;
-        }
-        Hashtag hashtag = (Hashtag) o;
-        return hashtag.getId().equals(this.getId());
     }
 
 }

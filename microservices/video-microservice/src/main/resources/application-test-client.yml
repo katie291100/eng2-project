@@ -8,7 +8,7 @@ datasources:
     driver-class-name: org.mariadb.jdbc.Driver
     db-type: mariadb
     dialect: MYSQL
-    url: jdbc:mariadb://${DB_HOST:db}/${DB_NAME:videos}
+    url: jdbc:mariadb://${DB_HOST:db}:3306/${DB_NAME:videos}
     username: ${DB_USER:todo}
     password: ${DB_PASSWORD:todosecret}
 jpa:
@@ -27,4 +27,4 @@ netty:
 kafka:
   bootstrap:
     servers:
-      - ${KAFKA_BOOTSTRAP_SERVERS:`localhost:9092`}
+      - ${KAFKA_BOOTSTRAP_SERVERS:`localhost:9192`}

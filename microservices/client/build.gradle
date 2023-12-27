@@ -6,7 +6,7 @@ plugins {
 }
 
 version = "0.1"
-group = "uk.ac.york.eng2"
+group = "uk.ac.york.eng2.cli"
 
 repositories {
     mavenCentral()
@@ -28,7 +28,7 @@ dependencies {
 
 
 application {
-    mainClass.set("uk.ac.york.eng2.ClientCommand")
+    mainClass.set("uk.ac.york.eng2.cli.ClientCommand")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
@@ -40,14 +40,16 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("uk.ac.york.eng2.*")
+        annotations("uk.ac.york.eng2.cli*")
     }
 }
 
 tasks.named("dockerfile") {
-    baseImage = "eclipse-temurin:17-jre-focal"
+    baseImage = "amazoncorretto:17-alpine3.17"
     editDockerfile {
         after("WORKDIR /home/app") {
+            insert("RUN apk update && apk add bash")
+
             insert("ENV LOG_LEVEL=ERROR")
         }
     }

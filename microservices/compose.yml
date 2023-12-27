@@ -42,7 +42,7 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'
 
   kafka-0:
-    image: docker.io/bitnami/kafka:3.5
+    image: docker.io/bitnami/kafka:3.6.1
     ports:
       - 9094:9094
     environment:
@@ -68,7 +68,7 @@ services:
       - kafka_0_data:/bitnami/kafka
 
   kafka-1:
-    image: docker.io/bitnami/kafka:3.5
+    image: docker.io/bitnami/kafka:3.6.1
     ports:
       - 9095:9094
     environment:
@@ -93,7 +93,7 @@ services:
       - kafka_1_data:/bitnami/kafka
 
   kafka-2:
-    image: docker.io/bitnami/kafka:3.5
+    image: docker.io/bitnami/kafka:3.6.1
     ports:
       - 9096:9094
     environment:

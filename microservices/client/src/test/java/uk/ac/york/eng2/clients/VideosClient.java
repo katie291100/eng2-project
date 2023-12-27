@@ -3,12 +3,12 @@ package uk.ac.york.eng2.clients;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.client.annotation.Client;
-import uk.ac.york.eng2.domain.Video;
-import uk.ac.york.eng2.dto.VideoDTO;
+import uk.ac.york.eng2.cli.domain.Video;
+import uk.ac.york.eng2.cli.dto.VideoDTO;
 
 import java.util.Set;
 
-@Client("${VIDEOS_URL:`http://localhost:8080/videos`}")
+@Client("${videos.url:`http://localhost:8080/videos`}")
 public interface VideosClient {
     @Get("/")
     public Iterable<Video> list();

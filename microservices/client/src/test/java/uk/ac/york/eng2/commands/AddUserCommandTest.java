@@ -3,7 +3,6 @@ package uk.ac.york.eng2.commands;
 import io.micronaut.configuration.picocli.PicocliRunner;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.env.Environment;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.ClassRule;
@@ -13,12 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import uk.ac.york.eng2.clients.UsersClient;
-import uk.ac.york.eng2.dto.UserDTO;
+import uk.ac.york.eng2.cli.clients.UsersClient;
+import uk.ac.york.eng2.cli.commands.AddUserCommand;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,7 +40,12 @@ public class AddUserCommandTest {
 
   @BeforeAll
   public static void waitForServices() {
-    environment.start();
+    if (!Objects.equals(System.getenv("USE_TEST_CONTAINERS"), "false")) {
+      environment.start();
+      return;
+    }
+    System.out.println("Warning: Not using test containers, using local services, TrendingHashtag tests will likely fail");
+
   }
 
   @BeforeEach

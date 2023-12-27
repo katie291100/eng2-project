@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import uk.ac.york.eng2.cli.clients.UsersClient;
-import uk.ac.york.eng2.cli.commands.PostVideoCommand;
+import uk.ac.york.eng2.cli.commands.GetUserCommand;
 import uk.ac.york.eng2.cli.dto.UserDTO;
 
 import java.io.ByteArrayOutputStream;
@@ -22,10 +22,11 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest
-public class PostVideoCommandTest {
+public class GetUserCommandTest {
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
   @Inject
@@ -59,32 +60,50 @@ public class PostVideoCommandTest {
     environment.stop();
   }
   @Test
-  public void canCreateVideo() {
+  public void GetByIDAfterCreateUser() {
     System.setOut(new PrintStream(baos));
 
     UserDTO userDTO = new UserDTO("TestUser");
     HttpResponse<Void> response = usersClient.add(userDTO);
     Long userId = Long.parseLong(response.header("location").split("/")[2]);
 
-    try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
-      String[] args = new String[] {"Video Test Title", userId.toString(), "hashtag1", "hashtag2"};
-      PicocliRunner.run(PostVideoCommand.class, ctx, args);
+    UserDTO userDTO2 = new UserDTO("TestUser2");
+    HttpResponse<Void> response2 = usersClient.add(userDTO2);
+    Long userId2 = Long.parseLong(response.header("location").split("/")[2]);
 
-      assertTrue(baos.toString().contains("Successfully created video with id "));
+
+    try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      String[] args = new String[]{"-id", userId.toString()};
+      PicocliRunner.run(GetUserCommand.class, ctx, args);
+
+      assertTrue(baos.toString().contains(userId + " - TestUser"));
+      assertFalse(baos.toString().contains(userId2 + " - TestUser2"));
+
     }
   }
-
   @Test
-  public void cantCreateVideoNoUser() {
+  public void GetByNameAfterCreateUser() {
     System.setOut(new PrintStream(baos));
 
-    try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
-      String[] args = new String[] {"Video Test Title", "0", "hashtag1", "hashtag2"};
-      PicocliRunner.run(PostVideoCommand.class, ctx, args);
+    UserDTO userDTO = new UserDTO("TestUser");
+    HttpResponse<Void> response = usersClient.add(userDTO);
+    Long userId = Long.parseLong(response.header("location").split("/")[2]);
 
-      assertTrue(baos.toString().contains("User with id 0 does not exist"));
+    UserDTO userDTO2 = new UserDTO("TestUser");
+    HttpResponse<Void> response2 = usersClient.add(userDTO2);
+    Long userId2 = Long.parseLong(response.header("location").split("/")[2]);
+
+    UserDTO userDTO3 = new UserDTO("TestUser3");
+    HttpResponse<Void> response3 = usersClient.add(userDTO3);
+    Long userId3 = Long.parseLong(response.header("location").split("/")[2]);
+
+    try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      String[] args = new String[]{"-name", "TestUser"};
+      PicocliRunner.run(GetUserCommand.class, ctx, args);
+
+      assertTrue(baos.toString().contains(userId + " - TestUser"));
+      assertTrue(baos.toString().contains(userId2 + " - TestUser"));
+      assertFalse(baos.toString().contains(userId3 + " - TestUser3"));
     }
   }
-
-
 }

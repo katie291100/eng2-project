@@ -7,6 +7,7 @@ import io.micronaut.context.env.Environment;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import org.junit.jupiter.api.Test;
+import uk.ac.york.eng2.cli.ClientCommand;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
