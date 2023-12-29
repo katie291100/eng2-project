@@ -26,6 +26,14 @@ context Microservice {
     }
 }
 
+//Every entity needs an ID attribute.
+context Entity {
+    constraint HasID {
+        check: self.attributes.exists(e | e.name.equals("id"))
+        message: "The entity " + self.name + " needs an id attribute."
+    }
+}
+
 operation Endpoint isHealthcheck() {
 	return (self.type.name == "GET" and self.name.toLowerCase().startsWith("health") and self.requestParams.size==0 and self.responseBody.exists(r | r.type == "HTTPResponse"));
 }

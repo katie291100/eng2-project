@@ -10,6 +10,5 @@ digraph G {
    		subscriptionController -> listAll [color="#2A6C41" ]
 	    	videos[label="videos(Set(Videos))" fillcolor="6" shape=ellipse]
 	    	listAll -> videos [label="responseBody"]
-	    	    
 	    
 }

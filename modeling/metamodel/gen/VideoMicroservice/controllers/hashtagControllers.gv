@@ -10,7 +10,6 @@ digraph G {
    		hashtagControllers -> listHashtags [color="#2A6C41" ]
 	    	hashtags[label="hashtags(Set[Hashtag])" fillcolor="6" shape=ellipse]
 	    	listHashtags -> hashtags [label="responseBody"]
-	    	    
 	    
 		
 	    getHashtag [label="getHashtag(GET)" fillcolor="#95f0e7" ]
@@ -19,7 +18,6 @@ digraph G {
 	    	hashtagID -> getHashtag [label="requestParams"]
 	    	hashtag[label="hashtag(Hashtag)" fillcolor="6" shape=ellipse]
 	    	getHashtag -> hashtag [label="responseBody"]
-	    	    
 	    
 		
 	    addHashtag [label="addHashtag(POST)" fillcolor="#95f0e7" ]
@@ -28,6 +26,5 @@ digraph G {
 	    	hashtagDTO -> addHashtag [label="requestParams"]
 	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
 	    	addHashtag -> HTTPResponse [label="responseBody"]
-	    	    
 	    
 }

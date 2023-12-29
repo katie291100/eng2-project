@@ -10,6 +10,7 @@ class System {
 
 class Microservice {
 	attr String name;
+	attr Long port;
 	val Entity[*] entities;
 	val Consumer[*] consumers;
 	val Producer[*] producers;

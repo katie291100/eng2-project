@@ -16,9 +16,7 @@ digraph G {
 	    [%for (r in e.responseBody){%]
 	    	[%=r.name%][label="[%=r.name%]([%=r.type%])" fillcolor="6" shape=ellipse]
 	    	[%=e.name%] -> [%=r.name%] [label="responseBody"]
-	     [%}%]
-	    	    
-	    
+	     [%}%]	    
 	[%}%]
 }
 [%

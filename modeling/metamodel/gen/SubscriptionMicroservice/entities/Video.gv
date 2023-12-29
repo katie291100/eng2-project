@@ -9,6 +9,11 @@ digraph G {
 		
 
 		
+	    id [label="id(Long)" fillcolor="6" shape=ellipse ]
+	    
+            Video -> id [color="#2A6C41" label="has"]
+	    
+		
 	    title [label="title(String)" fillcolor="6" shape=ellipse ]
 	    
             Video -> title [color="#2A6C41" label="has"]

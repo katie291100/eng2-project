@@ -1,0 +1,32 @@
+rule Model2Dto
+	transform d : DTO {
+
+	template : "templates/Dto2domain.egl"
+
+	target : d.eContainer().name + "/src-gen/dto/"+ d.name+".java"
+	
+	parameters : Map{}
+	
+}
+
+//TODO: generatee controller interface? or abstract maybe?
+rule Model2Controller
+	transform c : Controller {
+		
+	template : "templates/Model2Controller.egl"
+
+	target : c.eContainer().name + "/src-gen/controller/"+ c.name+".java"
+	
+	parameters : Map{}
+}
+
+//TODO: generate repository for entity but only if it is stored? So needs repository?need to filter entities
+rule Model2Repository
+	transform e : Entity {
+		
+	template : "templates/Model2Controller.egl"
+
+	target : c.eContainer().name + "/src-gen/controller/"+ c.name+".java"
+	
+	parameters : Map{}
+}

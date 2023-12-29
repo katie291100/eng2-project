@@ -8,6 +8,11 @@ digraph G {
 		
 		
 
+		
+	    id [label="id(Long)" fillcolor="6" shape=ellipse ]
+	    
+            User -> id [color="#2A6C41" label="has"]
+	    
 	
 }
 

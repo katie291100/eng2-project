@@ -6,10 +6,9 @@ digraph G {
 	splines=line
 	healthcheckControllers [fillcolor="1"]
 		
-	    check [label="check(GET)" fillcolor="#95f0e7" ]
-   		healthcheckControllers -> check [color="#2A6C41" ]
+	    health [label="health(GET)" fillcolor="#95f0e7" ]
+   		healthcheckControllers -> health [color="#2A6C41" ]
 	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
-	    	check -> HTTPResponse [label="responseBody"]
-	    	    
+	    	health -> HTTPResponse [label="responseBody"]
 	    
 }

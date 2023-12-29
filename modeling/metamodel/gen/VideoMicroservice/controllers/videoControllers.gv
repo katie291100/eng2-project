@@ -10,7 +10,6 @@ digraph G {
    		videoControllers -> listVideos [color="#2A6C41" ]
 	    	videos[label="videos(Set[Video])" fillcolor="6" shape=ellipse]
 	    	listVideos -> videos [label="responseBody"]
-	    	    
 	    
 		
 	    listVideosByHashtag [label="listVideosByHashtag(GET)" fillcolor="#95f0e7" ]
@@ -19,7 +18,6 @@ digraph G {
 	    	hashtag -> listVideosByHashtag [label="requestParams"]
 	    	videos[label="videos(Set[Video])" fillcolor="6" shape=ellipse]
 	    	listVideosByHashtag -> videos [label="responseBody"]
-	    	    
 	    
 		
 	    addVideo [label="addVideo(POST)" fillcolor="#95f0e7" ]
@@ -28,7 +26,6 @@ digraph G {
 	    	addVideo -> videoDTO [label="responseBody"]
 	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
 	    	addVideo -> HTTPResponse [label="responseBody"]
-	    	    
 	    
 		
 	    getVideo [label="getVideo(GET)" fillcolor="#95f0e7" ]
@@ -37,7 +34,6 @@ digraph G {
 	    	id -> getVideo [label="requestParams"]
 	    	video[label="video(Video)" fillcolor="6" shape=ellipse]
 	    	getVideo -> video [label="responseBody"]
-	    	    
 	    
 		
 	    likeVideo [label="likeVideo(PUT)" fillcolor="#95f0e7" ]
@@ -48,7 +44,6 @@ digraph G {
 	    	likeVideo -> videoId [label="responseBody"]
 	    	userID[label="userID(Long)" fillcolor="6" shape=ellipse]
 	    	likeVideo -> userID [label="responseBody"]
-	    	    
 	    
 		
 	    dislikeVideo [label="dislikeVideo(PUT)" fillcolor="#95f0e7" ]
@@ -59,6 +54,5 @@ digraph G {
 	    	dislikeVideo -> videoId [label="responseBody"]
 	    	userID[label="userID(Long)" fillcolor="6" shape=ellipse]
 	    	dislikeVideo -> userID [label="responseBody"]
-	    	    
 	    
 }

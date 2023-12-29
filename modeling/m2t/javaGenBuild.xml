@@ -1,13 +1,13 @@
 <project default="metamodel">
     <target name="metamodel">
     	
-    	<delete dir="gen"/>
+    	<delete dir="testOutput"/>
     	
         <!-- Load the model.flexmi EMF model -->
-        <epsilon.emf.loadModel name="M" modelfile="./../models/acme.flexmi" metamodelfile="Y3877930.emf" />
+        <epsilon.emf.loadModel name="M" modelfile="./../models/acme.flexmi" metamodelfile="./../metamodel/Y3877930.emf" />
         
         <!-- Run program.egx against it -->
-        <epsilon.egl src="Y3877930.egx">
+        <epsilon.egl src="Y3877930.egx" outputroot="testOutput">
             <model ref="M" />
         </epsilon.egl>
 

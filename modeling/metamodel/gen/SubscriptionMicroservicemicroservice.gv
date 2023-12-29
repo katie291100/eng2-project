@@ -11,6 +11,9 @@ digraph G {
 		    color="1";
 		    label="Controllers"
 			
+			    healthcheckControllers [fillcolor="5"]
+			   	
+			
 			    subscriptionController [fillcolor="5"]
 			   	
 		

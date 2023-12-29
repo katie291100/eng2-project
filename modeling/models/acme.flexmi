@@ -40,8 +40,9 @@
     </eventStream>
     </eventStreams>
     
-    <microservice name="VideoMicroservice">
+    <microservice name="VideoMicroservice" port="8080">
         <entity name="Video" dto="VideoDTO">
+            <attribute name="id" type="Long"/>
         	<attribute name="title" type="String"/>
         	<attribute name="postedBy" type="Long"/>
           	<attribute name="likes" type="Long"/>
@@ -172,7 +173,7 @@
             </endpoint>
         </controller>
 
-        <controller name="hashtagControllers">
+        <controller name="hashtagControllers" port="8080">
         	 <endpoint name="listHashtags" type="GET">
             	<responseBody>
             	   <attribute name="hashtags" type="Set[Hashtag]"/>
@@ -203,7 +204,7 @@
             </endpoint>
 		</controller>
     </microservice>
-    <microservice name="TrendingHashtagMicroservice">
+    <microservice name="TrendingHashtagMicroservice" port="8081">
         <entity name="Hashtag" dto="HashtagDTO">
           	<attribute name="id" type="Long"/>
             <attribute name="name" type="String"/>
@@ -211,6 +212,7 @@
             
         </entity>
         <entity name="Video" dto="VideoDTO">
+            <attribute name="id" type="Long"/>
         	<attribute name="title" type="String"/>
         	<attribute name="postedBy" type="Long"/>
           	<attribute name="likes" type="Long"/>
@@ -244,9 +246,10 @@
 		</controller>
 
     </microservice>
-    <microservice name="SubscriptionMicroservice">
+    <microservice name="SubscriptionMicroservice" port="8082">
 
         <entity name="Video" dto="VideoDTO">
+            <attribute name="id" type="Long"/>
         	<attribute name="title" type="String"/>
         	<attribute name="postedBy" type="Long"/>
   			<attribute name="watchers" type="Set[Users]"/>
@@ -262,8 +265,12 @@
         	<attribute name="name" type="String"/>
         </dto>
        
-        <entity name="User" dto="UserDTO"></entity>
-        <entity name="Hashtag" dto="HashtagDTO"></entity>
+        <entity name="User" dto="UserDTO">
+            <attribute name="id" type="Long"/>
+        </entity>
+        <entity name="Hashtag" dto="HashtagDTO">
+       		 <attribute name="id" type="Long"/>
+        </entity>
         
         <consumer name="subscriptionConsumer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>
         
