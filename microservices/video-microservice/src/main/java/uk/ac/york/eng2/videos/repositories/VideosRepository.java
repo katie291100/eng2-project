@@ -2,11 +2,9 @@ package uk.ac.york.eng2.videos.repositories;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.data.annotation.Join;
-import io.micronaut.data.annotation.Query;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import jakarta.annotation.Nonnull;
-import uk.ac.york.eng2.videos.domain.Hashtag;
 import uk.ac.york.eng2.videos.domain.Video;
 
 import java.util.List;

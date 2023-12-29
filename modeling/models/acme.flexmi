@@ -75,87 +75,87 @@
         <producer name="user" eventStreams="new-user, watch-video"/>
         <producer name="hashtag" eventStreams="new-hashtag"/>
 
-        <controller name="videoControllers">
-            <endpoint name="listVideos" type="GET">
+        <controller name="videoControllers" path="/video">
+            <endpoint name="listVideos" type="GET" path="/">
             	<responseBody>
-            	   <attribute name="videos" type="Set[Video]"/>
+            	   <attribute name="videos" type="List[Video]"/>
             	</responseBody>
              </endpoint>
-            <endpoint name="listVideosByHashtag" type="GET">
+            <endpoint name="listVideosByHashtag" type="GET" path="/{hashtag}">
             	<responseBody>
             	   <attribute name="videos" type="Set[Video]"/>
             	</responseBody>
             	<requestParams>
-            	   <attribute name="hashtag" type="String"/>
+            	   <attribute name="hashtag" type="String" />
             	</requestParams>
              </endpoint>
-            <endpoint name="addVideo" type="POST">
-                <responseParams>
+            <endpoint name="addVideo" type="POST" path="/">
+                <requestParams>
             	   <attribute name="videoDTO" type="VideoDTO"/>
-            	</responseParams>
+            	</requestParams>
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
-            <endpoint name="getVideo" type="GET">
+            <endpoint name="getVideo" type="GET" path="/{videoId}">
                 <requestParams>
-            	   <attribute name="id" type="Long"/>
+            	   <attribute name="videoId" type="Long"/>
             	</requestParams>
                 <responseBody>
             	   <attribute name="video" type="Video"/>
             	</responseBody>
             </endpoint>
-            <endpoint name="likeVideo" type="PUT">
-                <responseBody>
-            	   <attribute name="videoId" type="Long"/>
-            	   <attribute name="userID" type="Long"/>
-            	</responseBody>
+            <endpoint name="likeVideo" type="PUT" path="/{videoId}/likeVideo/{userId}">
                 <requestParams>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="videoId" type="Long"/>
+            	   <attribute name="userId" type="Long"/>
             	</requestParams>
+                <responseBody>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	</responseBody>
             </endpoint>
-            <endpoint name="dislikeVideo" type="PUT">
-                <responseBody>
+            <endpoint name="dislikeVideo" type="PUT" path="/{videoId}/dislikeVideo/{userId}">
+                  <requestParams>
             	   <attribute name="videoId" type="Long"/>
-            	   <attribute name="userID" type="Long"/>
-            	</responseBody>
-                <requestParams>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="userId" type="Long"/>
             	</requestParams>
+                <responseBody>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	</responseBody>
             </endpoint>
         </controller>
-        <controller name="userControllers">
-      		 <endpoint name="listUsers" type="GET">
+        <controller name="userControllers" path="/user">
+      		 <endpoint name="listUsers" type="GET" path="/">
             	<responseBody>
             	   <attribute name="users" type="Set[User]"/>
             	</responseBody>
              </endpoint>
-            <endpoint name="addUser" type="POST">
+            <endpoint name="addUser" type="POST" path="/">
                 <responseBody>
             	   <attribute name="userDTO" type="userDTO"/>
             	</responseBody>
                 <requestParams>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
             	</requestParams>
             </endpoint>
-            <endpoint name="watchVideo" type="PUT">
+            <endpoint name="watchVideo" type="PUT" path="/watchVideo/{videoID}">
                 <responseBody>
             	   <attribute name="videoId" type="Long"/>
             	   <attribute name="userID" type="Long"/>
             	</responseBody>
                 <requestParams>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]" />
             	</requestParams>
             </endpoint>
-            <endpoint name="getUser" type="GET">
+            <endpoint name="getUser" type="GET" path="/{userId}">
                 <responseBody>
-            	   <attribute name="userID" type="Long"/>
+            	   <attribute name="userId" type="Long"/>
             	</responseBody>
                 <requestParams>
             	   <attribute name="user" type="User"/>
             	</requestParams>
             </endpoint>
-            <endpoint name="getWatchedByUser" type="GET">
+            <endpoint name="getWatchedByUser" type="GET" path="/{userId}/watchedVideos">
                 <responseBody>
             	   <attribute name="userID" type="Long"/>
             	</responseBody>
@@ -163,7 +163,7 @@
             	   <attribute name="videos" type="Set(Videos)"/>
             	</requestParams>
             </endpoint>
-            <endpoint name="getPostedByUser" type="GET">
+            <endpoint name="getPostedByUser" type="GET" path="/{userId}/postedVideos">
                 <responseBody>
             	   <attribute name="userID" type="Long"/>
             	</responseBody>
@@ -173,13 +173,13 @@
             </endpoint>
         </controller>
 
-        <controller name="hashtagControllers" port="8080">
-        	 <endpoint name="listHashtags" type="GET">
+        <controller name="hashtagControllers" path="/hashtag">
+        	 <endpoint name="listHashtags" type="GET" path="/" >
             	<responseBody>
             	   <attribute name="hashtags" type="Set[Hashtag]"/>
             	</responseBody>
              </endpoint>
-             <endpoint name="getHashtag" type="GET">
+             <endpoint name="getHashtag" type="GET"  path="/{hashtagID}">
                 <requestParams>
             	   <attribute name="hashtagID" type="Long"/>
             	</requestParams>
@@ -187,19 +187,19 @@
             	   <attribute name="hashtag" type="Hashtag"/>
             	</responseBody>
             </endpoint>
-            <endpoint name="addHashtag" type="POST">
+            <endpoint name="addHashtag" type="POST" path="/">
                 <requestParams>
             	   <attribute name="hashtagDTO" type="HashtagDTO"/>
             	</requestParams>
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
 		</controller>
-		<controller name="healthcheckControllers">
-		<endpoint name="health" type="GET">
+		<controller name="healthcheckControllers" path="/health">
+		<endpoint name="health" type="GET" path="/">
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
 		</controller>
@@ -230,17 +230,17 @@
         <consumer name="hashtagConsumer" eventStreams="new-hashtag"/>
         <consumer name="trendingStream" eventStreams="like-video" isStream = "True"/>
 
-        <controller name="trendingController">
-            <endpoint name="listAll" type="GET">
+        <controller name="trendingController" path="/trendingHashtags">
+            <endpoint name="listAll" type="GET"  path="/">
                 <responseBody>
             	   <attribute name="videos" type="Set(Videos)"/>
             	</responseBody>
             </endpoint> 
         </controller>
-       <controller name="healthcheckControllers">
-			<endpoint name="health" type="GET">
+       <controller name="healthcheckControllers"  path="/health">
+			<endpoint name="health" type="GET"  path="/">
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
 		</controller>
@@ -276,16 +276,16 @@
         
         <consumer name="videoStream" eventStreams="new-video" isStream = "True"/>
         <producer name="subscriptionProducer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>
-       <controller name="healthcheckControllers">
-			<endpoint name="health" type="GET">
+       <controller name="healthcheckControllers" path="health">
+			<endpoint name="health" type="GET" path="/">
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
 		</controller>
 
-        <controller name="subscriptionController">
-            <endpoint name="listAll" type="GET">
+        <controller name="subscriptionController" path="/subscription">
+            <endpoint name="listAll" type="GET" path="/">
                 <responseBody>
             	   <attribute name="videos" type="Set(Videos)"/>
             	</responseBody>

@@ -1,12 +1,12 @@
-rule Model2Dto
-	transform d : DTO {
 
+pre {
+
+}
+
+rule Model2Dto transform d : DTO {
 	template : "templates/Dto2domain.egl"
-
 	target : d.eContainer().name + "/src-gen/dto/"+ d.name+".java"
-	
-	parameters : Map{}
-	
+//	formatter : java;
 }
 
 //TODO: generatee controller interface? or abstract maybe?
@@ -16,17 +16,20 @@ rule Model2Controller
 	template : "templates/Model2Controller.egl"
 
 	target : c.eContainer().name + "/src-gen/controller/"+ c.name+".java"
-	
-	parameters : Map{}
+
 }
 
-//TODO: generate repository for entity but only if it is stored? So needs repository?need to filter entities
-rule Model2Repository
-	transform e : Entity {
-		
-	template : "templates/Model2Controller.egl"
+////TODO: generate repository for entity but only if it is stored? So needs repository?need to filter entities
+//rule Model2Repository
+//	transform e : Entity {
+//		
+//	template : "templates/Model2Controller.egl"
+//
+//	target : c.eContainer().name + "/src-gen/controller/"+ c.name+".java"
+//	
+//	parameters : Map{}
+//}
 
-	target : c.eContainer().name + "/src-gen/controller/"+ c.name+".java"
-	
-	parameters : Map{}
+operation Attribute getType(){
+	return self.type.replace("\\[", "\\<").replace("\\]", "\\>");
 }

@@ -1,0 +1,23 @@
+package uk.ac.york.eng2.videos.controllers;
+
+import io.micronaut.http.*;
+import io.micronaut.http.annotation.*;
+import uk.ac.york.eng2.videos.domain.*;
+import uk.ac.york.eng2.videos.dto.*;
+import java.util.*;
+
+interface [%=c.name.firstToUpperCase()%]Impl {
+	
+	[% for (e in c.endpoints) {%]
+	@[%=e.type.name.toLowerCase().firstToUpperCase()%]("[%=e.path%]")
+	[%=e.responseBody.getType()%] [%=e.name %]([% for (a in e.requestParams) {%][%if (not e.path.matches(".*/\\{"+a.name+"\\}.*")){%]@Body[%}%] [%=a.getType()%] [%=a.name%][%if (not e.requestParams.last().equals(a)){%],[%}%] [%}%]);
+		
+		
+	[%}%]
+	
+}
+[%
+operation Attribute getType(){
+	return self.type.replace("\\[", "\\<").replace("\\]", "\\>");
+}
+%]

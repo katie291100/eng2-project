@@ -8,9 +8,8 @@ import jakarta.transaction.Transactional;
 import java.net.URI;
 import java.util.Set;
 
-import uk.ac.york.eng2.videos.domain.User;
-import uk.ac.york.eng2.videos.domain.Video;
-import uk.ac.york.eng2.videos.dto.UserDTO;
+import uk.ac.york.eng2.videos.domain.*;
+import uk.ac.york.eng2.videos.dto.*;
 import uk.ac.york.eng2.videos.events.UserProducer;
 import uk.ac.york.eng2.videos.repositories.UsersRepository;
 import uk.ac.york.eng2.videos.repositories.VideosRepository;

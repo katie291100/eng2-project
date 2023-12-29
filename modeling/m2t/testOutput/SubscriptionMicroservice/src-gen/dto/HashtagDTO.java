@@ -8,13 +8,14 @@ import java.util.Set;
 @Serdeable
 public class HashtagDTO {
 
-	private String String
+		private String String
 
-	public void setName(String name) {
-		this.name = name
-	}
-	
-	public Long getname() {
-    	return name;
-	}
+		public void setName(String name) {
+			this.name = name
+		}
+		
+		public Long getname() {
+        	return name;
+    	}
+
 }

@@ -21,14 +21,16 @@ class Microservice {
 
 class Controller{
 	attr String name;
+	attr String path;
 	val Endpoint[*] endpoints;
 }
 
 class Endpoint{
 	attr String name;
+	attr String path;
 	attr EndpointType type;
 	val Attribute[*] requestParams;
-	val Attribute[*] responseBody;
+	val Attribute responseBody;
 }
 
 class Entity {
