@@ -4,22 +4,12 @@ digraph G {
   	colorscheme="pastel19"
     cluster=true;
 
-	[%if (isDTO){%]
-		[%=e.name%] [fillcolor="2"]
+	[%=c.name%] [fillcolor="1"]
+	[%for (a in eventStreams){%]
 		
-	[%}else{%]
-		[%=e.name%] [fillcolor="1"]
-		
-		
-	[%}%]
-
-	[%for (a in attributes){%]
-		
-	    [%=a.name%] [label="[%=a.name%]([%=a.type%])" fillcolor="6" shape=ellipse]
+	    "[%=a.name%]" [label="[%=a.name%]" shape="box3d"]
 	    
-	    [%if (isLayerActive("attributes")){%]
-            [%=e.name%] -> [%=a.name%] [color="#2A6C41" label="has"]
-    	[%}%]
+	    "[%=c.name%]" -> "[%=a.name%]" [color="#2A6C41" label="has"]
 	    
 	[%}%]
 	

@@ -26,15 +26,15 @@ public interface UsersClient {
     @Post("/")
     HttpResponse<Void> add(@Body UserDTO userDetails);
 
-    @Put("/{id}")
-    @Transactional
-    HttpResponse<Void> updateUser(long id, @Body UserDTO userDetails);
+//    @Put("/{id}")
+//    @Transactional
+//    HttpResponse<Void> updateUser(long id, @Body UserDTO userDetails);
 
     @Put("/{id}/watchedVideo/{videoId}")
     @Transactional
     HttpResponse<Void> watchedVideo(long id, long videoId);
-
-    @Delete("/{id}")
-    @Transactional
-    HttpResponse<Void> deleteUser(long id);
+//
+//    @Delete("/{id}")
+//    @Transactional
+//    HttpResponse<Void> deleteUser(long id);
 }

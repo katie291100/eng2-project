@@ -19,8 +19,8 @@ public interface VideosClient {
     @Get("/{id}")
     public Video getVideo(Long id);
 
-    @Put("/{id}")
-    HttpResponse<Void> updateVideo(Long id, @Body VideoDTO video);
+//    @Put("/{id}")
+//    HttpResponse<Void> updateVideo(Long id, @Body VideoDTO video);
 
     @Get("/hashtag/{hashtag}")
     Set<Video> listVideosByHashtag(String hashtag);
@@ -31,6 +31,4 @@ public interface VideosClient {
     @Put("/{id}/dislike/{userId}")
     HttpResponse<Void> dislikeVideo(Long id, Long userId);
 
-    @Delete("/{id}")
-    HttpResponse<Void> deleteVideo(Long id);
 }

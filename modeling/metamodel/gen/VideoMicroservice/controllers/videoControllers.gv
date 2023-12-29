@@ -1,0 +1,64 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque", colorscheme="pastel19"]
+    colorscheme="pastel19"
+    
+	splines=line
+	videoControllers [fillcolor="1"]
+		
+	    listVideos [label="listVideos(GET)" fillcolor="#95f0e7" ]
+   		videoControllers -> listVideos [color="#2A6C41" ]
+	    	videos[label="videos(Set[Video])" fillcolor="6" shape=ellipse]
+	    	listVideos -> videos [label="responseBody"]
+	    	    
+	    
+		
+	    listVideosByHashtag [label="listVideosByHashtag(GET)" fillcolor="#95f0e7" ]
+   		videoControllers -> listVideosByHashtag [color="#2A6C41" ]
+	    	hashtag[label="hashtag(String)" fillcolor="6" shape=ellipse]
+	    	hashtag -> listVideosByHashtag [label="requestParams"]
+	    	videos[label="videos(Set[Video])" fillcolor="6" shape=ellipse]
+	    	listVideosByHashtag -> videos [label="responseBody"]
+	    	    
+	    
+		
+	    addVideo [label="addVideo(POST)" fillcolor="#95f0e7" ]
+   		videoControllers -> addVideo [color="#2A6C41" ]
+	    	videoDTO[label="videoDTO(VideoDTO)" fillcolor="6" shape=ellipse]
+	    	addVideo -> videoDTO [label="responseBody"]
+	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
+	    	addVideo -> HTTPResponse [label="responseBody"]
+	    	    
+	    
+		
+	    getVideo [label="getVideo(GET)" fillcolor="#95f0e7" ]
+   		videoControllers -> getVideo [color="#2A6C41" ]
+	    	id[label="id(Long)" fillcolor="6" shape=ellipse]
+	    	id -> getVideo [label="requestParams"]
+	    	video[label="video(Video)" fillcolor="6" shape=ellipse]
+	    	getVideo -> video [label="responseBody"]
+	    	    
+	    
+		
+	    likeVideo [label="likeVideo(PUT)" fillcolor="#95f0e7" ]
+   		videoControllers -> likeVideo [color="#2A6C41" ]
+	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
+	    	HTTPResponse -> likeVideo [label="requestParams"]
+	    	videoId[label="videoId(Long)" fillcolor="6" shape=ellipse]
+	    	likeVideo -> videoId [label="responseBody"]
+	    	userID[label="userID(Long)" fillcolor="6" shape=ellipse]
+	    	likeVideo -> userID [label="responseBody"]
+	    	    
+	    
+		
+	    dislikeVideo [label="dislikeVideo(PUT)" fillcolor="#95f0e7" ]
+   		videoControllers -> dislikeVideo [color="#2A6C41" ]
+	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
+	    	HTTPResponse -> dislikeVideo [label="requestParams"]
+	    	videoId[label="videoId(Long)" fillcolor="6" shape=ellipse]
+	    	dislikeVideo -> videoId [label="responseBody"]
+	    	userID[label="userID(Long)" fillcolor="6" shape=ellipse]
+	    	dislikeVideo -> userID [label="responseBody"]
+	    	    
+	    
+}

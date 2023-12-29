@@ -26,7 +26,8 @@ class Controller{
 class Endpoint{
 	attr String name;
 	attr EndpointType type;
-	ref Entity entity;
+	val Attribute[*] requestParams;
+	val Attribute[*] responseBody;
 }
 
 class Entity {
@@ -52,6 +53,7 @@ class Attribute{
 
 class Consumer{
 	attr String name;
+	attr Boolean isStream = false;
 	ref EventStream[*] eventStreams;
 }
 
@@ -62,7 +64,6 @@ class Producer{
 
 class EventStream{
 	attr String name;
-	attr Boolean isStream = false;
 	val KeyType key;
 	val ValueType value;
 }
@@ -76,9 +77,8 @@ abstract class EventType{
 }
 
 enum EndpointType {
-  List;
-  Update;
-  Delete;
-  Get;
-  Create;
+ GET;
+ PUT;
+ POST;
+ DELETE;
 }

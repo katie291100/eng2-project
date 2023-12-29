@@ -139,11 +139,11 @@ The Video Service exposes the following endpoints:
   - [GET `/videos`](#get-videos---get-all-videos)
   - [POST `/videos`](#post-videos---create-a-new-video)
   - [GET `/videos/{id}`](#get-videosid---get-a-video-by-id)
-  - [PUT `/videos/{id}`](#put-videosid---update-a-video-entity)
+  - [PUT `/videos/{id}` (disabled)](#put-videosid---update-a-video-entity)
   - [GET `/videos/hashtag/{hashtag}`](#get-videoshashtaghashtag---get-videos-by-hashtag-name)
   - [PUT `/videos/{id}/like`](#put-videosidlike---mark-a-video-as-liked)
   - [PUT `/videos/{id}/dislike`](#put-videosiddislike---mark-a-video-as-disliked)
-  - [DELETE `/videos/{id}`](#delete-videosid---delete-a-video)
+  - [DELETE `/videos/{id}` (disabled)](#delete-videosid---delete-a-video)
 - [Hashtag endpoints](#hashtag-endpoints)
     - [GET `/hashtags`](#get-hashtags---get-all-hashtags)
     - [POST `/hashtags`](#post-hashtags---create-a-new-hashtag)
@@ -341,7 +341,7 @@ Example response:
 ```
 - Returns `null` if video doesn't exist
 
-#### PUT `/videos/{id}` - Update a video entity
+#### PUT `/videos/{id}` - Update a video entity (disabled)
 Updates a video entity with the given id.
 Example Curl Request
 ```shell
@@ -399,7 +399,7 @@ curl -i -X PUT http://localhost:8080/videos/1/dislike
 Expected Response: `HTTP/1.1 200 OK` \
 Response if video doesn't exist: `404 Not Found`
 
-#### DELETE `/videos/{id}` - Delete a video
+#### DELETE `/videos/{id}` - Delete a video (Disabled)
 Deletes a video with the given id.
 Example Curl Request
 ```shell

@@ -1,0 +1,15 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque", colorscheme="pastel19"]
+  	colorscheme="pastel19"
+    cluster=true;
+
+	hashtagConsumer [fillcolor="1"]
+		
+	    "new-hashtag" [label="new-hashtag" shape="box3d"]
+	    
+	    "hashtagConsumer" -> "new-hashtag" [color="#2A6C41" label="has"]
+	    
+	
+}
+

@@ -1,0 +1,33 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque", colorscheme="pastel19"]
+    colorscheme="pastel19"
+    
+	splines=line
+	hashtagControllers [fillcolor="1"]
+		
+	    listHashtags [label="listHashtags(GET)" fillcolor="#95f0e7" ]
+   		hashtagControllers -> listHashtags [color="#2A6C41" ]
+	    	hashtags[label="hashtags(Set[Hashtag])" fillcolor="6" shape=ellipse]
+	    	listHashtags -> hashtags [label="responseBody"]
+	    	    
+	    
+		
+	    getHashtag [label="getHashtag(GET)" fillcolor="#95f0e7" ]
+   		hashtagControllers -> getHashtag [color="#2A6C41" ]
+	    	hashtagID[label="hashtagID(Long)" fillcolor="6" shape=ellipse]
+	    	hashtagID -> getHashtag [label="requestParams"]
+	    	hashtag[label="hashtag(Hashtag)" fillcolor="6" shape=ellipse]
+	    	getHashtag -> hashtag [label="responseBody"]
+	    	    
+	    
+		
+	    addHashtag [label="addHashtag(POST)" fillcolor="#95f0e7" ]
+   		hashtagControllers -> addHashtag [color="#2A6C41" ]
+	    	hashtagDTO[label="hashtagDTO(HashtagDTO)" fillcolor="6" shape=ellipse]
+	    	hashtagDTO -> addHashtag [label="requestParams"]
+	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
+	    	addHashtag -> HTTPResponse [label="responseBody"]
+	    	    
+	    
+}

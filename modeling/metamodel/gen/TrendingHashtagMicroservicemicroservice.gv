@@ -1,0 +1,78 @@
+digraph G {
+    node[shape=rectangle, colorscheme="pastel19", fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque"]
+	colorscheme="pastel19"
+	 subgraph microservice {
+	  	cluster=true;
+	    color="9";
+	    label="TrendingHashtagMicroservice"
+	    subgraph controllers {
+		    cluster=true;
+		    color="1";
+		    label="Controllers"
+			
+			    trendingController [fillcolor="5"]
+			   	
+			
+			    healthcheckControllers [fillcolor="5"]
+			   	
+		
+			
+		}
+		 subgraph entities {
+		    cluster=true;
+		    color="1";
+		    label="Entities"
+			
+			    Hashtag [fillcolor="1"]
+			   	
+			    	
+			
+			    Video [fillcolor="1"]
+			   	
+			    	
+		
+			
+		}
+		subgraph dtos {
+		    cluster=true;
+		    color="2";
+		    label="DTOs"
+			
+			    HashtagDTO [label = "HashtagDTO" fillcolor="2"]
+			    
+			
+			    VideoDTO [label = "VideoDTO" fillcolor="2"]
+			    
+		
+			
+		}
+		subgraph producers {
+		    cluster=true;
+		    color="3";
+		    label="Producers"
+		    
+			
+		}
+		subgraph consumers {
+		    cluster=true;
+		    color="4";
+		    label="Consumers"
+		    
+			    hashtagConsumerConsumer [label = "hashtagConsumer" fillcolor="4"]
+			    trendingStreamConsumer [label = "trendingStream" fillcolor="4"]
+		}
+			
+			    
+			    	Hashtag -> HashtagDTO [color="#2A6C41"]
+		
+			    	
+			
+			    
+			    	Video -> VideoDTO [color="#2A6C41"]
+		
+			    	
+	
+	}
+}
+

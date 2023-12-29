@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<Microservice xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns="Y3877930" xmi:id="_WrPPYJWlEe6OhZZh9QlQew">
-  <entities xmi:id="_XkcvUJWlEe6OhZZh9QlQew" name="Video" dto="_YJZPcJWlEe6OhZZh9QlQew">
-    <attributes xmi:id="_ijM74JWlEe6OhZZh9QlQew" name="Name"/>
-  </entities>
-  <dtos xmi:id="_YJZPcJWlEe6OhZZh9QlQew" name="Video">
-    <attributes xmi:id="_ctLjsJWlEe6OhZZh9QlQew"/>
-  </dtos>
-</Microservice>

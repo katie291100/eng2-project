@@ -1,0 +1,62 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque", colorscheme="pastel19"]
+    colorscheme="pastel19"
+    
+	splines=line
+	userControllers [fillcolor="1"]
+		
+	    listUsers [label="listUsers(GET)" fillcolor="#95f0e7" ]
+   		userControllers -> listUsers [color="#2A6C41" ]
+	    	users[label="users(Set[User])" fillcolor="6" shape=ellipse]
+	    	listUsers -> users [label="responseBody"]
+	    	    
+	    
+		
+	    addUser [label="addUser(POST)" fillcolor="#95f0e7" ]
+   		userControllers -> addUser [color="#2A6C41" ]
+	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
+	    	HTTPResponse -> addUser [label="requestParams"]
+	    	userDTO[label="userDTO(userDTO)" fillcolor="6" shape=ellipse]
+	    	addUser -> userDTO [label="responseBody"]
+	    	    
+	    
+		
+	    watchVideo [label="watchVideo(PUT)" fillcolor="#95f0e7" ]
+   		userControllers -> watchVideo [color="#2A6C41" ]
+	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
+	    	HTTPResponse -> watchVideo [label="requestParams"]
+	    	videoId[label="videoId(Long)" fillcolor="6" shape=ellipse]
+	    	watchVideo -> videoId [label="responseBody"]
+	    	userID[label="userID(Long)" fillcolor="6" shape=ellipse]
+	    	watchVideo -> userID [label="responseBody"]
+	    	    
+	    
+		
+	    getUser [label="getUser(GET)" fillcolor="#95f0e7" ]
+   		userControllers -> getUser [color="#2A6C41" ]
+	    	user[label="user(User)" fillcolor="6" shape=ellipse]
+	    	user -> getUser [label="requestParams"]
+	    	userID[label="userID(Long)" fillcolor="6" shape=ellipse]
+	    	getUser -> userID [label="responseBody"]
+	    	    
+	    
+		
+	    getWatchedByUser [label="getWatchedByUser(GET)" fillcolor="#95f0e7" ]
+   		userControllers -> getWatchedByUser [color="#2A6C41" ]
+	    	videos[label="videos(Set(Videos))" fillcolor="6" shape=ellipse]
+	    	videos -> getWatchedByUser [label="requestParams"]
+	    	userID[label="userID(Long)" fillcolor="6" shape=ellipse]
+	    	getWatchedByUser -> userID [label="responseBody"]
+	    	    
+	    
+		
+	    getPostedByUser [label="getPostedByUser(GET)" fillcolor="#95f0e7" ]
+   		userControllers -> getPostedByUser [color="#2A6C41" ]
+	    	videos[label="videos(Set(Videos))" fillcolor="6" shape=ellipse]
+	    	videos -> getPostedByUser [label="requestParams"]
+	    	userID[label="userID(Long)" fillcolor="6" shape=ellipse]
+	    	getPostedByUser -> userID [label="responseBody"]
+	    	    
+	    
+}

@@ -1,8 +1,7 @@
 rule System2Graphviz
     transform s : Y3877930::System {
-
-    template : "system2graphviz.egl"
-
+  	target: "gen/system.gv"
+    template : "templates/system2graphviz.egl"
     parameters : Map{
         "path" = Sequence{"System"},
         "icon" = "diagram-ffffff",
@@ -15,7 +14,8 @@ rule System2Graphviz
 rule Microservice2Graphviz
     transform n : Y3877930::Microservice {
 
-    template : "microservice2graphviz.egl"
+    template : "templates/microservice2graphviz.egl"
+  	target: "gen/"+n.name+"microservice.gv"
 
     parameters : Map{
         "path" = Sequence{"Microservices", n.name, "overview"},
@@ -36,17 +36,15 @@ rule Microservice2Graphviz
 rule Entity2Graphviz
     transform e : Y3877930::Entity {
 
-    template : "entity2graphviz.egl"
+    template : "templates/entity2graphviz.egl"
+  	target: "gen/"+e.eContainer().name + "/entities/"+ e.name+".gv"
 
     parameters : Map{
         "path" = Sequence{"Microservices", e.eContainer().name, "Entities",  e.name},
         "icon" = "diagram-c0c0c0",
          "format" = "graphviz-dot",
         "attributes" = e.attributes,
-        "isDTO" = false,
-        "layers" = Sequence {
-            Map {"id"="attributes", "active"=true}
-        }
+        "isDTO" = false
     }
 
 }
@@ -54,17 +52,15 @@ rule Entity2Graphviz
 rule DTO2Graphviz
     transform e : Y3877930::DTO {
 
-    template : "entity2graphviz.egl"
+    template : "templates/entity2graphviz.egl"
+  	target: "gen/"+e.eContainer().name + "/dtos/"+ e.name+".gv"
 
     parameters : Map{
         "path" = Sequence{"Microservices", e.eContainer().name, "DTOs",  e.name},
         "icon" = "diagram-c0c0c0",
         "format" = "graphviz-dot",
         "isDTO" = true,
-        "attributes" = e.attributes,
-        "layers" = Sequence {
-            Map {"id"="attributes", "active"=true}
-        }
+        "attributes" = e.attributes
     }
 
 }
@@ -72,17 +68,14 @@ rule DTO2Graphviz
 rule ControllerGraphviz
     transform c : Y3877930::Controller {
 
-    template : "controller2graphviz.egl"
+    template : "templates/controller2graphviz.egl"
+  	target: "gen/"+c.eContainer().name + "/controllers/"+ c.name+".gv"
 
     parameters : Map{
         "path" = Sequence{"Microservices", c.eContainer().name, "Controllers",  c.name},
         "icon" = "diagram-c0c0c0",
          "format" = "graphviz-dot",
-        "endpoints" = c.endpoints,
-        "layers" = Sequence {
-            Map {"id"="endpoints", "title"="exposes endpoint", "active"=true}
-            
-        }
+        "endpoints" = c.endpoints
     }
 
 }
@@ -90,7 +83,8 @@ rule ControllerGraphviz
 rule ConsumersGraphviz
     transform c : Y3877930::Consumer {
 
-    template : "event2graphviz.egl"
+    template : "templates/event2graphviz.egl"
+  	target: "gen/"+c.eContainer().name + "/events/consumers"+ c.name+".gv"
 
     parameters : Map{
         "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name+"Consumer"},
@@ -104,7 +98,8 @@ rule ConsumersGraphviz
 rule ProducersGraphviz
     transform c : Y3877930::Producer {
 
-    template : "event2graphviz.egl"
+    template : "templates/event2graphviz.egl"
+  	target: "gen/"+c.eContainer().name + "/events/producers"+ c.name+".gv"
 
     parameters : Map{
         "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name+"Producer"},

@@ -1,0 +1,19 @@
+<project default="metamodel">
+    <target name="metamodel">
+    	
+    	<delete dir="gen"/>
+        <!-- Load the model.flexmi EMF model -->
+        <epsilon.emf.loadModel name="M" modelfile="./../models/acme.flexmi" metamodelfile="Y3877930.emf" />
+        
+        <!-- Run program.egx against it -->
+        <epsilon.egl src="Y3877930.egx">
+            <model ref="M" />
+        </epsilon.egl>
+        
+        <!-- Dispose of the model -->
+        <epsilon.disposeModel model="M"/>
+
+        <!-- Refresh the project to pick up any created or updated files -->
+    	<eclipse.refreshLocal resource="metamodel" depth="infinite"/>
+    </target>
+</project> 

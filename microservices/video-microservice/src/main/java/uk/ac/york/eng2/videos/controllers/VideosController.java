@@ -99,30 +99,30 @@ public class VideosController {
         kafkaClient.postVideo(video.getPostedBy().getId(), video);
         return HttpResponse.created(URI.create("/Video/" + video.getId()));
     }
-
-    @Transactional
-    @Put("/{id}")
-    public HttpResponse<Void> updateVideo(long id, @Body VideoDTO video) {
-        Video videoRecord = repo.findById(id).orElse(null);
-
-        if (videoRecord == null) {
-            return HttpResponse.notFound();
-        }
-        if (video.getTitle() != null) {
-            videoRecord.setTitle(video.getTitle());
-        }
-        if (video.getPostedBy() != null) {
-            User poster = userRepo.findById(video.getPostedBy()).orElse(null);
-
-            if (poster ==  null){
-                return HttpResponse.notFound();
-            }
-
-            videoRecord.setPostedBy(poster);
-        }
-        repo.update(videoRecord);
-        return HttpResponse.ok();
-    }
+//
+//    @Transactional
+//    @Put("/{id}")
+//    public HttpResponse<Void> updateVideo(long id, @Body VideoDTO video) {
+//        Video videoRecord = repo.findById(id).orElse(null);
+//
+//        if (videoRecord == null) {
+//            return HttpResponse.notFound();
+//        }
+//        if (video.getTitle() != null) {
+//            videoRecord.setTitle(video.getTitle());
+//        }
+//        if (video.getPostedBy() != null) {
+//            User poster = userRepo.findById(video.getPostedBy()).orElse(null);
+//
+//            if (poster ==  null){
+//                return HttpResponse.notFound();
+//            }
+//
+//            videoRecord.setPostedBy(poster);
+//        }
+//        repo.update(videoRecord);
+//        return HttpResponse.ok();
+//    }
 
     @Transactional
     @Put("/{id}/like/{userId}")
@@ -163,16 +163,16 @@ public class VideosController {
         return HttpResponse.ok();
     }
 
-    @Delete("/{id}")
-    @Transactional
-    public HttpResponse<Void> deleteVideo(long id) {
-        Video videoRecord = repo.findById(id).orElse(null);
-
-        if (videoRecord == null) {
-            return HttpResponse.notFound();
-        }
-
-        repo.delete(videoRecord);
-        return HttpResponse.ok();
-    }
+//    @Delete("/{id}")
+//    @Transactional
+//    public HttpResponse<Void> deleteVideo(long id) {
+//        Video videoRecord = repo.findById(id).orElse(null);
+//
+//        if (videoRecord == null) {
+//            return HttpResponse.notFound();
+//        }
+//
+//        repo.delete(videoRecord);
+//        return HttpResponse.ok();
+//    }
 }

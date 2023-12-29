@@ -170,61 +170,61 @@ public class VideosControllerTest {
         assertEquals(video1.getId(), client.getVideo(video1.getId()).getId());
         assertEquals(video1.getTitle(), client.getVideo(video1.getId()).getTitle());
     }
+//
+//    @Test
+//    public void testUpdateVideoExists() {
+//        Video video = new Video();
+//        video.setTitle("Test Video");
+//        video.setPostedBy(poster);
+//        video = videosRepo.save(video);
+//
+//        VideoDTO videoDTO = new VideoDTO();
+//        videoDTO.setTitle("Test Video2");
+//
+//        User user = new User();
+//        user.setName("Test User2");
+//        user = userRepo.save(user);
+//        videoDTO.setPostedBy(user.getId());
+//
+//        HttpResponse<Void> response = client.updateVideo(video.getId(), videoDTO);
+//
+//        Video updatedVideo = videosRepo.findById(video.getId()).orElse(null);
+//        assertEquals(HttpStatus.OK, response.getStatus());
+//        if (updatedVideo != null) {
+//            assertEquals("Test Video2", updatedVideo.getTitle());
+//            assertEquals(user.getId(), updatedVideo.getPostedBy().getId());
+//        }
+//        else{
+//            assert false;
+//        }
+//    }
+//    @Test
+//    public void testDeleteVideo() {
+//        Video video = new Video();
+//        video.setTitle("Test Video");
+//        video.setPostedBy(poster);
+//        video = videosRepo.save(video);
+//
+//        client.deleteVideo(video.getId());
+//        Iterable<Video> videos = client.list();
+//        assertFalse(videos.iterator().hasNext());
+//    }
 
-    @Test
-    public void testUpdateVideoExists() {
-        Video video = new Video();
-        video.setTitle("Test Video");
-        video.setPostedBy(poster);
-        video = videosRepo.save(video);
-
-        VideoDTO videoDTO = new VideoDTO();
-        videoDTO.setTitle("Test Video2");
-
-        User user = new User();
-        user.setName("Test User2");
-        user = userRepo.save(user);
-        videoDTO.setPostedBy(user.getId());
-
-        HttpResponse<Void> response = client.updateVideo(video.getId(), videoDTO);
-
-        Video updatedVideo = videosRepo.findById(video.getId()).orElse(null);
-        assertEquals(HttpStatus.OK, response.getStatus());
-        if (updatedVideo != null) {
-            assertEquals("Test Video2", updatedVideo.getTitle());
-            assertEquals(user.getId(), updatedVideo.getPostedBy().getId());
-        }
-        else{
-            assert false;
-        }
-    }
-    @Test
-    public void testDeleteVideo() {
-        Video video = new Video();
-        video.setTitle("Test Video");
-        video.setPostedBy(poster);
-        video = videosRepo.save(video);
-
-        client.deleteVideo(video.getId());
-        Iterable<Video> videos = client.list();
-        assertFalse(videos.iterator().hasNext());
-    }
-
-    @Test
-    public void testDeleteVideoNoVideo() {
-        HttpResponse<Void> response = client.deleteVideo(1L);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
-    }
-
-    @Test
-    public void testUpdateVideoNoVideo() {
-        VideoDTO videoDTO = new VideoDTO();
-        videoDTO.setTitle("Test Video2");
-
-        HttpResponse<Void> response = client.updateVideo(1L, videoDTO);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
-    }
+//    @Test
+//    public void testDeleteVideoNoVideo() {
+//        HttpResponse<Void> response = client.deleteVideo(1L);
+//        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
+//    }
+//
+//    @Test
+//    public void testUpdateVideoNoVideo() {
+//        VideoDTO videoDTO = new VideoDTO();
+//        videoDTO.setTitle("Test Video2");
+//
+//        HttpResponse<Void> response = client.updateVideo(1L, videoDTO);
+//
+//        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
+//    }
 
     @Test
     public void testListVideosByHashtag(){

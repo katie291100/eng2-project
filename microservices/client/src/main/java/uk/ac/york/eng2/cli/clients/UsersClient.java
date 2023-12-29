@@ -27,14 +27,14 @@ public interface UsersClient {
     @Post("/")
     HttpResponse<Void> add(@Body UserDTO userDetails);
 
-    @Put("/{id}")
-    HttpResponse<Void> updateUser(long id, @Body UserDTO userDetails);
+//    @Put("/{id}")
+//    HttpResponse<Void> updateUser(long id, @Body UserDTO userDetails);
 
     @Put("/{id}/watchedVideo/{videoId}")
     HttpResponse<Void> watchedVideo(long id, long videoId);
 
-    @Delete("/{id}")
-    HttpResponse<Void> deleteUser(long id);
+//    @Delete("/{id}")
+//    HttpResponse<Void> deleteUser(long id);
 
 
 }

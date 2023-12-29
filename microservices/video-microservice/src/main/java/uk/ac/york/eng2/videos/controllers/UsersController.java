@@ -57,18 +57,18 @@ public class UsersController {
         return HttpResponse.created(URI.create("/users/" + newUser.getId()));
     }
 
-    @Put("/{id}")
-    @Transactional
-    public HttpResponse<Void> updateUser(long id, @Body UserDTO userDetails) {
-        User oldUser = repo.findById(id).orElse(null);
-        if (oldUser == null) {
-            return HttpResponse.notFound();
-        }
-        oldUser.setName(userDetails.getName());
-        repo.save(oldUser);
-
-        return HttpResponse.ok();
-    }
+//    @Put("/{id}")
+//    @Transactional
+//    public HttpResponse<Void> updateUser(long id, @Body UserDTO userDetails) {
+//        User oldUser = repo.findById(id).orElse(null);
+//        if (oldUser == null) {
+//            return HttpResponse.notFound();
+//        }
+//        oldUser.setName(userDetails.getName());
+//        repo.save(oldUser);
+//
+//        return HttpResponse.ok();
+//    }
     @Put("/{id}/watchedVideo/{videoId}")
     @Transactional
     public HttpResponse<Void> watchVideo(long id, long videoId) {
@@ -82,17 +82,17 @@ public class UsersController {
         kafkaClient.watchVideo(user.getId(), video);
         return HttpResponse.ok();
     }
-    @Delete("/{id}")
-    @Transactional
-    public HttpResponse<Void> deleteUser(long id) {
-        User oldUser = repo.findById(id).orElse(null);
-        if (oldUser == null) {
-            return HttpResponse.notFound();
-        }
-        repo.delete(oldUser);
-
-        return HttpResponse.ok();
-    }
+//    @Delete("/{id}")
+//    @Transactional
+//    public HttpResponse<Void> deleteUser(long id) {
+//        User oldUser = repo.findById(id).orElse(null);
+//        if (oldUser == null) {
+//            return HttpResponse.notFound();
+//        }
+//        repo.delete(oldUser);
+//
+//        return HttpResponse.ok();
+//    }
 
     @Get("/{id}/postedVideos")
     @Transactional

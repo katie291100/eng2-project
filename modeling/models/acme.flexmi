@@ -1,49 +1,64 @@
 <?nsuri Y3877930?>
 <?render-egx ../metamodel/Y3877930.egx?>
 <system name="Social Media">
-    <eventStream name="newVideo">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
+	<eventStreams>
+	    <eventStream name="new-video">
+	        <keyType name="video" type="String"/>
+	        <valueType name="video" type="Video"/>
+	    </eventStream>
+	    <eventStream name="like-video">
+	        <keyType name="video" type="String"/>
+	        <valueType name="video" type="Video"/>
+	    </eventStream>
+	    <eventStream name="dislike-video">
+	        <keyType name="video" type="String"/>
+	        <valueType name="video" type="Video"/>
+	    </eventStream>
+	    <eventStream name="new-hashtag">
+	        <keyType name="video" type="String"/>
+	        <valueType name="video" type="Video"/>
+	    </eventStream>
+	    <eventStream name="new-user">
+	        <keyType name="video" type="String"/>
+	        <valueType name="video" type="Video"/>
+	    </eventStream>
+	    <eventStream name="watch-video">
+	        <keyType name="video" type="String"/>
+	        <valueType name="video" type="Video"/>
+	    </eventStream>
+	    <eventStream name="like-hashtag">
+	        <keyType name="video" type="String"/>
+	        <valueType name="video" type="Video"/>
+	    </eventStream>
+	    <eventStream name="subscribe-hashtag">
+	        <keyType name="video" type="String"/>
+	        <valueType name="video" type="Video"/>
+	    </eventStream>
+   		 <eventStream name="unsubscribe-hashtag">
+   		     <keyType name="video" type="String"/>
+    	    <valueType name="video" type="Video"/>
     </eventStream>
-    <eventStream name="likeVideo">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
-    </eventStream>
-    <eventStream name="dislikeVideo">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
-    </eventStream>
-    <eventStream name="newHashtag">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
-    </eventStream>
-    <eventStream name="newUser">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
-    </eventStream>
-    <eventStream name="watchVideo">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
-    </eventStream>
-    <eventStream name="likeHashtag">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
-    </eventStream>
-    <eventStream name="subscribeHashtag">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
-    </eventStream>
-    <eventStream name="unsubscribeHashtag">
-        <keyType name="video" type="String"/>
-        <valueType name="video" type="Video"/>
-    </eventStream>
-    <microservice name="videomicroservice">
-        <entity name="Video" dto ="VideoDTO">    
-           	<attribute name="id" type="Long"/>
-            
+    </eventStreams>
+    
+    <microservice name="VideoMicroservice">
+        <entity name="Video" dto="VideoDTO">
         	<attribute name="title" type="String"/>
         	<attribute name="postedBy" type="Long"/>
-        	
+          	<attribute name="likes" type="Long"/>
+            <attribute name="dislikes" type="Long"/>
+  			<attribute name="hashtags" type="Set[Hashtag]"/>
+  			<attribute name="watchers" type="Set[Users]"/>
+        </entity>       
+        <entity name="User" dto="UserDTO">
+          	<attribute name="id" type="Long"/>
+            <attribute name="name" type="String"/>
+            <attribute name="watchedVideos" type="Set(Video)"/>
+            <attribute name="postedVideos" type="Set(Video)"/>
+        </entity>
+        <entity name="Hashtag" dto="HashtagDTO">
+          	<attribute name="id" type="Long"/>
+            <attribute name="name" type="String"/>
+            <attribute name="videos" type="Set(Video)"/>
         </entity>
         <dto name="VideoDTO">        
         	<attribute name="title" type="String"/>
@@ -52,65 +67,181 @@
         <dto name="UserDTO">        
         	<attribute name="name" type="String"/>
         </dto>
-       
-        <entity name="User" dto="UserDTO">
-          	<attribute name="id" type="Long"/>
-            <attribute name="name" type="String"/>
-        </entity>
+        <dto name="HashtagDTO">        
+        	<attribute name="name" type="String"/>
+        </dto>
+        <producer name="video" eventStreams="new-video, like-video, dislike-video"/>
+        <producer name="user" eventStreams="new-user, watch-video"/>
+        <producer name="hashtag" eventStreams="new-hashtag"/>
+
+        <controller name="videoControllers">
+            <endpoint name="listVideos" type="GET">
+            	<responseBody>
+            	   <attribute name="videos" type="Set[Video]"/>
+            	</responseBody>
+             </endpoint>
+            <endpoint name="listVideosByHashtag" type="GET">
+            	<responseBody>
+            	   <attribute name="videos" type="Set[Video]"/>
+            	</responseBody>
+            	<requestParams>
+            	   <attribute name="hashtag" type="String"/>
+            	</requestParams>
+             </endpoint>
+            <endpoint name="addVideo" type="POST">
+                <responseParams>
+            	   <attribute name="videoDTO" type="VideoDTO"/>
+            	</responseParams>
+                <responseBody>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</responseBody>
+            </endpoint>
+            <endpoint name="getVideo" type="GET">
+                <requestParams>
+            	   <attribute name="id" type="Long"/>
+            	</requestParams>
+                <responseBody>
+            	   <attribute name="video" type="Video"/>
+            	</responseBody>
+            </endpoint>
+            <endpoint name="likeVideo" type="PUT">
+                <responseBody>
+            	   <attribute name="videoId" type="Long"/>
+            	   <attribute name="userID" type="Long"/>
+            	</responseBody>
+                <requestParams>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</requestParams>
+            </endpoint>
+            <endpoint name="dislikeVideo" type="PUT">
+                <responseBody>
+            	   <attribute name="videoId" type="Long"/>
+            	   <attribute name="userID" type="Long"/>
+            	</responseBody>
+                <requestParams>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</requestParams>
+            </endpoint>
+        </controller>
+        <controller name="userControllers">
+      		 <endpoint name="listUsers" type="GET">
+            	<responseBody>
+            	   <attribute name="users" type="Set[User]"/>
+            	</responseBody>
+             </endpoint>
+            <endpoint name="addUser" type="POST">
+                <responseBody>
+            	   <attribute name="userDTO" type="userDTO"/>
+            	</responseBody>
+                <requestParams>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</requestParams>
+            </endpoint>
+            <endpoint name="watchVideo" type="PUT">
+                <responseBody>
+            	   <attribute name="videoId" type="Long"/>
+            	   <attribute name="userID" type="Long"/>
+            	</responseBody>
+                <requestParams>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</requestParams>
+            </endpoint>
+            <endpoint name="getUser" type="GET">
+                <responseBody>
+            	   <attribute name="userID" type="Long"/>
+            	</responseBody>
+                <requestParams>
+            	   <attribute name="user" type="User"/>
+            	</requestParams>
+            </endpoint>
+            <endpoint name="getWatchedByUser" type="GET">
+                <responseBody>
+            	   <attribute name="userID" type="Long"/>
+            	</responseBody>
+                <requestParams>
+            	   <attribute name="videos" type="Set(Videos)"/>
+            	</requestParams>
+            </endpoint>
+            <endpoint name="getPostedByUser" type="GET">
+                <responseBody>
+            	   <attribute name="userID" type="Long"/>
+            	</responseBody>
+                <requestParams>
+            	   <attribute name="videos" type="Set(Videos)"/>
+            	</requestParams>
+            </endpoint>
+        </controller>
+
+        <controller name="hashtagControllers">
+        	 <endpoint name="listHashtags" type="GET">
+            	<responseBody>
+            	   <attribute name="hashtags" type="Set[Hashtag]"/>
+            	</responseBody>
+             </endpoint>
+             <endpoint name="getHashtag" type="GET">
+                <requestParams>
+            	   <attribute name="hashtagID" type="Long"/>
+            	</requestParams>
+                <responseBody>
+            	   <attribute name="hashtag" type="Hashtag"/>
+            	</responseBody>
+            </endpoint>
+            <endpoint name="addHashtag" type="POST">
+                <requestParams>
+            	   <attribute name="hashtagDTO" type="HashtagDTO"/>
+            	</requestParams>
+                <responseBody>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</responseBody>
+            </endpoint>
+		</controller>
+		<controller name="healthcheckControllers">
+		<endpoint name="health" type="GET">
+                <responseBody>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</responseBody>
+            </endpoint>
+		</controller>
+    </microservice>
+    <microservice name="TrendingHashtagMicroservice">
         <entity name="Hashtag" dto="HashtagDTO">
           	<attribute name="id" type="Long"/>
             <attribute name="name" type="String"/>
+            <attribute name="videos" type="Set(Video)"/>
+            
+        </entity>
+        <entity name="Video" dto="VideoDTO">
+        	<attribute name="title" type="String"/>
+        	<attribute name="postedBy" type="Long"/>
+          	<attribute name="likes" type="Long"/>
+            <attribute name="dislikes" type="Long"/>
+  			<attribute name="hashtags" type="Set[Hashtag]"/>
+  			<attribute name="watchers" type="Set[Users]"/>
         </entity>
         <dto name="HashtagDTO">        
         	<attribute name="name" type="String"/>
         </dto>
-        <producer name="video" eventStreams="newVideo, likeVideo, dislikeVideo"/>
-        <producer name="user" eventStreams="newUser, watchVideo"/>
-        <producer name="hashtag" eventStreams="newHashtag"/>
-
-        <controller name="videoControllers">
-            <endpoint name="listAll" type="list" entity="Video"/>
-            <endpoint name="createVideo" type="Update" entity="Video"/>
-            <endpoint name="deleteVideo" type="Delete" entity="Video"/>
-            <endpoint name="updateVideoe" type="Update" entity="Video"/>
-
-        </controller>
-        <controller name="userControllers">
-            <endpoint name="listAll" type="list" entity="User"></endpoint>
-            <endpoint name="createUser" type="Update" entity="User"></endpoint>
-            <endpoint name="deleteUser" type="Delete" entity="User"></endpoint>
-            <endpoint name="updateUser" type="Update" entity="User"></endpoint>
-            <endpoint name="getUser" type="Get" entity="User"></endpoint>
-
-        </controller>
-
-    </microservice>
-    <microservice name="TrendingHashtagMicroservice">
-                <entity name="Hashtag" dto="HashtagDTO">
-          	<attribute name="id" type="Long"/>
-            <attribute name="name" type="String"/>
-        </entity>
-        <dto name="HashtagDTO">        
-        	<attribute name="name" type="String"/>
+        <dto name="VideoDTO">        
+        	<attribute name="title" type="String"/>
+        	<attribute name="postedBy" type="String"/>
         </dto>
-        <consumer name="hashtagConsumer" eventStreams="newHashtag"/>
-        <consumer name="trendingStream" eventStreams="likeVideo" isStream = "True"/>
+        <consumer name="hashtagConsumer" eventStreams="new-hashtag"/>
+        <consumer name="trendingStream" eventStreams="like-video" isStream = "True"/>
 
-        <controller name="videoController">
-            <endpoint name="listAll" type="list" entity="Video"></endpoint>
-            <endpoint name="createVideo" type="Update" entity="Video"></endpoint>
-            <endpoint name="deleteVideo" type="Delete" entity="Video"></endpoint>
-            <endpoint name="updateVideoe" type="Update" entity="Video"></endpoint>
-
+        <controller name="trendingController">
+            <endpoint name="listAll" type="GET">
+                <responseBody>
+            	   <attribute name="videos" type="Set(Videos)"/>
+            	</responseBody>
+            </endpoint> 
         </controller>
-        <controller name="userController">
-            <endpoint name="listAll" type="list" entity="User"></endpoint>
-            <endpoint name="createVideo" type="Update" entity="User"></endpoint>
-            <endpoint name="deleteVideo" type="Delete" entity="User"></endpoint>
-            <endpoint name="updateVideo" type="Update" entity="User"></endpoint>
-            <endpoint name="updateVideo" type="Get" entity="User"></endpoint>
-
-        </controller>
+       <controller name="healthcheckControllers">
+			<endpoint name="health" type="GET">
+                <responseBody>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</responseBody>
+            </endpoint>
+		</controller>
 
     </microservice>
     <microservice name="SubscriptionMicroservice">
@@ -118,24 +249,40 @@
         <entity name="Video" dto="VideoDTO">
         	<attribute name="title" type="String"/>
         	<attribute name="postedBy" type="Long"/>
-        	
+  			<attribute name="watchers" type="Set[Users]"/>
         </entity>
-        <dto name="UserDTO"></dto>
-        <dto name="VideoDTO"></dto>
+        <dto name="VideoDTO">        
+        	<attribute name="title" type="String"/>
+        	<attribute name="postedBy" type="Long"/>
+        </dto>
+        <dto name="UserDTO">        
+        	<attribute name="name" type="String"/>
+        </dto>
+        <dto name="HashtagDTO">        
+        	<attribute name="name" type="String"/>
+        </dto>
        
         <entity name="User" dto="UserDTO"></entity>
+        <entity name="Hashtag" dto="HashtagDTO"></entity>
         
-        <consumer name="subscriptionConsumer" eventStreams="subscribeHashtag, unsubscribeHashtag"/>
+        <consumer name="subscriptionConsumer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>
         
-        <consumer name="videoStream" eventStreams="newVideo" isStream = "True"/>
-        <producer name="subscriptionProducer" eventStreams="subscribeHashtag, unsubscribeHashtag"/>
+        <consumer name="videoStream" eventStreams="new-video" isStream = "True"/>
+        <producer name="subscriptionProducer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>
+       <controller name="healthcheckControllers">
+			<endpoint name="health" type="GET">
+                <responseBody>
+            	   <attribute name="HTTPResponse" type="HTTPResponse"/>
+            	</responseBody>
+            </endpoint>
+		</controller>
 
-        <controller name="subscriptionControllers">
-            <endpoint name="listAll" type="list" entity="Video"></endpoint>
-            <endpoint name="createVideo" type="Update" entity="Video"></endpoint>
-            <endpoint name="deleteVideo" type="Delete" entity="Video"></endpoint>
-            <endpoint name="updateVideoe" type="Update" entity="Video"></endpoint>
-
+        <controller name="subscriptionController">
+            <endpoint name="listAll" type="GET">
+                <responseBody>
+            	   <attribute name="videos" type="Set(Videos)"/>
+            	</responseBody>
+            </endpoint> 
         </controller>
 
     </microservice>

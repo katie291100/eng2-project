@@ -1,0 +1,15 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque", colorscheme="pastel19"]
+    colorscheme="pastel19"
+    
+	splines=line
+	healthcheckControllers [fillcolor="1"]
+		
+	    check [label="check(GET)" fillcolor="#95f0e7" ]
+   		healthcheckControllers -> check [color="#2A6C41" ]
+	    	HTTPResponse[label="HTTPResponse(HTTPResponse)" fillcolor="6" shape=ellipse]
+	    	check -> HTTPResponse [label="responseBody"]
+	    	    
+	    
+}

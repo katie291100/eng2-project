@@ -106,31 +106,31 @@ public class UsersControllerTest {
         Iterable<User> users = client.list();
         assertTrue(users.iterator().hasNext());
     }
-
-    @Test
-    public void testUpdateUser() {
-        User user = new User();
-        user.setName("Test Name");
-        user = userRepo.save(user);
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setName("Test Name2");
-        client.updateUser(user.getId(), userDTO);
-
-        User user2 = client.getUser(user.getId());
-        assertEquals(userDTO.getName(), user2.getName());
-    }
-
-    @Test
-    public void testUpdateUserNotFound() {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setName("Test Name2");
-        client.updateUser(1L, userDTO);
-
-        User user2 = client.getUser(1L);
-        assertNull(user2);
-        assertEquals(watchedVideo.size(), 0);
-    }
+//
+//    @Test
+//    public void testUpdateUser() {
+//        User user = new User();
+//        user.setName("Test Name");
+//        user = userRepo.save(user);
+//
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setName("Test Name2");
+//        client.updateUser(user.getId(), userDTO);
+//
+//        User user2 = client.getUser(user.getId());
+//        assertEquals(userDTO.getName(), user2.getName());
+//    }
+//
+//    @Test
+//    public void testUpdateUserNotFound() {
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setName("Test Name2");
+//        client.updateUser(1L, userDTO);
+//
+//        User user2 = client.getUser(1L);
+//        assertNull(user2);
+//        assertEquals(watchedVideo.size(), 0);
+//    }
 
     @Test
     public void testWatchedVideo() {
@@ -156,24 +156,24 @@ public class UsersControllerTest {
         Set<Video> videos = client.getWatchedByUser(1L);
         assertNull(videos);
     }
-
-    @Test
-    public void testDeleteUser() {
-        User user = new User();
-        user.setName("test name");
-        user = userRepo.save(user);
-        HttpResponse<Void> response = client.deleteUser(user.getId());
-        Iterable<User> users = client.list();
-        assertFalse(users.iterator().hasNext());
-        assertEquals(HttpStatus.OK, response.getStatus());
-
-    }
-
-    @Test
-    public void testDeleteUserNotFound() {
-        HttpResponse<Void> response = client.deleteUser(1L);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
-    }
+//
+//    @Test
+//    public void testDeleteUser() {
+//        User user = new User();
+//        user.setName("test name");
+//        user = userRepo.save(user);
+//        HttpResponse<Void> response = client.deleteUser(user.getId());
+//        Iterable<User> users = client.list();
+//        assertFalse(users.iterator().hasNext());
+//        assertEquals(HttpStatus.OK, response.getStatus());
+//
+//    }
+//
+//    @Test
+//    public void testDeleteUserNotFound() {
+//        HttpResponse<Void> response = client.deleteUser(1L);
+//        assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
+//    }
 
     @MockBean(UserProducer.class)
     UserProducer userProducer() {

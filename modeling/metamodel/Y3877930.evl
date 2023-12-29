@@ -1,0 +1,31 @@
+//There 'should' be at least one microservice.
+context `System` {
+    critique OneMicroservice {
+        check: self.microservices.size() > 0
+        message: "The system must have more than one microservice."
+    }
+}
+
+//Every event stream needs to have at least one publisher and one subscriber (assumption this should be warning).
+context EventStream {
+    critique HasProducer {
+        check: Producer.all.exists(t | t.eventStreams.includes(self))
+        message: "The EventStream " + self.name + " should have one or more producers."
+    }
+    critique HasConsumer {
+        check: Consumer.all.exists(t | t.eventStreams.includes(self))
+        message: "The EventStream " + self.name + " should have one or more consumers."
+    }
+}
+
+//Every microservice 'needs' at least one “health” resource using the HTTP GET method and taking no parameters, for reporting if it is working correctly.
+context Microservice {
+    constraint HasHealthcheck {
+        check: self.controllers.exists(c | c.endpoints.exists(e | e.isHealthcheck()))
+        message: "The Microservice " + self.name + " needs a health endpoint (GET, no request paramaters, returns HTTPResponse and starts with 'health')."
+    }
+}
+
+operation Endpoint isHealthcheck() {
+	return (self.type.name == "GET" and self.name.toLowerCase().startsWith("health") and self.requestParams.size==0 and self.responseBody.exists(r | r.type == "HTTPResponse"));
+}

@@ -1,0 +1,25 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque", colorscheme="pastel19"]
+  	colorscheme="pastel19"
+    cluster=true;
+
+	video [fillcolor="1"]
+		
+	    "new-video" [label="new-video" shape="box3d"]
+	    
+	    "video" -> "new-video" [color="#2A6C41" label="has"]
+	    
+		
+	    "like-video" [label="like-video" shape="box3d"]
+	    
+	    "video" -> "like-video" [color="#2A6C41" label="has"]
+	    
+		
+	    "dislike-video" [label="dislike-video" shape="box3d"]
+	    
+	    "video" -> "dislike-video" [color="#2A6C41" label="has"]
+	    
+	
+}
+
