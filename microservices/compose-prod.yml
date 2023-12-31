@@ -1,63 +1,5 @@
+# This file has been automatically generated
 services:
-  db:
-    image: mariadb:11
-    restart: unless-stopped
-    environment:
-      MARIADB_USER: &dbuser todo
-      MARIADB_PASSWORD: &dbpass todosecret
-      MARIADB_ROOT_PASSWORD: iamroot
-      MARIADB_DATABASE: &dbname videos
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    healthcheck:
-      # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
-      test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
-      timeout: 10s
-      retries: 3
-  db2:
-    image: mariadb:11
-    restart: unless-stopped
-    environment:
-      MARIADB_USER: *dbuser
-      MARIADB_PASSWORD: *dbpass
-      MARIADB_ROOT_PASSWORD: iamroot
-      MARIADB_DATABASE: hashtags
-      MYSQL_TCP_PORT: 3307
-      MYSQL_UNIX_PORT: 3307
-    volumes:
-      - mariadb_data2:/var/lib/mysql
-    ports:
-      - 3307:3307
-    depends_on:
-      - db
-  video-microservice:
-    image: video-microservice:latest
-    restart: unless-stopped
-    ports:
-      - 8080:8080
-    environment:
-      DB_HOST: db
-      DB_USER: *dbuser
-      DB_PASSWORD: *dbpass
-      DB_NAME: *dbname
-      KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
-      MICRONAUT_ENVIRONMENTS: prod
-    depends_on:
-      db:
-        condition: service_healthy
-
-  trending-hashtag-microservice:
-    image: trending-hashtag-microservice:latest
-    restart: unless-stopped
-    ports:
-      - 8081:8081
-    environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
-      MICRONAUT_ENVIRONMENTS: prod
-    depends_on:
-      db:
-        condition: service_healthy
-
   kafka-0:
     image: docker.io/bitnami/kafka:3.6.1
     restart: unless-stopped
@@ -87,7 +29,6 @@ services:
       test: [ 'CMD-SHELL', 'unset KAFKA_JMX_OPTS; export JMX_PORT=9999; kafka-topics.sh --bootstrap-server localhost:9092 --topic hc --create --if-not-exists && kafka-topics.sh --bootstrap-server localhost:9092 --topic hc --describe' ]
       timeout: 10s
       retries: 3
-
   kafka-1:
     image: docker.io/bitnami/kafka:3.6.1
     restart: unless-stopped
@@ -148,24 +89,82 @@ services:
       "
       # blocks until kafka is reachable
       kafka-topics.sh --bootstrap-server kafka-0:9092 --list
-
+      
       echo -e 'Creating kafka topics'
-      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-hashtag --replication-factor 3 --partitions 6
-      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic liked-hashtag --replication-factor 3 --partitions 6
-      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-user --replication-factor 3 --partitions 6
-      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic watch-video --replication-factor 3 --partitions 6
-      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-video --replication-factor 3 --partitions 6
-      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic like-video --replication-factor 3 --partitions 6
-      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic dislike-video --replication-factor 3 --partitions 6
-      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic trending-hashtag --replication-factor 3 --partitions 6
-
+      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-video --replication-factor 3 --partitions 3
+      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-user --replication-factor 3 --partitions 3
+      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic dislike-video --replication-factor 3 --partitions 3
+      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic unsubscribe-hashtag --replication-factor 3 --partitions 3
+      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic watch-video --replication-factor 3 --partitions 3
+      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-hashtag --replication-factor 3 --partitions 3
+      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic subscribe-hashtag --replication-factor 3 --partitions 3
+      kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic like-video --replication-factor 3 --partitions 3
       echo -e 'Successfully created the following topics:'
       kafka-topics.sh --bootstrap-server kafka-0:9092 --list
       "
+  video-microservice:
+    image: video-microservice:latest
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+      MICRONAUT_ENVIRONMENTS: prod
+      DB_HOST: db-video-microservice
+    depends_on:
+      db-video-microservice:
+        condition:
+          service_healthy
+  db-video-microservice:
+    image: mariadb:11
+    restart: unless-stopped
+    volumes:
+      - mariadb_data-video-microservice:/var/lib/mysql
+    healthcheck:
+      # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+      test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
+      timeout: 10s
+      retries: 3
+
+  trending-hashtag-microservice:
+    image: trending-hashtag-microservice:latest
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+      MICRONAUT_ENVIRONMENTS: prod
+      DB_HOST: db-trending-hashtag-microservice
+    depends_on:
+      db-trending-hashtag-microservice:
+        condition:
+          service_healthy
+  db-trending-hashtag-microservice:
+    image: mariadb:11
+    restart: unless-stopped
+    volumes:
+      - mariadb_data-trending-hashtag-microservice:/var/lib/mysql
+    healthcheck:
+      # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+      test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
+      timeout: 10s
+      retries: 3
+#
+#  subscription-microservice:
+#    image: subscription-microservice:latest
+#    restart: unless-stopped
+#    ports:
+#      - 8082:8080
+#    environment:
+#      KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+#      MICRONAUT_ENVIRONMENTS: prod
+#
+#
 
 volumes:
-  mariadb_data:
-  mariadb_data2:
   kafka_0_data:
   kafka_1_data:
   kafka_2_data:
+  mariadb_data-video-microservice:
+  mariadb_data-trending-hashtag-microservice:
+

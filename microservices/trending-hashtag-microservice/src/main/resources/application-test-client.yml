@@ -4,7 +4,7 @@ micronaut:
   serde:
     maximum-nesting-depth: 100
   server:
-    port: 8081
+    port: 8080
 jpa:
   default:
     entity-scan:

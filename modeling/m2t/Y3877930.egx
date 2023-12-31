@@ -4,32 +4,58 @@ pre {
 }
 
 rule Model2Dto transform d : DTO {
-	template : "templates/Dto2domain.egl"
-	target : d.eContainer().name + "/src-gen/dto/"+ d.name+".java"
+	template : "templates/Model2Dto.egl"
+	target : d.eContainer().name + "/src-gen/" + d.eContainer().getPackageFiles() + "/dto/"+ d.name.firstToUpperCase()+".java"
+	parameters: Map{"package"= d.eContainer().package+".dto"}
 //	formatter : java;
 }
 
-//TODO: generatee controller interface? or abstract maybe?
+rule Model2Entity transform e : Entity {
+    template : "templates/Model2Entity.egl"
+    target : e.eContainer().name + "/src-gen/" + e.eContainer().getPackageFiles() + "/domain/"+ e.name.firstToUpperCase()+".java"
+//  formatter : java;
+}
+
+//Generates controller interface
 rule Model2Controller
 	transform c : Controller {
 		
 	template : "templates/Model2Controller.egl"
 
-	target : c.eContainer().name + "/src-gen/controller/"+ c.name+".java"
+	target : c.eContainer().name + "/src-gen/" + c.eContainer().getPackageFiles() + "/controllers/"+ c.name.firstToUpperCase()+"Interface.java"
 
 }
 
-////TODO: generate repository for entity but only if it is stored? So needs repository?need to filter entities
-//rule Model2Repository
-//	transform e : Entity {
-//		
-//	template : "templates/Model2Controller.egl"
-//
-//	target : c.eContainer().name + "/src-gen/controller/"+ c.name+".java"
-//	
-//	parameters : Map{}
-//}
+//Generates controller abstract for scaffolding.
+rule Model2ControllerAbstract
+	transform c : Controller {
+		
+	template : "templates/Model2ControllerAbstract.egl"
 
-operation Attribute getType(){
-	return self.type.replace("\\[", "\\<").replace("\\]", "\\>");
+	target : c.eContainer().name + "/src-gen/" + c.eContainer().getPackageFiles() + "/controllers/"+ c.name.firstToUpperCase()+"Abstract.java"
+
+}
+
+
+//Generates controller abstract for scaffolding.
+rule Model2DockerCompose
+	transform s : System {
+		
+	template : "templates/Model2DockerCompose.egl"
+
+	target : "docker-compose-gen.yml"
+
+}
+
+rule Model2DockerComposeSecrets
+    transform s : System {
+        
+    template : "templates/Model2DockerSecrets.egl"
+
+    target : "docker-compose-secrets.yml"
+
+}
+
+operation Microservice getPackageFiles(){
+    return self.package.replace("\\.", "/");
 }

@@ -6,16 +6,18 @@ import uk.ac.york.eng2.videos.domain.*;
 import uk.ac.york.eng2.videos.dto.*;
 import java.util.*;
 
-interface [%=c.name.firstToUpperCase()%]Interface {
+abstract class [%=c.name.firstToUpperCase()%]Abstract {
 	
 	[% for (e in c.endpoints) {%]
 	 /**
      * This is a [%=e.type.name%] request at "[%=e.path%]"
      */
 	@[%=e.type.name.toLowerCase().firstToUpperCase()%]("[%=e.path%]")
-	[%=e.responseBody.getType()%] [%=e.name %]([% for (a in e.requestParams) {%][%if (not e.path.matches(".*/\\{"+a.name+"\\}.*")){%]@Body[%}%] [%=a.getType()%] [%=a.name%][%if (not e.requestParams.last().equals(a)){%],[%}%] [%}%]);
+	public [%=e.responseBody.getType()%] [%=e.name %]([% for (a in e.requestParams) {%][%if (not e.path.matches(".*/\\{"+a.name+"\\}.*")){%]@Body[%}%] [%=a.getType()%] [%=a.name%][%if (not e.requestParams.last().equals(a)){%],[%}%] [%}%]);
 		
-		
+		{
+        return null;
+    }
 	[%}%]
 	
 }

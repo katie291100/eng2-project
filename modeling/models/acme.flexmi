@@ -40,27 +40,31 @@
     </eventStream>
     </eventStreams>
     
-    <microservice name="VideoMicroservice" port="8080">
+    <microservice name="video-microservice" port="8080" package="uk.ac.york.eng2.videos">
         <entity name="Video" dto="VideoDTO">
-            <attribute name="id" type="Long"/>
-        	<attribute name="title" type="String"/>
-        	<attribute name="postedBy" type="Long"/>
-          	<attribute name="likes" type="Long"/>
-            <attribute name="dislikes" type="Long"/>
-  			<attribute name="hashtags" type="Set[Hashtag]"/>
-  			<attribute name="watchers" type="Set[Users]"/>
+            <entityAttribute name="id" type="Long"/>
+        	<entityAttribute name="title" type="String"/>
+        	<entityAttribute name="postedBy" type="Long"/>
+          	<entityAttribute name="likes" type="Long"/>
+            <entityAttribute name="dislikes" type="Long"/>
+  			<entityAttribute name="hashtags" type="Set[Hashtag]"/>
+  			<entityAttribute name="watchers" type="Set[Users]"/>
         </entity>       
         <entity name="User" dto="UserDTO">
-          	<attribute name="id" type="Long"/>
-            <attribute name="name" type="String"/>
-            <attribute name="watchedVideos" type="Set(Video)"/>
-            <attribute name="postedVideos" type="Set(Video)"/>
+          	<entityAttribute name="id" type="Long"/>
+            <entityAttribute name="name" type="String"/>
+            <entityAttribute name="watchedVideos" type="Set(Video)" relationship="ManyToMany"/>
+            <entityAttribute name="postedVideos" type="Set(Video)"/>
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
-          	<attribute name="id" type="Long"/>
-            <attribute name="name" type="String"/>
-            <attribute name="videos" type="Set(Video)"/>
+          	<entityAttribute name="id" type="Long"/>
+            <entityAttribute name="name" type="String"/>
+            <entityAttribute name="videos" type="Set(Video)"/>
         </entity>
+        <repository name="VideoRepository" entity="Video"/>
+       	<repository name="UserRepository" entity="User"/>
+        <repository name="HashtagRepository" entity="Hashtag"/>
+        
         <dto name="VideoDTO">        
         	<attribute name="title" type="String"/>
         	<attribute name="postedBy" type="Long"/>
@@ -204,22 +208,26 @@
             </endpoint>
 		</controller>
     </microservice>
-    <microservice name="TrendingHashtagMicroservice" port="8081">
+    <microservice name="trending-hashtag-microservice" port="8081" package="uk.ac.york.eng2.trendingHashtags">
         <entity name="Hashtag" dto="HashtagDTO">
-          	<attribute name="id" type="Long"/>
-            <attribute name="name" type="String"/>
-            <attribute name="videos" type="Set(Video)"/>
+          	<entityAttribute name="id" type="Long"/>
+            <entityAttribute name="name" type="String"/>
+            <entityAttribute name="videos" type="Set(Video)"/>
             
         </entity>
         <entity name="Video" dto="VideoDTO">
-            <attribute name="id" type="Long"/>
-        	<attribute name="title" type="String"/>
-        	<attribute name="postedBy" type="Long"/>
-          	<attribute name="likes" type="Long"/>
-            <attribute name="dislikes" type="Long"/>
-  			<attribute name="hashtags" type="Set[Hashtag]"/>
-  			<attribute name="watchers" type="Set[Users]"/>
-        </entity>
+            <entityAttribute name="id" type="Long"/>
+        	<entityAttribute name="title" type="String"/>
+        	<entityAttribute name="postedBy" type="Long"/>
+          	<entityAttribute name="likes" type="Long"/>
+            <entityAttribute name="dislikes" type="Long"/>
+  			<entityAttribute name="hashtags" type="Set[Hashtag]"/>
+  			<entityAttribute name="watchers" type="Set[Users]"/>
+        </entity> 
+        
+        <repository name="HashtagRepository" entity="Hashtag"/>
+        
+        
         <dto name="HashtagDTO">        
         	<attribute name="name" type="String"/>
         </dto>
@@ -246,13 +254,12 @@
 		</controller>
 
     </microservice>
-    <microservice name="SubscriptionMicroservice" port="8082">
-
+    <microservice name="subscription-microservice" port="8082" package="uk.ac.york.eng2.subscription">
         <entity name="Video" dto="VideoDTO">
-            <attribute name="id" type="Long"/>
-        	<attribute name="title" type="String"/>
-        	<attribute name="postedBy" type="Long"/>
-  			<attribute name="watchers" type="Set[Users]"/>
+            <entityAttribute name="id" type="Long"/>
+        	<entityAttribute name="title" type="String"/>
+        	<entityAttribute name="postedBy" type="Long"/>
+  			<entityAttribute name="watchers" type="Set[Users]"/>
         </entity>
         <dto name="VideoDTO">        
         	<attribute name="title" type="String"/>
@@ -266,10 +273,10 @@
         </dto>
        
         <entity name="User" dto="UserDTO">
-            <attribute name="id" type="Long"/>
+            <entityAttribute name="id" type="Long"/>
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
-       		 <attribute name="id" type="Long"/>
+       		 <entityAttribute name="id" type="Long"/>
         </entity>
         
         <consumer name="subscriptionConsumer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>

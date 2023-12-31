@@ -22,7 +22,8 @@ import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
 import uk.ac.york.eng2.videos.repositories.UsersRepository;
 import uk.ac.york.eng2.videos.repositories.VideosRepository;
 
-public class VideosController implements VideoAbstract {
+@Controller("/videos")
+public class VideosController {
     @Inject
     private VideosRepository repo;
     @Inject
@@ -32,6 +33,7 @@ public class VideosController implements VideoAbstract {
     @Inject
     private HashtagsRepository hashtagRepo;
 
+    @Get("/")
     public List<Video> listVideos() {
         return repo.findAll();
     }
@@ -54,9 +56,11 @@ public class VideosController implements VideoAbstract {
         return repo.findById(id).orElse(null);
     }
 
+
     @Transactional
     @Post("/")
     public HttpResponse<Void> addVideo(@Body VideoDTO videoDetails) {
+        System.out.println("Video details: " + videoDetails);
         Set<Hashtag> hashtags = new HashSet<>();
         Iterable<HashtagDTO> hashtagDTOs = videoDetails.getHashtags();
 
@@ -122,6 +126,7 @@ public class VideosController implements VideoAbstract {
 //    }
 
     @Transactional
+    @Put("/{videoId}/like/{userId}")
     public HttpResponse<Void> likeVideo(Long videoId, Long userId) {
         Video videoRecord = repo.findById(videoId).orElse(null);
         User userRecord = userRepo.findById(userId).orElse(null);
