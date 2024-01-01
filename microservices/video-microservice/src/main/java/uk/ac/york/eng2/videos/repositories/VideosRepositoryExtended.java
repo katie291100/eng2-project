@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VideosRepository extends CrudRepository<Video, Long> {
+public interface VideosRepositoryExtended extends VideosRepository{
 
     @Join(value = "hashtags",  type = Join.Type.LEFT_FETCH)
     @Join(value = "postedBy", type = Join.Type.LEFT_FETCH)

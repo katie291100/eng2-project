@@ -15,13 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller("/trendingHashtags")
-public class TrendingController {
+public class TrendingController implements TrendingControllerInterface{
     
     @Inject
     InteractiveQueryService interactiveQueryService;
 
     @Get("/")
-    public List<Long> list() {
+    public List<Long> listAll() {
         System.out.println("TrendingController.list() starting");
         ReadOnlyKeyValueStore<Long, ValueAndTimestamp<Long>>  queryableStore = getStore();
         HashMap<Long, Long> values = new HashMap<>();

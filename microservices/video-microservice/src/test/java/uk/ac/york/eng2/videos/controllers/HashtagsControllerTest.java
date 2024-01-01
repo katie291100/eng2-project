@@ -8,21 +8,13 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.ac.york.eng2.videos.clients.HashtagsClient;
-import uk.ac.york.eng2.videos.clients.UsersClient;
 import uk.ac.york.eng2.videos.domain.Hashtag;
-import uk.ac.york.eng2.videos.domain.User;
-import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.HashtagDTO;
-import uk.ac.york.eng2.videos.dto.UserDTO;
 import uk.ac.york.eng2.videos.events.HashtagProducer;
-import uk.ac.york.eng2.videos.events.VideoProducer;
-import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
-import uk.ac.york.eng2.videos.repositories.UsersRepository;
-import uk.ac.york.eng2.videos.repositories.VideosRepository;
+import uk.ac.york.eng2.videos.repositories.HashtagsRepositoryExtended;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +25,7 @@ public class HashtagsControllerTest {
     HashtagsClient client;
 
     @Inject
-    HashtagsRepository hashtagsRepo;
+    HashtagsRepositoryExtended hashtagsRepo;
 
     Map<Long, Hashtag> newHashtag = new HashMap<>();
 
@@ -54,7 +46,8 @@ public class HashtagsControllerTest {
     }
     @Test
     public void testListHashtags() {
-        HashtagDTO hashtagDTO = new HashtagDTO("hashtag1");
+        HashtagDTO hashtagDTO = new HashtagDTO();
+        hashtagDTO.setName("hashtag1");
         client.add(hashtagDTO);
         Iterable<Hashtag> hashtags = client.list();
         assert (hashtags.iterator().hasNext());
@@ -72,7 +65,8 @@ public class HashtagsControllerTest {
 
     @Test
     public void testAddHashtag() {
-        HashtagDTO hashtagDTO = new HashtagDTO("hashtag3");
+        HashtagDTO hashtagDTO = new HashtagDTO();
+        hashtagDTO.setName("hashtag3");
         HttpResponse<Void> response = client.add(hashtagDTO);
 
         assertEquals(HttpStatus.CREATED, response.getStatus());

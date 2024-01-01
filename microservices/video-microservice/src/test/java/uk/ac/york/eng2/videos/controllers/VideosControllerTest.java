@@ -15,9 +15,9 @@ import uk.ac.york.eng2.videos.dto.HashtagDTO;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
 
 import uk.ac.york.eng2.videos.events.VideoProducer;
-import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
-import uk.ac.york.eng2.videos.repositories.UsersRepository;
-import uk.ac.york.eng2.videos.repositories.VideosRepository;
+import uk.ac.york.eng2.videos.repositories.HashtagsRepositoryExtended;
+import uk.ac.york.eng2.videos.repositories.UsersRepositoryExtended;
+import uk.ac.york.eng2.videos.repositories.VideosRepositoryExtended;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,13 +33,13 @@ public class VideosControllerTest {
     VideosClient client;
 
     @Inject
-    VideosRepository videosRepo;
+    VideosRepositoryExtended videosRepo;
 
     @Inject
-    UsersRepository userRepo;
+    UsersRepositoryExtended userRepo;
 
     @Inject
-    HashtagsRepository hashtagsRepo;
+    HashtagsRepositoryExtended hashtagsRepo;
 
     User poster = new User();
     Hashtag hashtag = new Hashtag();
@@ -53,8 +53,8 @@ public class VideosControllerTest {
     VideoProducer videoProducer() {
         return new VideoProducer() {
             @Override
-            public void postVideo(Long key, Video b) {
-                postsAdded.put(key, b);
+            public void newVideo(Long videoId, Video video) {
+                postsAdded.put(videoId, video);
             }
 
             @Override
@@ -119,7 +119,8 @@ public class VideosControllerTest {
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video");
         HashSet<HashtagDTO> hashtags = new HashSet<>();
-        HashtagDTO hashtagDTO = new HashtagDTO("hashtag1");
+        HashtagDTO hashtagDTO = new HashtagDTO();
+        hashtagDTO.setName("hashtag1");
         hashtags.add(hashtagDTO);
         videoDTO.setHashtags(hashtags);
 

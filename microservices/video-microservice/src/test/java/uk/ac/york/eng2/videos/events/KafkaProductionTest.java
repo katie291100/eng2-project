@@ -15,8 +15,8 @@ import uk.ac.york.eng2.videos.clients.VideosClient;
 import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
-import uk.ac.york.eng2.videos.repositories.UsersRepository;
-import uk.ac.york.eng2.videos.repositories.VideosRepository;
+import uk.ac.york.eng2.videos.repositories.UsersRepositoryExtended;
+import uk.ac.york.eng2.videos.repositories.VideosRepositoryExtended;
 
 import java.time.Duration;
 import java.util.Map;
@@ -32,10 +32,10 @@ public class KafkaProductionTest {
     VideosClient client;
 
     @Inject
-    VideosRepository videosRepo;
+    VideosRepositoryExtended videosRepo;
 
     @Inject
-    UsersRepository userRepo;
+    UsersRepositoryExtended userRepo;
 
     static Map<Long, Video> videoAdded = new java.util.HashMap<>();
     static Map<Long, Video> videoLiked = new java.util.HashMap<>();
@@ -106,17 +106,17 @@ public class KafkaProductionTest {
     @KafkaListener(groupId = "kafka-production-test")
     static class TestConsumer {
 
-        @Topic(VideoProducer.TOPIC_ADD_VIDEO)
-        void postVideo(@KafkaKey Long key, Video b) {
+        @Topic("new-video")
+        void newVideo(@KafkaKey Long key, Video b) {
             videoAdded.put(key, b);
         }
 
-        @Topic(VideoProducer.TOPIC_LIKE_VIDEO)
+        @Topic("like-video")
         void likeVideo(@KafkaKey Long key, Video b){
             videoLiked.put(key, b);
         }
 
-        @Topic(VideoProducer.TOPIC_DISLIKE_VIDEO)
+        @Topic("dislike-video")
         void dislikeVideo(@KafkaKey Long key, Video b){
             videoDisliked.put(key, b);
         }

@@ -1,7 +1,5 @@
 package uk.ac.york.eng2.videos.controllers;
 
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -12,14 +10,11 @@ import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.domain.Video;
 import uk.ac.york.eng2.videos.dto.UserDTO;
 import uk.ac.york.eng2.videos.events.UserProducer;
-import uk.ac.york.eng2.videos.events.VideoProducer;
-import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
-import uk.ac.york.eng2.videos.repositories.UsersRepository;
-import uk.ac.york.eng2.videos.repositories.VideosRepository;
+import uk.ac.york.eng2.videos.repositories.HashtagsRepositoryExtended;
+import uk.ac.york.eng2.videos.repositories.UsersRepositoryExtended;
+import uk.ac.york.eng2.videos.repositories.VideosRepositoryExtended;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,13 +25,13 @@ public class UsersControllerTest {
     UsersClient client;
 
     @Inject
-    VideosRepository videosRepo;
+    VideosRepositoryExtended videosRepo;
 
     @Inject
-    UsersRepository userRepo;
+    UsersRepositoryExtended userRepo;
 
     @Inject
-    HashtagsRepository hashtagsRepo;
+    HashtagsRepositoryExtended hashtagsRepo;
 
     Map<Long, Video> watchedVideo = new HashMap<>();
     Map<Long, Video> newUser = new HashMap<>();
@@ -55,7 +50,7 @@ public class UsersControllerTest {
         User user = new User();
         user.setName("test name");
         userRepo.save(user);
-        Iterable<User> users = client.list();
+        Iterable<User> users = client.listUser();
         assertTrue(users.iterator().hasNext());
     }
 
@@ -84,8 +79,9 @@ public class UsersControllerTest {
         video.setTitle("test title");
         video.setPostedBy(user);
         videosRepo.save(video);
-
-        user.addWatchedVideo(video);
+        Set<Video> userWatchedVideo = new HashSet<>();
+        userWatchedVideo.add(video);
+        user.setWatchedVideos(userWatchedVideo);
         userRepo.update(user);
         Set<Video> videos = client.getWatchedByUser(user.getId());
         assertTrue(videos.iterator().hasNext());
@@ -102,8 +98,8 @@ public class UsersControllerTest {
     public void testAddUser() {
         UserDTO userDTO = new UserDTO();
         userDTO.setName("test name");
-        client.add(userDTO);
-        Iterable<User> users = client.list();
+        client.addUser(userDTO);
+        Iterable<User> users = client.listUser();
         assertTrue(users.iterator().hasNext());
     }
 //
