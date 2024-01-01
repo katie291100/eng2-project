@@ -3,7 +3,7 @@ digraph G {
         gradientangle="270", fillcolor="bisque"]
     rankdir="TB"
 		[%for (m in microservices){%]
-		 [%=m.name%] [label = "[%=m.name%]" fillcolor="azure2"]
+		 "[%=m.name%]" [label = "[%=m.name%]" fillcolor="azure2"]
 			 	[%}%]
 
     	 subgraph kafka {

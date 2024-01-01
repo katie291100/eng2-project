@@ -13,9 +13,7 @@ abstract class [%=c.name.firstToUpperCase()%]Abstract {
      * This is a [%=e.type.name%] request at "[%=e.path%]"
      */
 	@[%=e.type.name.toLowerCase().firstToUpperCase()%]("[%=e.path%]")
-	public [%=e.responseBody.getType()%] [%=e.name %]([% for (a in e.requestParams) {%][%if (not e.path.matches(".*/\\{"+a.name+"\\}.*")){%]@Body[%}%] [%=a.getType()%] [%=a.name%][%if (not e.requestParams.last().equals(a)){%],[%}%] [%}%]);
-		
-		{
+	public [%=e.responseBody.getType()%] [%=e.name %]([% for (a in e.requestParams) {%][%if (not e.path.matches(".*/\\{"+a.name+"\\}.*")){%]@Body[%}%] [%=a.getType()%] [%=a.name%][%if (not e.requestParams.last().equals(a)){%],[%}%] [%}%]){
         return null;
     }
 	[%}%]
@@ -23,6 +21,6 @@ abstract class [%=c.name.firstToUpperCase()%]Abstract {
 }
 [%
 operation Attribute getType(){
-	return self.type.replace("\\[", "\\<").replace("\\]", "\\>");
+    return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
 }
 %]

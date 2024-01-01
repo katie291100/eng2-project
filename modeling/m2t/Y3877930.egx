@@ -5,36 +5,27 @@ pre {
 
 rule Model2Dto transform d : DTO {
 	template : "templates/Model2Dto.egl"
-	target : d.eContainer().name + "/src-gen/" + d.eContainer().getPackageFiles() + "/dto/"+ d.name.firstToUpperCase()+".java"
+	target : d.eContainer().name + "/src-gen/main/java/" + d.eContainer().getPackageFiles() + "/dto/"+ d.name.firstToUpperCase()+".java"
 	parameters: Map{"package"= d.eContainer().package+".dto"}
 //	formatter : java;
 }
 
 rule Model2Entity transform e : Entity {
     template : "templates/Model2Entity.egl"
-    target : e.eContainer().name + "/src-gen/" + e.eContainer().getPackageFiles() + "/domain/"+ e.name.firstToUpperCase()+".java"
+    target : e.eContainer().name + "/src-gen/main/java/" + e.eContainer().getPackageFiles() + "/domain/"+ e.name.firstToUpperCase()+".java"
 //  formatter : java;
 }
 
 //Generates controller interface
-rule Model2Controller
-	transform c : Controller {
+rule Model2Producer
+	transform p : Producer {
 		
-	template : "templates/Model2Controller.egl"
+	template : "templates/Model2Producer.egl"
 
-	target : c.eContainer().name + "/src-gen/" + c.eContainer().getPackageFiles() + "/controllers/"+ c.name.firstToUpperCase()+"Interface.java"
+	target : p.eContainer().name + "/src-gen/main/java/" + p.eContainer().getPackageFiles() + "/events/"+ p.name.firstToUpperCase()+".java"
 
 }
 
-//Generates controller abstract for scaffolding.
-rule Model2ControllerAbstract
-	transform c : Controller {
-		
-	template : "templates/Model2ControllerAbstract.egl"
-
-	target : c.eContainer().name + "/src-gen/" + c.eContainer().getPackageFiles() + "/controllers/"+ c.name.firstToUpperCase()+"Abstract.java"
-
-}
 
 
 //Generates controller abstract for scaffolding.

@@ -23,47 +23,38 @@ public class [%=e.name%] {
     [%}%]
     @Column(unique=[%=a.unique%], nullable=[%=a.nullable%], insertable=[%=a.insertable%], updatable=[%=a.updatable%], columnDefinition="[%=a.columnDefinition%]")    
     [%}%]
-    private [%=a.type.firstToUpperCase()%] [%=a.name.firstToLowerCase()%];
+    private [%=a.getType()%] [%=a.name.firstToLowerCase()%];
     
+    public [%=a.getType()%] get[%=a.name.firstToUpperCase()%]() {
+        return [%=a.name%];
+    }
+
+    public void set[%=a.name.firstToUpperCase()%]([%=a.getType()%] [%=a.name.firstToLowerCase()%]) {
+        this.[%=a.name%] = [%=a.name%];
+    }
     [%}%]
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Video> getWatchedVideos() {
-        return watchedVideos;
-    }
-
-    public void addWatchedVideo(Video watchedVideo) {
-        watchedVideos.add(watchedVideo);
-    }
-
-    public void setWatchedVideos(Set<Video> watchedVideos) {
-        this.watchedVideos = watchedVideos;
-    }
-
-    public Set<Video> getPostedVideos() {
-        return postedVideos;
-    }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+        return "[%=e.name%]{" +
+         [%for (a in e.attributes){%]    
+                "[%=a.name%]=" + [%=a.name%] + ","+
+         [%}%]
                 '}';
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof [%=e.name%])) {
+            return false;
+        }
+        [%=e.name.firstToUpperCase()%] a = ([%=e.name.firstToUpperCase()%]) o;
+        return a.getId().equals(this.getId());
+    }
 }
+[%
+operation Attribute getType(){
+    return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
+}
+%]

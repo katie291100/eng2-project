@@ -1,0 +1,29 @@
+package uk.ac.york.eng2.videos.events;
+
+import io.micronaut.configuration.kafka.annotation.KafkaClient;
+import io.micronaut.configuration.kafka.annotation.KafkaKey;
+import io.micronaut.configuration.kafka.annotation.Topic;
+import uk.ac.york.eng2.videos.domain.*;
+
+@KafkaClient
+public interface [%=p.name.firstToUpperCase()%] {
+
+    [% for (e in p.eventStreams) {%]
+    [%
+    var split = e.name.split('-');
+    var funcName = split.first().firstToLowerCase();
+    split.removeAt(0);
+    for (w in split){
+        funcName = funcName.concat(w.firstToUpperCase());
+    }
+    %]
+    @Topic("[%=e.name%]")
+    void [%=funcName%](@KafkaKey Long key, Hashtag h);
+    [%}%]
+}
+
+[%
+operation Attribute getType(){
+    return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
+}
+%]

@@ -17,7 +17,6 @@ public interface UserProducer {
 
     @Topic(TOPIC_WATCH_VIDEO)
     void watchVideo(@KafkaKey Long key, Video b);
-
 }
 
 

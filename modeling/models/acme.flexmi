@@ -75,9 +75,9 @@
         <dto name="HashtagDTO">        
         	<attribute name="name" type="String"/>
         </dto>
-        <producer name="video" eventStreams="new-video, like-video, dislike-video"/>
-        <producer name="user" eventStreams="new-user, watch-video"/>
-        <producer name="hashtag" eventStreams="new-hashtag"/>
+        <producer name="videoProducer" eventStreams="new-video, like-video, dislike-video"/>
+        <producer name="userProducer" eventStreams="new-user, watch-video"/>
+        <producer name="hashtagProducer" eventStreams="new-hashtag"/>
 
         <controller name="videoControllers" path="/video">
             <endpoint name="listVideos" type="GET" path="/">
@@ -136,7 +136,7 @@
              </endpoint>
             <endpoint name="addUser" type="POST" path="/">
                 <responseBody>
-            	   <attribute name="userDTO" type="userDTO"/>
+            	   <attribute name="userDTO" type="UserDTO"/>
             	</responseBody>
                 <requestParams>
             	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
@@ -164,7 +164,7 @@
             	   <attribute name="userID" type="Long"/>
             	</responseBody>
                 <requestParams>
-            	   <attribute name="videos" type="Set(Videos)"/>
+            	   <attribute name="videos" type="Set[Video]"/>
             	</requestParams>
             </endpoint>
             <endpoint name="getPostedByUser" type="GET" path="/{userId}/postedVideos">
@@ -172,7 +172,7 @@
             	   <attribute name="userID" type="Long"/>
             	</responseBody>
                 <requestParams>
-            	   <attribute name="videos" type="Set(Videos)"/>
+            	   <attribute name="videos" type="Set(Video)"/>
             	</requestParams>
             </endpoint>
         </controller>

@@ -62,11 +62,11 @@ digraph G {
 		}
 		subgraph repositories {
 		    cluster=true;
-		    color="4";
+		    color="5";
 		    label="Repositories"
 		    
-			[%for (c in consumers){%]
-			    [%=c.name%]Consumer [label = "[%=c.name%]" fillcolor="5"]
+			[%for (c in repositories){%]
+			    [%=c.name%] [label = "[%=c.name%]" fillcolor="5"]
 			[%}%]
 		}		
 		[%for (e in entities){%]
@@ -77,6 +77,14 @@ digraph G {
 			   [%}%]		
 			    	
 		[%}%]	
+		[%for (r in repositories){%]
+            
+                [%if (r.entity != null){%]
+                
+                    [%=r.name%] -> [%=r.entity.name%] [color="#2A6C41"]
+               [%}%]        
+                    
+        [%}%]   
 	}
 }
 

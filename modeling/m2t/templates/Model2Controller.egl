@@ -21,6 +21,6 @@ interface [%=c.name.firstToUpperCase()%]Interface {
 }
 [%
 operation Attribute getType(){
-	return self.type.replace("\\[", "\\<").replace("\\]", "\\>");
+	return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
 }
 %]
