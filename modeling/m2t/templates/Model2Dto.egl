@@ -9,17 +9,23 @@ import java.util.Set;
 public class [%=d.name%] {
 
 	[% for (a in d.attributes) {%]
-		private [%=a.type.firstToUpperCase()%] [%=a.type.firstToUpperCase().replace("\\[", "\\<").replace("\\]", "\\>")%]
+		private [%=a.getType()%] [%=a.name.firstToLowerCase()%];
 	[%}%]
 
     [% for (a in d.attributes) {%]
-		public void set[%=a.name.firstToUpperCase()%]([%=a.type.firstToUpperCase().replace("\\[", "\\<").replace("\\]", "\\>")%] [%=a.name.firstToLowerCase()%]) {
-			this.[%=a.name.firstToLowerCase()%] = [%=a.name.firstToLowerCase()%]
+		public void set[%=a.name.firstToUpperCase()%]([%=a.getType()%] [%=a.name.firstToLowerCase()%]) {
+			this.[%=a.name.firstToLowerCase()%] = [%=a.name.firstToLowerCase()%];
 		}
 		
-		public Long get[%=a.name.firstToLowerCase()%]() {
+		public [%=a.getType()%] get[%=a.name.firstToLowerCase()%]() {
         	return [%=a.name.firstToLowerCase()%];
     	}
 	[%}%]
 
 }
+
+[%
+operation Attribute getType(){
+    return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
+}
+%]

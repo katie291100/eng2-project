@@ -8,21 +8,15 @@ digraph G {
 	[%for (a in eventStreams){%]
 		
 	    "[%=a.name%]" [label="[%=a.name%]" shape="box3d"]
+	   
+	    [% if (isConsumer = true){%]
+	       "[%=a.name%]" -> "[%=c.name%]" [color="#2A6C41" label="s([%=a.key.type%] [%=a.key.name%], \n [%=a.value.type%] [%=a.value.name%])"]
 	    
-	    "[%=c.name%]" -> "[%=a.name%]" [color="#2A6C41" label="has"]
+	    [%}%]
+	    [%else{%]
+        "[%=c.name%]" -> "[%=a.name%]" [color="#2A6C41" label="([%=a.key.type%] [%=a.key.name%], \n [%=a.value.type%] [%=a.value.name%])"]	    
+	    [%}%]
 	    
 	[%}%]
 	
 }
-
-[%
-operation isLayerActive(id : String) {
-    var layer = layers.selectOne(l|l.id = id);
-    if (layer.isDefined()) {
-        return layer.active;
-    }
-    else {
-        return true;
-    }
-}
-%]

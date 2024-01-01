@@ -90,8 +90,9 @@ rule ConsumersGraphviz
     parameters : Map{
         "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name},
         "icon" = "diagram-c0c0c0",
-         "format" = "graphviz-dot",
-        "eventStreams" = c.eventStreams
+        "format" = "graphviz-dot",
+        "eventStreams" = c.eventStreams,
+        "isConsumer"= true
     }
 
 }
@@ -106,7 +107,9 @@ rule ProducersGraphviz
         "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name},
         "icon" = "diagram-c0c0c0",
          "format" = "graphviz-dot",
-         "eventStreams" = c.eventStreams
+         "eventStreams" = c.eventStreams,
+         "isConsumer"= false
+         
     }
 
 }

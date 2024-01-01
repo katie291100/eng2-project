@@ -23,6 +23,7 @@ rule Model2Controller
 	template : "templates/Model2Controller.egl"
 
 	target : c.eContainer().name + "/src-gen/main/java/" + c.eContainer().getPackageFiles() + "/controllers/"+ c.name.firstToUpperCase()+".java"
+    parameters: Map{"package"= c.eContainer().package+".dto"}
 
 }
 
@@ -33,6 +34,16 @@ rule Model2Producer
     template : "templates/Model2Producer.egl"
 
     target : p.eContainer().name + "/src-gen/main/java/" + p.eContainer().getPackageFiles() + "/events/"+ p.name.firstToUpperCase()+".java"
+
+}
+
+//Generates producer
+rule Model2Repository
+    transform r : Repository {
+        
+    template : "templates/Model2Repository.egl"
+
+    target : r.eContainer().name + "/src-gen/main/java/" + r.eContainer().getPackageFiles() + "/repositories/"+ r.name.firstToUpperCase()+".java"
 
 }
 
