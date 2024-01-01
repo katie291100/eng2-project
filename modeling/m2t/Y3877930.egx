@@ -17,18 +17,27 @@ rule Model2Entity transform e : Entity {
 }
 
 //Generates controller interface
-rule Model2Producer
-	transform p : Producer {
+rule Model2Controller
+	transform c : Controller {
 		
-	template : "templates/Model2Producer.egl"
+	template : "templates/Model2Controller.egl"
 
-	target : p.eContainer().name + "/src-gen/main/java/" + p.eContainer().getPackageFiles() + "/events/"+ p.name.firstToUpperCase()+".java"
+	target : c.eContainer().name + "/src-gen/main/java/" + c.eContainer().getPackageFiles() + "/controllers/"+ c.name.firstToUpperCase()+".java"
+
+}
+
+//Generates producer
+rule Model2Producer
+    transform p : Producer {
+        
+    template : "templates/Model2Producer.egl"
+
+    target : p.eContainer().name + "/src-gen/main/java/" + p.eContainer().getPackageFiles() + "/events/"+ p.name.firstToUpperCase()+".java"
 
 }
 
 
 
-//Generates controller abstract for scaffolding.
 rule Model2DockerCompose
 	transform s : System {
 		
