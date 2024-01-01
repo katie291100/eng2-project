@@ -25,6 +25,7 @@ rule Microservice2Graphviz
         "entities" = n.entities,
         "producers" = n.producers,
         "consumers" = n.consumers,
+        "repositories" = n.repositories,
         "controllers" = n.controllers,
         "dtos" = n.dtos
       
@@ -42,7 +43,7 @@ rule Entity2Graphviz
     parameters : Map{
         "path" = Sequence{"Microservices", e.eContainer().name, "Entities",  e.name},
         "icon" = "diagram-c0c0c0",
-         "format" = "graphviz-dot",
+        "format" = "graphviz-dot",
         "attributes" = e.attributes,
         "isDTO" = false
     }
@@ -87,10 +88,11 @@ rule ConsumersGraphviz
   	target: "gen/"+c.eContainer().name + "/events/consumers"+ c.name+".gv"
 
     parameters : Map{
-        "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name+"Consumer"},
+        "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name},
         "icon" = "diagram-c0c0c0",
-         "format" = "graphviz-dot",
-        "eventStreams" = c.eventStreams
+        "format" = "graphviz-dot",
+        "eventStreams" = c.eventStreams,
+        "isConsumer"= true
     }
 
 }
@@ -102,10 +104,12 @@ rule ProducersGraphviz
   	target: "gen/"+c.eContainer().name + "/events/producers"+ c.name+".gv"
 
     parameters : Map{
-        "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name+"Producer"},
+        "path" = Sequence{"Microservices", c.eContainer().name, "Events",  c.name},
         "icon" = "diagram-c0c0c0",
          "format" = "graphviz-dot",
-         "eventStreams" = c.eventStreams
+         "eventStreams" = c.eventStreams,
+         "isConsumer"= false
+         
     }
 
 }

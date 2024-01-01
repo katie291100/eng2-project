@@ -1,0 +1,14 @@
+package [%=package%].repositories;
+
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
+import [%=package%].domain.[%=r.entity.name.firstToUpperCase()%];
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface [%=r.name%] extends CrudRepository<[%=r.entity.name.firstToUpperCase()%], Long> {
+
+
+}

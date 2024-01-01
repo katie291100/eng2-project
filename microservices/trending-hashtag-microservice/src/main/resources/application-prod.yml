@@ -4,7 +4,7 @@ micronaut:
   serde:
     maximum-nesting-depth: 100
   server:
-    port: 8081
+    port: 8080
 jpa:
   default:
     entity-scan:
@@ -23,7 +23,7 @@ datasources:
     driver-class-name: org.mariadb.jdbc.Driver
     db-type: mariadb
     dialect: MYSQL
-    url: jdbc:mariadb://${DB_HOST:db2}:3307/${DB_NAME:hashtags}
+    url: jdbc:mariadb://${DB_HOST:db2}:3306/${DB_NAME:hashtags}
     username: todo
     password: todosecret
 kafka:

@@ -16,7 +16,7 @@ public interface VideosClient {
     public Iterable<Video> list();
 
     @Post("/")
-    public HttpResponse<Void> add(@Body VideoDTO bookDetails);
+    public HttpResponse<Void> addVideo(@Body VideoDTO bookDetails);
 
     @Get("/{id}")
     public Video getVideo(Long id);

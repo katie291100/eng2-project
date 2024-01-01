@@ -61,7 +61,7 @@ public class KafkaProductionTest {
 
         videoDTO.setPostedBy(poster.getId());
 
-        HttpResponse<Void> response = client.add(videoDTO);
+        HttpResponse<Void> response = client.addVideo(videoDTO);
         Iterable<Video> iterVideos = client.list();
 
         assertEquals(201, response.getStatus().getCode());
@@ -78,7 +78,7 @@ public class KafkaProductionTest {
 
         videoDTO.setPostedBy(poster.getId());
 
-        HttpResponse<Void> response = client.add(videoDTO);
+        HttpResponse<Void> response = client.addVideo(videoDTO);
         Video video = client.list().iterator().next();
         client.likeVideo(video.getId(), poster.getId());
         assertEquals(201, response.getStatus().getCode());
@@ -94,7 +94,7 @@ public class KafkaProductionTest {
 
         videoDTO.setPostedBy(poster.getId());
 
-        HttpResponse<Void> response = client.add(videoDTO);
+        HttpResponse<Void> response = client.addVideo(videoDTO);
         Video video = client.list().iterator().next();
         client.dislikeVideo(video.getId(), poster.getId());
         assertEquals(201, response.getStatus().getCode());

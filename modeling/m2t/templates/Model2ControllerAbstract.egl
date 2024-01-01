@@ -1,0 +1,33 @@
+package [%=package%].controllers;
+
+import io.micronaut.http.*;
+import io.micronaut.http.annotation.*;
+[% if (c.eContainer().entities.size() > 0) {%]
+import [%=package%].domain.*;
+[%}%]
+[% if (c.eContainer().dtos.size() > 0) {%]
+import [%=package%].dto.*;
+[%}%]
+
+import [%=package%].domain.*;
+import [%=package%].dto.*;
+import java.util.*;
+
+abstract class [%=c.name.firstToUpperCase()%]Abstract {
+	
+	[% for (e in c.endpoints) {%]
+	 /**
+     * This is a [%=e.type.name%] request at "[%=e.path%]"
+     */
+	@[%=e.type.name.toLowerCase().firstToUpperCase()%]("[%=e.path%]")
+	public [%=e.responseBody.getType()%] [%=e.name %]([% for (a in e.requestParams) {%][%if (not e.path.matches(".*/\\{"+a.name+"\\}.*")){%]@Body[%}%] [%=a.getType()%] [%=a.name%][%if (not e.requestParams.last().equals(a)){%],[%}%] [%}%]){
+        return null;
+    }
+	[%}%]
+	
+}
+[%
+operation Attribute getType(){
+    return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
+}
+%]

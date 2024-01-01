@@ -1,0 +1,61 @@
+package [%=package%].domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.micronaut.serde.annotation.Serdeable;
+import jakarta.persistence.*;
+import java.util.*;
+
+@Serdeable
+@Entity
+public class [%=e.name%] {
+    
+    [%for (a in e.attributes){%]
+	[%if (a.name=="id"){%]
+	@Id
+	[%}%][%if (a.GeneratedValue==true){%]
+	@GeneratedValue
+	[%}%][%if (a.JsonIgnore){%]
+	@JsonIgnore
+	[%}%]
+	[%if (a.relationship.isDefined() and a.relationship.name !="None"){%]
+	@[%=a.relationship.name%]([%if (a.mappedBy != ""){%]mappedBy="[%=a.mappedBy%]", [%}%]fetch = FetchType.[%=a.fetchtype.name%])
+	[%}%]
+    @Column(unique=[%=a.unique%], nullable=[%=a.nullable%], insertable=[%=a.insertable%], updatable=[%=a.updatable%], columnDefinition="[%=a.columnDefinition%]")    
+    private [%=a.getType()%] [%=a.name.firstToLowerCase()%];
+    [%}%]
+
+    [%for (a in e.attributes){%]    
+    
+    public [%=a.getType()%] get[%=a.name.firstToUpperCase()%]() {
+        return [%=a.name%];
+    }
+
+    public void set[%=a.name.firstToUpperCase()%]([%=a.getType()%] [%=a.name.firstToLowerCase()%]) {
+        this.[%=a.name%] = [%=a.name%];
+    }
+    [%}%]
+
+    @Override
+    public String toString() {
+        return "[%=e.name%]{" +
+         [%for (a in e.attributes){%]    
+                "[%=a.name%]=" + [%=a.name%] + ","+
+         [%}%]
+                '}';
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof [%=e.name%])) {
+            return false;
+        }
+        [%=e.name.firstToUpperCase()%] a = ([%=e.name.firstToUpperCase()%]) o;
+        return a.getId().equals(this.getId());
+    }
+}
+[%
+operation Attribute getType(){
+    return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
+}
+%]

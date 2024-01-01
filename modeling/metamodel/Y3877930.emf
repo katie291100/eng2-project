@@ -11,6 +11,7 @@ class System {
 class Microservice {
 	attr String name;
 	attr Long port;
+	attr String ~package;
 	val Entity[*] entities;
 	val Consumer[*] consumers;
 	val Producer[*] producers;
@@ -35,7 +36,7 @@ class Endpoint{
 
 class Entity {
 	attr String name;
-	val Attribute[*] attributes;
+	val EntityAttribute[*] attributes;
 	ref DTO dto;
 }
 
@@ -53,7 +54,19 @@ class Attribute{
 	attr String type;
 	attr String name;
 }
-
+class EntityAttribute extends Attribute{
+	attr RelationshipType relationship = "None";
+	attr Boolean JsonIgnore = false;
+    attr Boolean GeneratedValue = false;
+	attr String mappedBy = "";
+	attr FetchType fetchtype = "LAZY";
+	attr Boolean ~unique = false;
+    attr Boolean nullable = true;
+    attr Boolean insertable = true;
+    attr Boolean updatable = true;
+	attr String columnDefinition = "";
+	
+}
 class Consumer{
 	attr String name;
 	attr Boolean isStream = false;
@@ -84,4 +97,17 @@ enum EndpointType {
  PUT;
  POST;
  DELETE;
+}
+
+enum FetchType {
+ LAZY;
+ EAGER;
+}
+
+
+enum RelationshipType {
+ None;
+ ManyToMany;
+ OneToMany;
+ ManyToOne;
 }

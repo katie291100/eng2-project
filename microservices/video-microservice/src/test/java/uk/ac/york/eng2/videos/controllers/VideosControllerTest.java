@@ -100,12 +100,13 @@ public class VideosControllerTest {
 
     @Test
     public void testAddVideo() {
+        System.out.println("Test add video");
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video");
 
         videoDTO.setPostedBy(poster.getId());
 
-        HttpResponse<Void> response = client.add(videoDTO);
+        HttpResponse<Void> response = client.addVideo(videoDTO);
         Iterable<Video> iterVideos = client.list();
 
         assertEquals(201, response.getStatus().getCode());
@@ -124,7 +125,7 @@ public class VideosControllerTest {
 
         videoDTO.setPostedBy(poster.getId());
 
-        HttpResponse<Void> response = client.add(videoDTO);
+        HttpResponse<Void> response = client.addVideo(videoDTO);
         Iterable<Video> iterVideos = client.list();
 
         assert !hashtagsRepo.findByName("hashtag1").isEmpty();
@@ -141,7 +142,7 @@ public class VideosControllerTest {
 
         videoDTO.setPostedBy(poster.getId()+1);
 
-        HttpResponse<Void> response = client.add(videoDTO);
+        HttpResponse<Void> response = client.addVideo(videoDTO);
         Iterable<Video> iterVideos = client.list();
 
         assertEquals(404, response.getStatus().getCode());

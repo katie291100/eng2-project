@@ -3,67 +3,69 @@
 <system name="Social Media">
 	<eventStreams>
 	    <eventStream name="new-video">
-	        <keyType name="video" type="String"/>
+	        <keyType name="videoId" type="Long"/>
 	        <valueType name="video" type="Video"/>
 	    </eventStream>
 	    <eventStream name="like-video">
-	        <keyType name="video" type="String"/>
-	        <valueType name="video" type="Video"/>
+	        <keyType name="userId" type="Long"/>
+	        <valueType name="videoId" type="Video"/>
 	    </eventStream>
 	    <eventStream name="dislike-video">
-	        <keyType name="video" type="String"/>
-	        <valueType name="video" type="Video"/>
+            <keyType name="userId" type="Long"/>
+            <valueType name="videoId" type="Video"/>
 	    </eventStream>
 	    <eventStream name="new-hashtag">
-	        <keyType name="video" type="String"/>
-	        <valueType name="video" type="Video"/>
+	        <keyType name="hashtagId" type="Long"/>
+	        <valueType name="hashtag" type="Hashtag"/>
 	    </eventStream>
 	    <eventStream name="new-user">
-	        <keyType name="video" type="String"/>
-	        <valueType name="video" type="Video"/>
+	        <keyType name="userId" type="Long"/>
+	        <valueType name="user" type="User"/>
 	    </eventStream>
 	    <eventStream name="watch-video">
-	        <keyType name="video" type="String"/>
-	        <valueType name="video" type="Video"/>
-	    </eventStream>
-	    <eventStream name="like-hashtag">
-	        <keyType name="video" type="String"/>
-	        <valueType name="video" type="Video"/>
+            <keyType name="userId" type="Long"/>
+            <valueType name="videoId" type="Video"/>
 	    </eventStream>
 	    <eventStream name="subscribe-hashtag">
-	        <keyType name="video" type="String"/>
-	        <valueType name="video" type="Video"/>
+	        <keyType name="userId" type="Long"/>
+	        <valueType name="hashtag" type="Hashtag"/>
 	    </eventStream>
-   		 <eventStream name="unsubscribe-hashtag">
-   		     <keyType name="video" type="String"/>
-    	    <valueType name="video" type="Video"/>
-    </eventStream>
+   		<eventStream name="unsubscribe-hashtag">
+            <keyType name="userId" type="Long"/>
+            <valueType name="hashtag" type="Hashtag"/>
+        </eventStream>
     </eventStreams>
     
-    <microservice name="VideoMicroservice" port="8080">
+    <microservice name="video-microservice" port="8080" package="uk.ac.york.eng2.videos">
         <entity name="Video" dto="VideoDTO">
-            <attribute name="id" type="Long"/>
-        	<attribute name="title" type="String"/>
-        	<attribute name="postedBy" type="Long"/>
-          	<attribute name="likes" type="Long"/>
-            <attribute name="dislikes" type="Long"/>
-  			<attribute name="hashtags" type="Set[Hashtag]"/>
-  			<attribute name="watchers" type="Set[Users]"/>
+            <entityAttribute name="id" type="Long" generatedValue="True"/>
+        	<entityAttribute name="title" type="String" nullable="false"/>
+        	<entityAttribute name="postedBy" type="User" relationship="ManyToOne" optional="false"/>
+          	<entityAttribute name="likes" type="Long"/>
+            <entityAttribute name="dislikes" type="Long"/>
+  			<entityAttribute name="hashtags" type="Set[Hashtag]" fetchType="EAGER" relationship="ManyToMany"/>
+  			<entityAttribute name="watchers" type="Set[User]" JsonIgnore="true" relationship="ManyToMany" mappedBy = "watchedVideos"/>
         </entity>       
         <entity name="User" dto="UserDTO">
-          	<attribute name="id" type="Long"/>
-            <attribute name="name" type="String"/>
-            <attribute name="watchedVideos" type="Set(Video)"/>
-            <attribute name="postedVideos" type="Set(Video)"/>
+          	<entityAttribute name="id" type="Long" generatedValue="True"/>
+            <entityAttribute name="name" type="String" nullable="false"/>
+            <entityAttribute name="watchedVideos" type="Set(Video)" JsonIgnore="true" relationship="ManyToMany" />
+            <entityAttribute name="postedVideos" type="Set(Video)" relationship="OneToMany" mappedBy = "postedBy" fetch = "EAGER"/>
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
-          	<attribute name="id" type="Long"/>
-            <attribute name="name" type="String"/>
-            <attribute name="videos" type="Set(Video)"/>
+          	<entityAttribute name="id" type="Long" generatedValue="True"/>
+            <entityAttribute name="name" type="String" nullable="false"/>
+            <entityAttribute name="videos" type="Set(Video)" relationship="ManyToMany" mappedBy = "hashtags" fetch = "EAGER"/>
         </entity>
+        <repository name="VideosRepository" entity="Video"/>
+       	<repository name="UsersRepository" entity="User"/>
+        <repository name="HashtagsRepository" entity="Hashtag"/>
+        
         <dto name="VideoDTO">        
         	<attribute name="title" type="String"/>
         	<attribute name="postedBy" type="Long"/>
+        	<attribute name="hashtags" type="Set[HashtagDTO]"/>
+        	
         </dto>
         <dto name="UserDTO">        
         	<attribute name="name" type="String"/>
@@ -71,17 +73,17 @@
         <dto name="HashtagDTO">        
         	<attribute name="name" type="String"/>
         </dto>
-        <producer name="video" eventStreams="new-video, like-video, dislike-video"/>
-        <producer name="user" eventStreams="new-user, watch-video"/>
-        <producer name="hashtag" eventStreams="new-hashtag"/>
+        <producer name="videoProducer" eventStreams="new-video, like-video, dislike-video"/>
+        <producer name="userProducer" eventStreams="new-user, watch-video"/>
+        <producer name="hashtagProducer" eventStreams="new-hashtag"/>
 
-        <controller name="videoControllers" path="/video">
+        <controller name="videoControllers" path="/videos">
             <endpoint name="listVideos" type="GET" path="/">
             	<responseBody>
             	   <attribute name="videos" type="List[Video]"/>
             	</responseBody>
              </endpoint>
-            <endpoint name="listVideosByHashtag" type="GET" path="/{hashtag}">
+            <endpoint name="listVideosByHashtag" type="GET" path="hashtag/{hashtag}">
             	<responseBody>
             	   <attribute name="videos" type="Set[Video]"/>
             	</responseBody>
@@ -131,45 +133,45 @@
             	</responseBody>
              </endpoint>
             <endpoint name="addUser" type="POST" path="/">
-                <responseBody>
-            	   <attribute name="userDTO" type="userDTO"/>
-            	</responseBody>
                 <requestParams>
+            	   <attribute name="userDTO" type="UserDTO"/>
+            	</requestParams>
+                <responseBody>
             	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
-            	</requestParams>
-            </endpoint>
-            <endpoint name="watchVideo" type="PUT" path="/watchVideo/{videoID}">
-                <responseBody>
-            	   <attribute name="videoId" type="Long"/>
-            	   <attribute name="userID" type="Long"/>
             	</responseBody>
+            </endpoint>
+            <endpoint name="watchVideo" type="PUT" path="/{userId}/watchedVideo/{videoId}">
                 <requestParams>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]" />
+            	   <attribute name="userId" type="Long"/>
+                   <attribute name="videoId" type="Long"/>
             	</requestParams>
+                <responseBody>
+            	   <attribute name="HTTPResponse" type="HttpResponse[Void]" />
+            	</responseBody>
             </endpoint>
             <endpoint name="getUser" type="GET" path="/{userId}">
-                <responseBody>
-            	   <attribute name="userId" type="Long"/>
-            	</responseBody>
                 <requestParams>
-            	   <attribute name="user" type="User"/>
+            	   <attribute name="userId" type="Long"/>
             	</requestParams>
+                <responseBody>
+            	   <attribute name="user" type="User"/>
+            	</responseBody>
             </endpoint>
             <endpoint name="getWatchedByUser" type="GET" path="/{userId}/watchedVideos">
-                <responseBody>
-            	   <attribute name="userID" type="Long"/>
-            	</responseBody>
                 <requestParams>
-            	   <attribute name="videos" type="Set(Videos)"/>
+            	   <attribute name="userId" type="Long"/>
             	</requestParams>
+                <responseBody>
+            	   <attribute name="videos" type="Set[Video]"/>
+            	</responseBody>
             </endpoint>
             <endpoint name="getPostedByUser" type="GET" path="/{userId}/postedVideos">
-                <responseBody>
-            	   <attribute name="userID" type="Long"/>
-            	</responseBody>
                 <requestParams>
-            	   <attribute name="videos" type="Set(Videos)"/>
+            	   <attribute name="userId" type="Long"/>
             	</requestParams>
+                <responseBody>
+            	   <attribute name="videos" type="Set(Video)"/>
+            	</responseBody>
             </endpoint>
         </controller>
 
@@ -179,9 +181,9 @@
             	   <attribute name="hashtags" type="Set[Hashtag]"/>
             	</responseBody>
              </endpoint>
-             <endpoint name="getHashtag" type="GET"  path="/{hashtagID}">
+             <endpoint name="getHashtag" type="GET"  path="/{hashtagId}">
                 <requestParams>
-            	   <attribute name="hashtagID" type="Long"/>
+            	   <attribute name="hashtagId" type="Long"/>
             	</requestParams>
                 <responseBody>
             	   <attribute name="hashtag" type="Hashtag"/>
@@ -204,36 +206,30 @@
             </endpoint>
 		</controller>
     </microservice>
-    <microservice name="TrendingHashtagMicroservice" port="8081">
+    <microservice name="trending-hashtag-microservice" port="8081" package="uk.ac.york.eng2.trendingHashtags">
         <entity name="Hashtag" dto="HashtagDTO">
-          	<attribute name="id" type="Long"/>
-            <attribute name="name" type="String"/>
-            <attribute name="videos" type="Set(Video)"/>
-            
+            <entityAttribute name="id" type="Long"/>
+            <entityAttribute name="name" type="String" nullable="false"/>
+            <entityAttribute name="videos" type="Set(Video)" relationship="ManyToMany" mappedBy = "hashtags"/>
+
         </entity>
         <entity name="Video" dto="VideoDTO">
-            <attribute name="id" type="Long"/>
-        	<attribute name="title" type="String"/>
-        	<attribute name="postedBy" type="Long"/>
-          	<attribute name="likes" type="Long"/>
-            <attribute name="dislikes" type="Long"/>
-  			<attribute name="hashtags" type="Set[Hashtag]"/>
-  			<attribute name="watchers" type="Set[Users]"/>
-        </entity>
-        <dto name="HashtagDTO">        
-        	<attribute name="name" type="String"/>
-        </dto>
-        <dto name="VideoDTO">        
-        	<attribute name="title" type="String"/>
-        	<attribute name="postedBy" type="String"/>
-        </dto>
+            <entityAttribute name="id" type="Long"/>
+            <entityAttribute name="title" type="String" nullable="false"/>
+            <entityAttribute name="likes" type="Long"/>
+            <entityAttribute name="dislikes" type="Long"/>
+            <entityAttribute name="hashtags" type="Set[Hashtag]" fetchType="EAGER" relationship="ManyToMany"/>
+        </entity> 
+        
+        <repository name="HashtagsRepository" entity="Hashtag"/>
+    
         <consumer name="hashtagConsumer" eventStreams="new-hashtag"/>
-        <consumer name="trendingStream" eventStreams="like-video" isStream = "True"/>
+        <consumer name="trendingStreams" eventStreams="like-video" isStream = "True"/>
 
         <controller name="trendingController" path="/trendingHashtags">
             <endpoint name="listAll" type="GET"  path="/">
                 <responseBody>
-            	   <attribute name="videos" type="Set(Videos)"/>
+            	   <attribute name="videos" type="List(Long)"/>
             	</responseBody>
             </endpoint> 
         </controller>
@@ -246,13 +242,12 @@
 		</controller>
 
     </microservice>
-    <microservice name="SubscriptionMicroservice" port="8082">
-
+    <microservice name="subscription-microservice" port="8082" package="uk.ac.york.eng2.subscription">
         <entity name="Video" dto="VideoDTO">
-            <attribute name="id" type="Long"/>
-        	<attribute name="title" type="String"/>
-        	<attribute name="postedBy" type="Long"/>
-  			<attribute name="watchers" type="Set[Users]"/>
+            <entityAttribute name="id" type="Long"/>
+        	<entityAttribute name="title" type="String"/>
+        	<entityAttribute name="postedBy" type="Long"/>
+  			<entityAttribute name="watchers" type="Set[User]"/>
         </entity>
         <dto name="VideoDTO">        
         	<attribute name="title" type="String"/>
@@ -266,10 +261,10 @@
         </dto>
        
         <entity name="User" dto="UserDTO">
-            <attribute name="id" type="Long"/>
+            <entityAttribute name="id" type="Long"/>
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
-       		 <attribute name="id" type="Long"/>
+       		 <entityAttribute name="id" type="Long"/>
         </entity>
         
         <consumer name="subscriptionConsumer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>
