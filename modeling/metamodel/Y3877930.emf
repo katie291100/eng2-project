@@ -56,7 +56,8 @@ class Attribute{
 }
 class EntityAttribute extends Attribute{
 	attr RelationshipType relationship = "None";
-	attr Boolean JSONIgnore = false;
+	attr Boolean JsonIgnore = false;
+    attr Boolean GeneratedValue = false;
 	attr String mappedBy = "";
 	attr FetchType fetchtype = "LAZY";
 	attr Boolean ~unique = false;

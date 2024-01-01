@@ -1,9 +1,16 @@
-package uk.ac.york.eng2.videos.controllers;
+package [%=package%].controllers;
 
 import io.micronaut.http.*;
 import io.micronaut.http.annotation.*;
-import uk.ac.york.eng2.videos.domain.*;
-import uk.ac.york.eng2.videos.dto.*;
+[% if (c.eContainer().entities.size() > 0) {%]
+import [%=package%].domain.*;
+[%}%]
+[% if (c.eContainer().dtos.size() > 0) {%]
+import [%=package%].dto.*;
+[%}%]
+
+import [%=package%].domain.*;
+import [%=package%].dto.*;
 import java.util.*;
 
 abstract class [%=c.name.firstToUpperCase()%]Abstract {

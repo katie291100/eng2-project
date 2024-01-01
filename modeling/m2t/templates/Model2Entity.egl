@@ -1,4 +1,4 @@
-package uk.ac.york.eng2.videos.domain;
+package [%=package%].domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
@@ -9,21 +9,22 @@ import java.util.*;
 @Entity
 public class [%=e.name%] {
     
-    [%for (a in e.attributes){%]    
-    [%if (a.name=="id"){%]
-    @Id
-    @GeneratedValue
-    [%}%]
-    [%else{%]
-    [%if (a.JSONIgnore){%]
-    @JsonIgnore
-    [%}%]
-    [%if (a.relationship.isDefined() and a.relationship.name !="None"){%]
-    @[%=a.relationship.name%](mappedBy="[%=a.mappedBy%]", fetch = FetchType.[%=a.fetchtype.name%])
-    [%}%]
+    [%for (a in e.attributes){%]
+	[%if (a.name=="id"){%]
+	@Id
+	[%}%][%if (a.GeneratedValue==true){%]
+	@GeneratedValue
+	[%}%][%if (a.JsonIgnore){%]
+	@JsonIgnore
+	[%}%]
+	[%if (a.relationship.isDefined() and a.relationship.name !="None"){%]
+	@[%=a.relationship.name%]([%if (a.mappedBy != ""){%]mappedBy="[%=a.mappedBy%]", [%}%]fetch = FetchType.[%=a.fetchtype.name%])
+	[%}%]
     @Column(unique=[%=a.unique%], nullable=[%=a.nullable%], insertable=[%=a.insertable%], updatable=[%=a.updatable%], columnDefinition="[%=a.columnDefinition%]")    
-    [%}%]
     private [%=a.getType()%] [%=a.name.firstToLowerCase()%];
+    [%}%]
+
+    [%for (a in e.attributes){%]    
     
     public [%=a.getType()%] get[%=a.name.firstToUpperCase()%]() {
         return [%=a.name%];

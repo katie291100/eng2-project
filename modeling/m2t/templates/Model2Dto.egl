@@ -1,8 +1,10 @@
-package uk.ac.york.eng2.videos.dto;
+package [%=package%].dto;
 
 import io.micronaut.http.annotation.Body;
 import io.micronaut.serde.annotation.Serdeable;
-
+[% if (d.eContainer().entities.size() > 0) {%]
+import [%=package%].domain.*;
+[%}%]
 import java.util.Set;
 
 @Serdeable
@@ -17,7 +19,7 @@ public class [%=d.name%] {
 			this.[%=a.name.firstToLowerCase()%] = [%=a.name.firstToLowerCase()%];
 		}
 		
-		public [%=a.getType()%] get[%=a.name.firstToLowerCase()%]() {
+		public [%=a.getType()%] get[%=a.name.firstToUpperCase()%]() {
         	return [%=a.name.firstToLowerCase()%];
     	}
 	[%}%]

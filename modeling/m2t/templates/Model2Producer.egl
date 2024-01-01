@@ -1,9 +1,11 @@
-package uk.ac.york.eng2.videos.events;
+package [%=package%].events;
 
 import io.micronaut.configuration.kafka.annotation.KafkaClient;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.Topic;
-import uk.ac.york.eng2.videos.domain.*;
+[% if (p.eContainer().entities.size() > 0) {%]
+import [%=package%].domain.*;
+[%}%]
 
 @KafkaClient
 public interface [%=p.name.firstToUpperCase()%] {
@@ -18,12 +20,15 @@ public interface [%=p.name.firstToUpperCase()%] {
     }
     %]
     @Topic("[%=e.name%]")
-    void [%=funcName%](@KafkaKey Long key, Hashtag h);
+    void [%=funcName%](@KafkaKey [%=e.key.getType()%] [%=e.key.name%], [%=e.value.getType()%] [%=e.value.name%]);
     [%}%]
 }
 
 [%
-operation Attribute getType(){
+operation ValueType getType(){
+    return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
+}
+operation KeyType getType(){
     return self.type.replace("\\[", "\\<").replace("\\(", "\\<").replace("\\)", "\\>").replace("\\]", "\\>").firstToUpperCase();
 }
 %]
