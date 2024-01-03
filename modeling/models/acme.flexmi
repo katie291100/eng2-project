@@ -96,7 +96,7 @@
             	   <attribute name="videoDTO" type="VideoDTO"/>
             	</requestParams>
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
             <endpoint name="getVideo" type="GET" path="/{videoId}">
@@ -113,7 +113,7 @@
             	   <attribute name="userId" type="Long"/>
             	</requestParams>
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
             <endpoint name="dislikeVideo" type="PUT" path="/{videoId}/dislikeVideo/{userId}">
@@ -122,7 +122,7 @@
             	   <attribute name="userId" type="Long"/>
             	</requestParams>
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
         </controller>
@@ -137,7 +137,7 @@
             	   <attribute name="userDTO" type="UserDTO"/>
             	</requestParams>
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
             <endpoint name="watchVideo" type="PUT" path="/{userId}/watchedVideo/{videoId}">
@@ -146,7 +146,7 @@
                    <attribute name="videoId" type="Long"/>
             	</requestParams>
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]" />
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]" />
             	</responseBody>
             </endpoint>
             <endpoint name="getUser" type="GET" path="/{userId}">
@@ -194,14 +194,14 @@
             	   <attribute name="hashtagDTO" type="HashtagDTO"/>
             	</requestParams>
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
 		</controller>
 		<controller name="healthcheckControllers" path="/health">
 		<endpoint name="health" type="GET" path="/">
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
 		</controller>
@@ -236,7 +236,7 @@
        <controller name="healthcheckControllers"  path="/health">
 			<endpoint name="health" type="GET"  path="/">
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
 		</controller>
@@ -244,29 +244,27 @@
     </microservice>
     <microservice name="subscription-microservice" port="8082" package="uk.ac.york.eng2.subscription">
         <entity name="Video" dto="VideoDTO">
-            <entityAttribute name="id" type="Long"/>
-        	<entityAttribute name="title" type="String"/>
-        	<entityAttribute name="postedBy" type="Long"/>
-  			<entityAttribute name="watchers" type="Set[User]"/>
-        </entity>
-        <dto name="VideoDTO">        
-        	<attribute name="title" type="String"/>
-        	<attribute name="postedBy" type="Long"/>
-        </dto>
-        <dto name="UserDTO">        
-        	<attribute name="name" type="String"/>
-        </dto>
-        <dto name="HashtagDTO">        
-        	<attribute name="name" type="String"/>
-        </dto>
-       
+            <entityAttribute name="id" type="Long" generatedValue="True"/>
+            <entityAttribute name="title" type="String" nullable="false"/>
+            <entityAttribute name="postedBy" type="User" relationship="ManyToOne" optional="false"/>
+            <entityAttribute name="hashtags" type="Set[Hashtag]" fetchType="EAGER" relationship="ManyToMany"/>
+            <entityAttribute name="watchers" type="Set[User]" JsonIgnore="true" relationship="ManyToMany" mappedBy = "watchedVideos"/>
+        </entity>       
         <entity name="User" dto="UserDTO">
-            <entityAttribute name="id" type="Long"/>
+            <entityAttribute name="id" type="Long" generatedValue="True"/>
+            <entityAttribute name="name" type="String" nullable="false"/>
+            <entityAttribute name="watchedVideos" type="Set(Video)" JsonIgnore="true" relationship="ManyToMany" />
+            <entityAttribute name="subscribtions" type="Set(Hashtag)" JsonIgnore="true" relationship="ManyToMany" />
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
-       		 <entityAttribute name="id" type="Long"/>
+            <entityAttribute name="id" type="Long" generatedValue="True"/>
+            <entityAttribute name="name" type="String" nullable="false"/>
+            <entityAttribute name="videos" type="Set(Video)" relationship="ManyToMany" mappedBy = "hashtags" fetch = "EAGER"/>
+            <entityAttribute name="subscribedToBy" type="Set(User)" JsonIgnore="true" relationship="ManyToMany" />
         </entity>
-        
+        <repository name="HashtagsRepository" entity="Hashtag"/>
+        <repository name="UsersRepository" entity="User"/>
+
         <consumer name="subscriptionConsumer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>
         
         <consumer name="videoStream" eventStreams="new-video" isStream = "True"/>
@@ -274,16 +272,34 @@
        <controller name="healthcheckControllers" path="health">
 			<endpoint name="health" type="GET" path="/">
                 <responseBody>
-            	   <attribute name="HTTPResponse" type="HttpResponse[Void]"/>
+            	   <attribute name="HttpResponse" type="HttpResponse[Void]"/>
             	</responseBody>
             </endpoint>
 		</controller>
 
         <controller name="subscriptionController" path="/subscription">
-            <endpoint name="listAll" type="GET" path="/">
+            <endpoint name="listAllSubscriptions" type="GET" path="/">
                 <responseBody>
-            	   <attribute name="videos" type="Set(Videos)"/>
+            	   <attribute name="videos" type="Set(Video)"/>
             	</responseBody>
+            </endpoint> 
+            <endpoint name="subscribe" type="PUT" path="/{hashtagId}/{userId}">
+                <requestParams>
+                    <attribute name="hashtagId" type="Long"/>
+                    <attribute name="userId" type="Long"/>
+                </requestParams>
+                <responseBody>
+                   <attribute name="HttpResponse" type="HttpResponse(Void)"/>
+                </responseBody>
+            </endpoint> 
+            <endpoint name="unsubscribe" type="DELETE" path="/{hashtagId}/{userId}">
+                <requestParams>
+                    <attribute name="hashtagId" type="Long"/>
+                    <attribute name="userId" type="Long"/>
+                </requestParams>
+                <responseBody>
+                   <attribute name="HttpResponse" type="HttpResponse(Void)"/>
+                </responseBody>
             </endpoint> 
         </controller>
 
