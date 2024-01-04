@@ -12,23 +12,22 @@ public class Video {
 	@Id
 	@GeneratedValue
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long id;
+    private Long id ;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
-    private String title;
-
-	@ManyToOne(fetch = FetchType.EAGER, optional=false)
-    private User postedBy;
+    private String title ;
+	@ManyToOne(fetch = FetchType.LAZY, optional=false)
+    private User postedBy ;
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long likes;
+    private Long likes = 0L  ;
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long dislikes;
+    private Long dislikes = 0L  ;
 	@ManyToMany(fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<Hashtag> hashtags;
+    private Set<Hashtag> hashtags ;
 	@JsonIgnore
 	@ManyToMany(mappedBy="watchedVideos", fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<User> watchers;
+    private Set<User> watchers ;
 
     
     

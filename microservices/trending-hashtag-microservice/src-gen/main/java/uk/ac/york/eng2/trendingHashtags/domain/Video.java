@@ -11,16 +11,16 @@ public class Video {
     
 	@Id
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long id;
+    private Long id ;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
-    private String title;
+    private String title ;
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long likes;
+    private Long likes = 0L  ;
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long dislikes;
+    private Long dislikes = 0L  ;
 	@ManyToMany(fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<Hashtag> hashtags;
+    private Set<Hashtag> hashtags ;
 
     
     

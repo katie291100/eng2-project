@@ -11,17 +11,17 @@ public class User {
     
 	@Id
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long id;
+    private Long id ;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
-    private String name;
+    private String name ;
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<Video> watchedVideos;
+    private Set<Video> watchedVideos ;
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<Hashtag> subscribtions;
+    private Set<Hashtag> subscribtions ;
 
     
     

@@ -11,16 +11,16 @@ public class Hashtag {
     
 	@Id
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long id;
+    private Long id ;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
-    private String name;
+    private String name ;
 	@ManyToMany(mappedBy="hashtags", fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<Video> videos;
+    private Set<Video> videos ;
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<User> subscribedToBy;
+    private Set<User> subscribedToBy ;
 
     
     

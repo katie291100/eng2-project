@@ -23,7 +23,7 @@ public class [%=e.name%] {
 	[%if (a.relationship.name != "ManyToOne"){%]
     @Column(unique=[%=a.unique%], nullable=[%=a.nullable%], insertable=[%=a.insertable%], updatable=[%=a.updatable%], columnDefinition="[%=a.columnDefinition%]")    
     [%}%]
-    private [%=a.getType()%] [%=a.name.firstToLowerCase()%];
+    private [%=a.getType()%] [%=a.name.firstToLowerCase()%] [%if (a.getType() == "Long" and a.GeneratedValue==false and a.name != "id" ){%] = 0L [%}%] ;
     [%}%]
 
     [%for (a in e.attributes){%]    
