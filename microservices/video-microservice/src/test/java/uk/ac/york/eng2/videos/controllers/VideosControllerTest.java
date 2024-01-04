@@ -249,7 +249,6 @@ public class VideosControllerTest {
 
         assertEquals(1, iterVideos.size());
         assertEquals("Test Video", iterVideos.get(0).getTitle());
-
     }
 
     @Test
