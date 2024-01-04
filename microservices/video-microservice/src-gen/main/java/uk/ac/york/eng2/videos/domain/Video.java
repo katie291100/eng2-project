@@ -15,19 +15,20 @@ public class Video {
     private Long id;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
     private String title;
-	@ManyToOne(optional=false)
+
+	@ManyToOne(fetch = FetchType.EAGER, optional=false)
     private User postedBy;
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long likes = 0L;
+    private Long likes;
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Long dislikes = 0L;
+    private Long dislikes;
 	@ManyToMany(fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<Hashtag> hashtags = new HashSet<>();
+    private Set<Hashtag> hashtags;
 	@JsonIgnore
 	@ManyToMany(mappedBy="watchedVideos", fetch = FetchType.LAZY)
-//    @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")
-    private Set<User> watchers = new HashSet<>();
+    @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
+    private Set<User> watchers;
 
     
     
@@ -93,6 +94,17 @@ public class Video {
         this.watchers = watchers;
     }
 
+    @Override
+    public String toString() {
+        return "Video{" +
+                "id=" + id + ","+
+                "title=" + title + ","+
+                "likes=" + likes + ","+
+                "dislikes=" + dislikes + ","+
+                "hashtags=" + hashtags + ","+
+        '}';
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;

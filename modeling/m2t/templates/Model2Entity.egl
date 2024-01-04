@@ -40,10 +40,12 @@ public class [%=e.name%] {
     @Override
     public String toString() {
         return "[%=e.name%]{" +
-         [%for (a in e.attributes){%]    
+         [%for (a in e.attributes){%]
+            [% if (a.JsonIgnore == false) {%]
                 "[%=a.name%]=" + [%=a.name%] + ","+
+             [%}%]
          [%}%]
-                '}';
+        '}';
     }
     
     @Override

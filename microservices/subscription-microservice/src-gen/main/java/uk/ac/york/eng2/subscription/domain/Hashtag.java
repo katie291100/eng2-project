@@ -62,15 +62,10 @@ public class Hashtag {
     @Override
     public String toString() {
         return "Hashtag{" +
-    
                 "id=" + id + ","+
-    
                 "name=" + name + ","+
-    
                 "videos=" + videos + ","+
-    
-                "subscribedToBy=" + subscribedToBy + ","+
-                '}';
+        '}';
     }
     
     @Override

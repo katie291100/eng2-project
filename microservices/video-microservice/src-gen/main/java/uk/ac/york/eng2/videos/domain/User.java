@@ -19,7 +19,6 @@ public class User {
 	@ManyToMany(fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Video> watchedVideos;
-
     @JsonIgnore
     @OneToMany(mappedBy="postedBy", fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
@@ -61,12 +60,14 @@ public class User {
     public void setPostedVideos(Set<Video> postedVideos) {
         this.postedVideos = postedVideos;
     }
+
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+                "id=" + id + ","+
+                "name=" + name + ","+
+                "postedVideos=" + postedVideos + ","+
+        '}';
     }
     
     @Override

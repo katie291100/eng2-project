@@ -1,7 +1,6 @@
 package uk.ac.york.eng2.videos.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import java.util.*;
@@ -16,8 +15,7 @@ public class Hashtag {
     private Long id;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
     private String name;
-
-    @JsonIgnore
+	@JsonIgnore
 	@ManyToMany(mappedBy="hashtags", fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Video> videos;
@@ -53,13 +51,9 @@ public class Hashtag {
     @Override
     public String toString() {
         return "Hashtag{" +
-    
                 "id=" + id + ","+
-    
                 "name=" + name + ","+
-    
-                "videos=" + videos + ","+
-                '}';
+        '}';
     }
     
     @Override

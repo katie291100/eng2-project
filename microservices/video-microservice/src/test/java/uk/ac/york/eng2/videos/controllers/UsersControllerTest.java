@@ -83,6 +83,7 @@ public class UsersControllerTest {
         userWatchedVideo.add(video);
         user.setWatchedVideos(userWatchedVideo);
         userRepo.update(user);
+
         Set<Video> videos = client.getWatchedByUser(user.getId());
         assertTrue(videos.iterator().hasNext());
         assertEquals(video.getId(), videos.iterator().next().getId());

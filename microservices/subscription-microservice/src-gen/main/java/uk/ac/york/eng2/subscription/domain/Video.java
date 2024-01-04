@@ -73,17 +73,11 @@ public class Video {
     @Override
     public String toString() {
         return "Video{" +
-    
                 "id=" + id + ","+
-    
                 "title=" + title + ","+
-    
                 "postedBy=" + postedBy + ","+
-    
                 "hashtags=" + hashtags + ","+
-    
-                "watchers=" + watchers + ","+
-                '}';
+        '}';
     }
     
     @Override
