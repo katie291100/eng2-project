@@ -244,20 +244,20 @@
     </microservice>
     <microservice name="subscription-microservice" port="8082" package="uk.ac.york.eng2.subscription">
         <entity name="Video" dto="VideoDTO">
-            <entityAttribute name="id" type="Long" generatedValue="True"/>
+            <entityAttribute name="id" type="Long"/>
             <entityAttribute name="title" type="String" nullable="false"/>
             <entityAttribute name="postedBy" type="User" relationship="ManyToOne" optional="false"/>
             <entityAttribute name="hashtags" type="Set[Hashtag]" fetchType="EAGER" relationship="ManyToMany"/>
             <entityAttribute name="watchers" type="Set[User]" JsonIgnore="true" relationship="ManyToMany" mappedBy = "watchedVideos"/>
         </entity>       
         <entity name="User" dto="UserDTO">
-            <entityAttribute name="id" type="Long" generatedValue="True"/>
+            <entityAttribute name="id" type="Long"/>
             <entityAttribute name="name" type="String" nullable="false"/>
             <entityAttribute name="watchedVideos" type="Set(Video)" JsonIgnore="true" relationship="ManyToMany" />
             <entityAttribute name="subscribtions" type="Set(Hashtag)" JsonIgnore="true" relationship="ManyToMany" />
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
-            <entityAttribute name="id" type="Long" generatedValue="True"/>
+            <entityAttribute name="id" type="Long"/>
             <entityAttribute name="name" type="String" nullable="false"/>
             <entityAttribute name="videos" type="Set(Video)" relationship="ManyToMany" mappedBy = "hashtags" fetch = "EAGER"/>
             <entityAttribute name="subscribedToBy" type="Set(User)" JsonIgnore="true" relationship="ManyToMany" />

@@ -18,9 +18,11 @@ public class [%=e.name%] {
 	@JsonIgnore
 	[%}%]
 	[%if (a.relationship.isDefined() and a.relationship.name !="None"){%]
-	@[%=a.relationship.name%]([%if (a.mappedBy != ""){%]mappedBy="[%=a.mappedBy%]", [%}%]fetch = FetchType.[%=a.fetchtype.name%])
+	@[%=a.relationship.name%]([%if (a.mappedBy != ""){%]mappedBy="[%=a.mappedBy%]", [%}%]fetch = FetchType.[%=a.fetchtype.name%] [%if (a.relationship.name == "ManyToOne"){%], optional=[%=a.optional%][%}%])
 	[%}%]
+	[%if (a.relationship.name != "ManyToOne"){%]
     @Column(unique=[%=a.unique%], nullable=[%=a.nullable%], insertable=[%=a.insertable%], updatable=[%=a.updatable%], columnDefinition="[%=a.columnDefinition%]")    
+    [%}%]
     private [%=a.getType()%] [%=a.name.firstToLowerCase()%];
     [%}%]
 

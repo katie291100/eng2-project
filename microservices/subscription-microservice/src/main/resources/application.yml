@@ -13,10 +13,10 @@ jpa:
     entity-scan:
       packages:
         - uk.ac.york.eng2.subscription.domain
-  properties:
-    hibernate:
-      hbm2ddl:
-        auto: update
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
 netty:
   default:
     allocator:

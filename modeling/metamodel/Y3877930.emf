@@ -62,6 +62,7 @@ class EntityAttribute extends Attribute{
 	attr FetchType fetchtype = "LAZY";
 	attr Boolean ~unique = false;
     attr Boolean nullable = true;
+    attr Boolean optional = true;
     attr Boolean insertable = true;
     attr Boolean updatable = true;
 	attr String columnDefinition = "";
