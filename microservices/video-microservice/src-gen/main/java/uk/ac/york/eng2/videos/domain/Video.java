@@ -98,6 +98,7 @@ public class Video {
         return "Video{" +
                 "id=" + id + ","+
                 "title=" + title + ","+
+                "postedBy=" + postedBy + ","+
                 "likes=" + likes + ","+
                 "dislikes=" + dislikes + ","+
                 "hashtags=" + hashtags + ","+

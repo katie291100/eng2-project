@@ -19,8 +19,7 @@ public class User {
 	@ManyToMany(fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Video> watchedVideos ;
-
-    @JsonIgnore
+	@JsonIgnore
 	@OneToMany(mappedBy="postedBy", fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Video> postedVideos ;
@@ -67,7 +66,6 @@ public class User {
         return "User{" +
                 "id=" + id + ","+
                 "name=" + name + ","+
-                "postedVideos=" + postedVideos + ","+
         '}';
     }
     

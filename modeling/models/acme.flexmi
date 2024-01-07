@@ -71,7 +71,7 @@
         <entity name="Video" dto="VideoDTO">
             <entityAttribute name="id" type="Long" generatedValue="True"/>
         	<entityAttribute name="title" type="String" nullable="false"/>
-        	<entityAttribute name="postedBy" type="User" relationship="ManyToOne" optional="false" JsonIgnore="True" fetchType="EAGER"/>
+        	<entityAttribute name="postedBy" type="User" relationship="ManyToOne" optional="false" fetchType="EAGER"/>
           	<entityAttribute name="likes" type="Long"/>
             <entityAttribute name="dislikes" type="Long"/>
   			<entityAttribute name="hashtags" type="Set[Hashtag]" fetchType="EAGER" relationship="ManyToMany"/>
@@ -81,7 +81,7 @@
           	<entityAttribute name="id" type="Long" generatedValue="True"/>
             <entityAttribute name="name" type="String" nullable="false"/>
             <entityAttribute name="watchedVideos" type="Set(Video)" JsonIgnore="true" relationship="ManyToMany" />
-            <entityAttribute name="postedVideos" type="Set(Video)" relationship="OneToMany" mappedBy = "postedBy" fetch = "EAGER"/>
+            <entityAttribute name="postedVideos" type="Set(Video)" relationship="OneToMany" mappedBy = "postedBy" fetch = "EAGER" JsonIgnore="True"/>
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
           	<entityAttribute name="id" type="Long" generatedValue="True"/>
