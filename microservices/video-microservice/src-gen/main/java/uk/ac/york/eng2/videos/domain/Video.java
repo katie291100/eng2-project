@@ -15,7 +15,7 @@ public class Video {
     private Long id ;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
     private String title ;
-	@ManyToOne(fetch = FetchType.LAZY, optional=false)
+	@ManyToOne(fetch = FetchType.EAGER, optional=false)
     private User postedBy ;
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Long likes = 0L  ;

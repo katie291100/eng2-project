@@ -1,8 +1,8 @@
-package uk.ac.york.eng2.subscription.dto;
+package uk.ac.york.eng2.trendingHashtags.dto;
 
 import io.micronaut.http.annotation.Body;
 import io.micronaut.serde.annotation.Serdeable;
-import uk.ac.york.eng2.subscription.domain.*;
+import uk.ac.york.eng2.trendingHashtags.domain.*;
 import java.util.Set;
 
 @Serdeable

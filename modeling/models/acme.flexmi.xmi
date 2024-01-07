@@ -1,220 +1,216 @@
 <?xml version="1.0" encoding="ASCII"?>
-<System xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns="Y3877930" xmi:id="_4JPsYKgeEe6NQORErMQNMg" name="Social Media">
-  <eventStreams xmi:id="_4JPsYageEe6NQORErMQNMg" name="new-video">
-    <key xmi:id="_4JPsYqgeEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPsY6geEe6NQORErMQNMg" name="video" type="Video"/>
+<System xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns="Y3877930" xmi:id="_OWUwMKzNEe6cbaqwjrdfKA" name="Social Media">
+  <eventStreams xmi:id="_OWUwMazNEe6cbaqwjrdfKA" name="new-video">
+    <event xmi:id="_OWUwMqzNEe6cbaqwjrdfKA">
+      <key xmi:id="_OWUwM6zNEe6cbaqwjrdfKA" name="videoId" type="Long"/>
+      <value xmi:id="_OWUwNKzNEe6cbaqwjrdfKA" name="video" type="Video"/>
+    </event>
   </eventStreams>
-  <eventStreams xmi:id="_4JPsZKgeEe6NQORErMQNMg" name="like-video">
-    <key xmi:id="_4JPsZageEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPsZqgeEe6NQORErMQNMg" name="video" type="Video"/>
+  <eventStreams xmi:id="_OWUwNazNEe6cbaqwjrdfKA" name="like-video">
+    <event xmi:id="_OWUwNqzNEe6cbaqwjrdfKA">
+      <key xmi:id="_OWUwN6zNEe6cbaqwjrdfKA" name="userId" type="Long"/>
+      <value xmi:id="_OWUwOKzNEe6cbaqwjrdfKA" name="videoId" type="Video"/>
+    </event>
   </eventStreams>
-  <eventStreams xmi:id="_4JPsZ6geEe6NQORErMQNMg" name="dislike-video">
-    <key xmi:id="_4JPsaKgeEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPsaageEe6NQORErMQNMg" name="video" type="Video"/>
+  <eventStreams xmi:id="_OWUwOazNEe6cbaqwjrdfKA" name="dislike-video">
+    <event xmi:id="_OWUwOqzNEe6cbaqwjrdfKA"/>
   </eventStreams>
-  <eventStreams xmi:id="_4JPsaqgeEe6NQORErMQNMg" name="new-hashtag">
-    <key xmi:id="_4JPsa6geEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPsbKgeEe6NQORErMQNMg" name="video" type="Video"/>
+  <eventStreams xmi:id="_OWUwO6zNEe6cbaqwjrdfKA" name="new-hashtag">
+    <event xmi:id="_OWUwPKzNEe6cbaqwjrdfKA"/>
   </eventStreams>
-  <eventStreams xmi:id="_4JPsbageEe6NQORErMQNMg" name="new-user">
-    <key xmi:id="_4JPsbqgeEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPsb6geEe6NQORErMQNMg" name="video" type="Video"/>
+  <eventStreams xmi:id="_OWUwPazNEe6cbaqwjrdfKA" name="new-user">
+    <event xmi:id="_OWUwPqzNEe6cbaqwjrdfKA"/>
   </eventStreams>
-  <eventStreams xmi:id="_4JPscKgeEe6NQORErMQNMg" name="watch-video">
-    <key xmi:id="_4JPscageEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPscqgeEe6NQORErMQNMg" name="video" type="Video"/>
+  <eventStreams xmi:id="_OWUwP6zNEe6cbaqwjrdfKA" name="watch-video">
+    <event xmi:id="_OWUwQKzNEe6cbaqwjrdfKA"/>
   </eventStreams>
-  <eventStreams xmi:id="_4JPsc6geEe6NQORErMQNMg" name="like-hashtag">
-    <key xmi:id="_4JPsdKgeEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPsdageEe6NQORErMQNMg" name="video" type="Video"/>
+  <eventStreams xmi:id="_OWUwQazNEe6cbaqwjrdfKA" name="subscribe-hashtag">
+    <event xmi:id="_OWUwQqzNEe6cbaqwjrdfKA"/>
   </eventStreams>
-  <eventStreams xmi:id="_4JPsdqgeEe6NQORErMQNMg" name="subscribe-hashtag">
-    <key xmi:id="_4JPsd6geEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPseKgeEe6NQORErMQNMg" name="video" type="Video"/>
+  <eventStreams xmi:id="_OWUwQ6zNEe6cbaqwjrdfKA" name="unsubscribe-hashtag">
+    <event xmi:id="_OWUwRKzNEe6cbaqwjrdfKA"/>
   </eventStreams>
-  <eventStreams xmi:id="_4JPseageEe6NQORErMQNMg" name="unsubscribe-hashtag">
-    <key xmi:id="_4JPseqgeEe6NQORErMQNMg" name="video" type="String"/>
-    <value xmi:id="_4JPse6geEe6NQORErMQNMg" name="video" type="Video"/>
-  </eventStreams>
-  <microservices xmi:id="_4JPsfKgeEe6NQORErMQNMg" name="video-microservice" port="8080">
-    <entities xmi:id="_4JPsfageEe6NQORErMQNMg" name="Video" dto="_4JPs-6geEe6NQORErMQNMg">
-      <attributes xmi:id="_4JPsfqgeEe6NQORErMQNMg" type="Long" name="id"/>
-      <attributes xmi:id="_4JPsf6geEe6NQORErMQNMg" type="String" name="title"/>
-      <attributes xmi:id="_4JPsgKgeEe6NQORErMQNMg" type="Long" name="postedBy"/>
-      <attributes xmi:id="_4JPsgageEe6NQORErMQNMg" type="Long" name="likes"/>
-      <attributes xmi:id="_4JPsgqgeEe6NQORErMQNMg" type="Long" name="dislikes"/>
-      <attributes xmi:id="_4JPsg6geEe6NQORErMQNMg" type="Set[Hashtag]" name="hashtags"/>
-      <attributes xmi:id="_4JPshKgeEe6NQORErMQNMg" type="Set[Users]" name="watchers"/>
+  <microservices xmi:id="_OWUwRazNEe6cbaqwjrdfKA" name="video-microservice" port="8080" package="uk.ac.york.eng2.videos">
+    <entities xmi:id="_OWUwRqzNEe6cbaqwjrdfKA" name="Video" dto="_OWUwjazNEe6cbaqwjrdfKA">
+      <attributes xmi:id="_OWUwR6zNEe6cbaqwjrdfKA" type="Long" name="id" GeneratedValue="true"/>
+      <attributes xmi:id="_OWUwSKzNEe6cbaqwjrdfKA" type="String" name="title" nullable="false"/>
+      <attributes xmi:id="_OWUwSazNEe6cbaqwjrdfKA" type="User" name="postedBy" relationship="ManyToOne" JsonIgnore="true" fetchtype="EAGER" optional="false"/>
+      <attributes xmi:id="_OWUwSqzNEe6cbaqwjrdfKA" type="Long" name="likes"/>
+      <attributes xmi:id="_OWUwS6zNEe6cbaqwjrdfKA" type="Long" name="dislikes"/>
+      <attributes xmi:id="_OWUwTKzNEe6cbaqwjrdfKA" type="Set[Hashtag]" name="hashtags" relationship="ManyToMany" fetchtype="EAGER"/>
+      <attributes xmi:id="_OWUwTazNEe6cbaqwjrdfKA" type="Set[User]" name="watchers" relationship="ManyToMany" JsonIgnore="true" mappedBy="watchedVideos"/>
     </entities>
-    <entities xmi:id="_4JPshageEe6NQORErMQNMg" name="User" dto="_4JPs_qgeEe6NQORErMQNMg">
-      <attributes xmi:id="_4JPshqgeEe6NQORErMQNMg" type="Long" name="id"/>
-      <attributes xmi:id="_4JPsh6geEe6NQORErMQNMg" type="String" name="name"/>
-      <attributes xmi:id="_4JPsiKgeEe6NQORErMQNMg" type="Set(Video)" name="watchedVideos"/>
-      <attributes xmi:id="_4JPsiageEe6NQORErMQNMg" type="Set(Video)" name="postedVideos"/>
+    <entities xmi:id="_OWUwTqzNEe6cbaqwjrdfKA" name="User" dto="_OWUwkazNEe6cbaqwjrdfKA">
+      <attributes xmi:id="_OWUwT6zNEe6cbaqwjrdfKA" type="Long" name="id" GeneratedValue="true"/>
+      <attributes xmi:id="_OWUwUKzNEe6cbaqwjrdfKA" type="String" name="name" nullable="false"/>
+      <attributes xmi:id="_OWUwUazNEe6cbaqwjrdfKA" type="Set(Video)" name="watchedVideos" relationship="ManyToMany" JsonIgnore="true"/>
+      <attributes xmi:id="_OWUwUqzNEe6cbaqwjrdfKA" type="Set(Video)" name="postedVideos" relationship="OneToMany" mappedBy="postedBy" fetchtype="EAGER"/>
     </entities>
-    <entities xmi:id="_4JPsiqgeEe6NQORErMQNMg" name="Hashtag" dto="_4JPtAKgeEe6NQORErMQNMg">
-      <attributes xmi:id="_4JPsi6geEe6NQORErMQNMg" type="Long" name="id"/>
-      <attributes xmi:id="_4JPsjKgeEe6NQORErMQNMg" type="String" name="name"/>
-      <attributes xmi:id="_4JPsjageEe6NQORErMQNMg" type="Set(Video)" name="videos"/>
+    <entities xmi:id="_OWUwU6zNEe6cbaqwjrdfKA" name="Hashtag" dto="_OWUwk6zNEe6cbaqwjrdfKA">
+      <attributes xmi:id="_OWUwVKzNEe6cbaqwjrdfKA" type="Long" name="id" GeneratedValue="true"/>
+      <attributes xmi:id="_OWUwVazNEe6cbaqwjrdfKA" type="String" name="name" nullable="false"/>
+      <attributes xmi:id="_OWUwVqzNEe6cbaqwjrdfKA" type="Set(Video)" name="videos" relationship="ManyToMany" JsonIgnore="true" mappedBy="hashtags" fetchtype="EAGER"/>
     </entities>
-    <producers xmi:id="_4JPsjqgeEe6NQORErMQNMg" name="video" eventStreams="_4JPsYageEe6NQORErMQNMg _4JPsZKgeEe6NQORErMQNMg _4JPsZ6geEe6NQORErMQNMg"/>
-    <producers xmi:id="_4JPsj6geEe6NQORErMQNMg" name="user" eventStreams="_4JPsbageEe6NQORErMQNMg _4JPscKgeEe6NQORErMQNMg"/>
-    <producers xmi:id="_4JPskKgeEe6NQORErMQNMg" name="hashtag" eventStreams="_4JPsaqgeEe6NQORErMQNMg"/>
-    <controllers xmi:id="_4JPskageEe6NQORErMQNMg" name="videoControllers" path="/video">
-      <endpoints xmi:id="_4JPskqgeEe6NQORErMQNMg" name="listVideos" path="/">
-        <responseBody xmi:id="_4JPsk6geEe6NQORErMQNMg" type="List[Video]" name="videos"/>
+    <producers xmi:id="_OWUwV6zNEe6cbaqwjrdfKA" name="videoProducer" eventStreams="_OWUwMazNEe6cbaqwjrdfKA _OWUwNazNEe6cbaqwjrdfKA _OWUwOazNEe6cbaqwjrdfKA"/>
+    <producers xmi:id="_OWUwWKzNEe6cbaqwjrdfKA" name="userProducer" eventStreams="_OWUwPazNEe6cbaqwjrdfKA _OWUwP6zNEe6cbaqwjrdfKA"/>
+    <producers xmi:id="_OWUwWazNEe6cbaqwjrdfKA" name="hashtagProducer" eventStreams="_OWUwO6zNEe6cbaqwjrdfKA"/>
+    <controllers xmi:id="_OWUwWqzNEe6cbaqwjrdfKA" name="videoControllers" path="/videos">
+      <endpoints xmi:id="_OWUwW6zNEe6cbaqwjrdfKA" name="listVideos" path="/">
+        <responseBody xmi:id="_OWUwXKzNEe6cbaqwjrdfKA" type="List[Video]" name="videos"/>
       </endpoints>
-      <endpoints xmi:id="_4JPslKgeEe6NQORErMQNMg" name="listVideosByHashtag" path="/{hashtag}">
-        <requestParams xmi:id="_4JPslageEe6NQORErMQNMg" type="String" name="hashtag"/>
-        <responseBody xmi:id="_4JPslqgeEe6NQORErMQNMg" type="Set[Video]" name="videos"/>
+      <endpoints xmi:id="_OWUwXazNEe6cbaqwjrdfKA" name="listVideosByHashtag" path="hashtag/{hashtag}">
+        <requestParams xmi:id="_OWUwXqzNEe6cbaqwjrdfKA" type="String" name="hashtag"/>
+        <responseBody xmi:id="_OWUwX6zNEe6cbaqwjrdfKA" type="Set[Video]" name="videos"/>
       </endpoints>
-      <endpoints xmi:id="_4JPsl6geEe6NQORErMQNMg" name="addVideo" path="/" type="POST">
-        <requestParams xmi:id="_4JPsmKgeEe6NQORErMQNMg" type="VideoDTO" name="videoDTO"/>
-        <responseBody xmi:id="_4JPsmageEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
+      <endpoints xmi:id="_OWUwYKzNEe6cbaqwjrdfKA" name="addVideo" path="/" type="POST">
+        <requestParams xmi:id="_OWUwYazNEe6cbaqwjrdfKA" type="VideoDTO" name="videoDTO"/>
+        <responseBody xmi:id="_OWUwYqzNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
       </endpoints>
-      <endpoints xmi:id="_4JPsmqgeEe6NQORErMQNMg" name="getVideo" path="/{videoId}">
-        <requestParams xmi:id="_4JPsm6geEe6NQORErMQNMg" type="Long" name="videoId"/>
-        <responseBody xmi:id="_4JPsnKgeEe6NQORErMQNMg" type="Video" name="video"/>
+      <endpoints xmi:id="_OWUwY6zNEe6cbaqwjrdfKA" name="getVideo" path="/{videoId}">
+        <requestParams xmi:id="_OWUwZKzNEe6cbaqwjrdfKA" type="Long" name="videoId"/>
+        <responseBody xmi:id="_OWUwZazNEe6cbaqwjrdfKA" type="Video" name="video"/>
       </endpoints>
-      <endpoints xmi:id="_4JPsnageEe6NQORErMQNMg" name="likeVideo" path="/{videoId}/likeVideo/{userId}" type="PUT">
-        <requestParams xmi:id="_4JPsnqgeEe6NQORErMQNMg" type="Long" name="videoId"/>
-        <requestParams xmi:id="_4JPsn6geEe6NQORErMQNMg" type="Long" name="userId"/>
-        <responseBody xmi:id="_4JPsoKgeEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
+      <endpoints xmi:id="_OWUwZqzNEe6cbaqwjrdfKA" name="likeVideo" path="/{videoId}/likeVideo/{userId}" type="PUT">
+        <requestParams xmi:id="_OWUwZ6zNEe6cbaqwjrdfKA" type="Long" name="videoId"/>
+        <requestParams xmi:id="_OWUwaKzNEe6cbaqwjrdfKA" type="Long" name="userId"/>
+        <responseBody xmi:id="_OWUwaazNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
       </endpoints>
-      <endpoints xmi:id="_4JPsoageEe6NQORErMQNMg" name="dislikeVideo" path="/{videoId}/dislikeVideo/{userId}" type="PUT">
-        <requestParams xmi:id="_4JPsoqgeEe6NQORErMQNMg" type="Long" name="videoId"/>
-        <requestParams xmi:id="_4JPso6geEe6NQORErMQNMg" type="Long" name="userId"/>
-        <responseBody xmi:id="_4JPspKgeEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
-      </endpoints>
-    </controllers>
-    <controllers xmi:id="_4JPspageEe6NQORErMQNMg" name="userControllers" path="/user">
-      <endpoints xmi:id="_4JPspqgeEe6NQORErMQNMg" name="listUsers" path="/">
-        <responseBody xmi:id="_4JPsp6geEe6NQORErMQNMg" type="Set[User]" name="users"/>
-      </endpoints>
-      <endpoints xmi:id="_4JPsqKgeEe6NQORErMQNMg" name="addUser" path="/" type="POST">
-        <requestParams xmi:id="_4JPsqageEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
-        <responseBody xmi:id="_4JPsqqgeEe6NQORErMQNMg" type="userDTO" name="userDTO"/>
-      </endpoints>
-      <endpoints xmi:id="_4JPsq6geEe6NQORErMQNMg" name="watchVideo" path="/watchVideo/{videoID}" type="PUT">
-        <requestParams xmi:id="_4JPsrKgeEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
-        <responseBody xmi:id="_4JPsrageEe6NQORErMQNMg" type="Long" name="userID"/>
-      </endpoints>
-      <endpoints xmi:id="_4JPsrqgeEe6NQORErMQNMg" name="getUser" path="/{userId}">
-        <requestParams xmi:id="_4JPsr6geEe6NQORErMQNMg" type="User" name="user"/>
-        <responseBody xmi:id="_4JPssKgeEe6NQORErMQNMg" type="Long" name="userId"/>
-      </endpoints>
-      <endpoints xmi:id="_4JPssageEe6NQORErMQNMg" name="getWatchedByUser" path="/{userId}/watchedVideos">
-        <requestParams xmi:id="_4JPssqgeEe6NQORErMQNMg" type="Set(Videos)" name="videos"/>
-        <responseBody xmi:id="_4JPss6geEe6NQORErMQNMg" type="Long" name="userID"/>
-      </endpoints>
-      <endpoints xmi:id="_4JPstKgeEe6NQORErMQNMg" name="getPostedByUser" path="/{userId}/postedVideos">
-        <requestParams xmi:id="_4JPstageEe6NQORErMQNMg" type="Set(Videos)" name="videos"/>
-        <responseBody xmi:id="_4JPstqgeEe6NQORErMQNMg" type="Long" name="userID"/>
+      <endpoints xmi:id="_OWUwaqzNEe6cbaqwjrdfKA" name="dislikeVideo" path="/{videoId}/dislikeVideo/{userId}" type="PUT">
+        <requestParams xmi:id="_OWUwa6zNEe6cbaqwjrdfKA" type="Long" name="videoId"/>
+        <requestParams xmi:id="_OWUwbKzNEe6cbaqwjrdfKA" type="Long" name="userId"/>
+        <responseBody xmi:id="_OWUwbazNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
       </endpoints>
     </controllers>
-    <controllers xmi:id="_4JPst6geEe6NQORErMQNMg" name="hashtagControllers" path="/hashtag">
-      <endpoints xmi:id="_4JPsuKgeEe6NQORErMQNMg" name="listHashtags" path="/">
-        <responseBody xmi:id="_4JPsuageEe6NQORErMQNMg" type="Set[Hashtag]" name="hashtags"/>
+    <controllers xmi:id="_OWUwbqzNEe6cbaqwjrdfKA" name="userControllers" path="/user">
+      <endpoints xmi:id="_OWUwb6zNEe6cbaqwjrdfKA" name="listUsers" path="/">
+        <responseBody xmi:id="_OWUwcKzNEe6cbaqwjrdfKA" type="Set[User]" name="users"/>
       </endpoints>
-      <endpoints xmi:id="_4JPsuqgeEe6NQORErMQNMg" name="getHashtag" path="/{hashtagID}">
-        <requestParams xmi:id="_4JPsu6geEe6NQORErMQNMg" type="Long" name="hashtagID"/>
-        <responseBody xmi:id="_4JPsvKgeEe6NQORErMQNMg" type="Hashtag" name="hashtag"/>
+      <endpoints xmi:id="_OWUwcazNEe6cbaqwjrdfKA" name="addUser" path="/" type="POST">
+        <requestParams xmi:id="_OWUwcqzNEe6cbaqwjrdfKA" type="UserDTO" name="userDTO"/>
+        <responseBody xmi:id="_OWUwc6zNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
       </endpoints>
-      <endpoints xmi:id="_4JPsvageEe6NQORErMQNMg" name="addHashtag" path="/" type="POST">
-        <requestParams xmi:id="_4JPsvqgeEe6NQORErMQNMg" type="HashtagDTO" name="hashtagDTO"/>
-        <responseBody xmi:id="_4JPsv6geEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
+      <endpoints xmi:id="_OWUwdKzNEe6cbaqwjrdfKA" name="watchVideo" path="/{userId}/watchedVideo/{videoId}" type="PUT">
+        <requestParams xmi:id="_OWUwdazNEe6cbaqwjrdfKA" type="Long" name="userId"/>
+        <requestParams xmi:id="_OWUwdqzNEe6cbaqwjrdfKA" type="Long" name="videoId"/>
+        <responseBody xmi:id="_OWUwd6zNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
+      </endpoints>
+      <endpoints xmi:id="_OWUweKzNEe6cbaqwjrdfKA" name="getUser" path="/{userId}">
+        <requestParams xmi:id="_OWUweazNEe6cbaqwjrdfKA" type="Long" name="userId"/>
+        <responseBody xmi:id="_OWUweqzNEe6cbaqwjrdfKA" type="User" name="user"/>
+      </endpoints>
+      <endpoints xmi:id="_OWUwe6zNEe6cbaqwjrdfKA" name="getWatchedByUser" path="/{userId}/watchedVideos">
+        <requestParams xmi:id="_OWUwfKzNEe6cbaqwjrdfKA" type="Long" name="userId"/>
+        <responseBody xmi:id="_OWUwfazNEe6cbaqwjrdfKA" type="Set[Video]" name="videos"/>
+      </endpoints>
+      <endpoints xmi:id="_OWUwfqzNEe6cbaqwjrdfKA" name="getPostedByUser" path="/{userId}/postedVideos">
+        <requestParams xmi:id="_OWUwf6zNEe6cbaqwjrdfKA" type="Long" name="userId"/>
+        <responseBody xmi:id="_OWUwgKzNEe6cbaqwjrdfKA" type="Set(Video)" name="videos"/>
       </endpoints>
     </controllers>
-    <controllers xmi:id="_4JPswKgeEe6NQORErMQNMg" name="healthcheckControllers" path="/health">
-      <endpoints xmi:id="_4JPswageEe6NQORErMQNMg" name="health" path="/">
-        <responseBody xmi:id="_4JPswqgeEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
+    <controllers xmi:id="_OWUwgazNEe6cbaqwjrdfKA" name="hashtagControllers" path="/hashtag">
+      <endpoints xmi:id="_OWUwgqzNEe6cbaqwjrdfKA" name="listHashtags" path="/">
+        <responseBody xmi:id="_OWUwg6zNEe6cbaqwjrdfKA" type="Set[Hashtag]" name="hashtags"/>
+      </endpoints>
+      <endpoints xmi:id="_OWUwhKzNEe6cbaqwjrdfKA" name="getHashtag" path="/{hashtagId}">
+        <requestParams xmi:id="_OWUwhazNEe6cbaqwjrdfKA" type="Long" name="hashtagId"/>
+        <responseBody xmi:id="_OWUwhqzNEe6cbaqwjrdfKA" type="Hashtag" name="hashtag"/>
+      </endpoints>
+      <endpoints xmi:id="_OWUwh6zNEe6cbaqwjrdfKA" name="addHashtag" path="/" type="POST">
+        <requestParams xmi:id="_OWUwiKzNEe6cbaqwjrdfKA" type="HashtagDTO" name="hashtagDTO"/>
+        <responseBody xmi:id="_OWUwiazNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
       </endpoints>
     </controllers>
-    <dtos xmi:id="_4JPsw6geEe6NQORErMQNMg" name="VideoDTO">
-      <attributes xmi:id="_4JPsxKgeEe6NQORErMQNMg" type="String" name="title"/>
-      <attributes xmi:id="_4JPsxageEe6NQORErMQNMg" type="Long" name="postedBy"/>
+    <controllers xmi:id="_OWUwiqzNEe6cbaqwjrdfKA" name="healthcheckControllers" path="/health">
+      <endpoints xmi:id="_OWUwi6zNEe6cbaqwjrdfKA" name="health" path="/">
+        <responseBody xmi:id="_OWUwjKzNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
+      </endpoints>
+    </controllers>
+    <dtos xmi:id="_OWUwjazNEe6cbaqwjrdfKA" name="VideoDTO">
+      <attributes xmi:id="_OWUwjqzNEe6cbaqwjrdfKA" type="String" name="title"/>
+      <attributes xmi:id="_OWUwj6zNEe6cbaqwjrdfKA" type="Long" name="postedBy"/>
+      <attributes xmi:id="_OWUwkKzNEe6cbaqwjrdfKA" type="Set[HashtagDTO]" name="hashtags"/>
     </dtos>
-    <dtos xmi:id="_4JPsxqgeEe6NQORErMQNMg" name="UserDTO">
-      <attributes xmi:id="_4JPsx6geEe6NQORErMQNMg" type="String" name="name"/>
+    <dtos xmi:id="_OWUwkazNEe6cbaqwjrdfKA" name="UserDTO">
+      <attributes xmi:id="_OWUwkqzNEe6cbaqwjrdfKA" type="String" name="name"/>
     </dtos>
-    <dtos xmi:id="_4JPsyKgeEe6NQORErMQNMg" name="HashtagDTO">
-      <attributes xmi:id="_4JPsyageEe6NQORErMQNMg" type="String" name="name"/>
+    <dtos xmi:id="_OWUwk6zNEe6cbaqwjrdfKA" name="HashtagDTO">
+      <attributes xmi:id="_OWUwlKzNEe6cbaqwjrdfKA" type="String" name="name"/>
     </dtos>
-    <repositories xmi:id="_4JPsyqgeEe6NQORErMQNMg" name="VideoRepository" entity="_4JPs6ageEe6NQORErMQNMg"/>
-    <repositories xmi:id="_4JPsy6geEe6NQORErMQNMg" name="UserRepository" entity="_4JPs7qgeEe6NQORErMQNMg"/>
-    <repositories xmi:id="_4JPszKgeEe6NQORErMQNMg" name="HashtagRepository" entity="_4JPs8KgeEe6NQORErMQNMg"/>
+    <repositories xmi:id="_OWUwlazNEe6cbaqwjrdfKA" name="VideosRepository" entity="_OWUwrazNEe6cbaqwjrdfKA"/>
+    <repositories xmi:id="_OWUwlqzNEe6cbaqwjrdfKA" name="UsersRepository" entity="_OWUws6zNEe6cbaqwjrdfKA"/>
+    <repositories xmi:id="_OWUwl6zNEe6cbaqwjrdfKA" name="HashtagsRepository" entity="_OWUwuKzNEe6cbaqwjrdfKA"/>
   </microservices>
-  <microservices xmi:id="_4JPszageEe6NQORErMQNMg" name="trending-hashtag-microservice" port="8081">
-    <entities xmi:id="_4JPszqgeEe6NQORErMQNMg" name="Hashtag" dto="_4JPtAKgeEe6NQORErMQNMg">
-      <attributes xmi:id="_4JPsz6geEe6NQORErMQNMg" type="Long" name="id"/>
-      <attributes xmi:id="_4JPs0KgeEe6NQORErMQNMg" type="String" name="name"/>
-      <attributes xmi:id="_4JPs0ageEe6NQORErMQNMg" type="Set(Video)" name="videos"/>
+  <microservices xmi:id="_OWUwmKzNEe6cbaqwjrdfKA" name="trending-hashtag-microservice" port="8081" package="uk.ac.york.eng2.trendingHashtags">
+    <entities xmi:id="_OWUwmazNEe6cbaqwjrdfKA" name="Hashtag" dto="_OWUwk6zNEe6cbaqwjrdfKA">
+      <attributes xmi:id="_OWUwmqzNEe6cbaqwjrdfKA" type="Long" name="id"/>
+      <attributes xmi:id="_OWUwm6zNEe6cbaqwjrdfKA" type="String" name="name" nullable="false"/>
+      <attributes xmi:id="_OWUwnKzNEe6cbaqwjrdfKA" type="Set(Video)" name="videos" relationship="ManyToMany" mappedBy="hashtags"/>
     </entities>
-    <entities xmi:id="_4JPs0qgeEe6NQORErMQNMg" name="Video" dto="_4JPs-6geEe6NQORErMQNMg">
-      <attributes xmi:id="_4JPs06geEe6NQORErMQNMg" type="Long" name="id"/>
-      <attributes xmi:id="_4JPs1KgeEe6NQORErMQNMg" type="String" name="title"/>
-      <attributes xmi:id="_4JPs1ageEe6NQORErMQNMg" type="Long" name="postedBy"/>
-      <attributes xmi:id="_4JPs1qgeEe6NQORErMQNMg" type="Long" name="likes"/>
-      <attributes xmi:id="_4JPs16geEe6NQORErMQNMg" type="Long" name="dislikes"/>
-      <attributes xmi:id="_4JPs2KgeEe6NQORErMQNMg" type="Set[Hashtag]" name="hashtags"/>
-      <attributes xmi:id="_4JPs2ageEe6NQORErMQNMg" type="Set[Users]" name="watchers"/>
+    <entities xmi:id="_OWUwnazNEe6cbaqwjrdfKA" name="Video" dto="_OWUwjazNEe6cbaqwjrdfKA">
+      <attributes xmi:id="_OWUwnqzNEe6cbaqwjrdfKA" type="Long" name="id"/>
+      <attributes xmi:id="_OWUwn6zNEe6cbaqwjrdfKA" type="String" name="title" nullable="false"/>
+      <attributes xmi:id="_OWUwoKzNEe6cbaqwjrdfKA" type="Long" name="likes"/>
+      <attributes xmi:id="_OWUwoazNEe6cbaqwjrdfKA" type="Long" name="dislikes"/>
+      <attributes xmi:id="_OWUwoqzNEe6cbaqwjrdfKA" type="Set[Hashtag]" name="hashtags" relationship="ManyToMany" fetchtype="EAGER"/>
     </entities>
-    <consumers xmi:id="_4JPs2qgeEe6NQORErMQNMg" name="hashtagConsumer" eventStreams="_4JPsaqgeEe6NQORErMQNMg"/>
-    <consumers xmi:id="_4JPs26geEe6NQORErMQNMg" name="trendingStream" isStream="true" eventStreams="_4JPsZKgeEe6NQORErMQNMg"/>
-    <controllers xmi:id="_4JPs3KgeEe6NQORErMQNMg" name="trendingController" path="/trendingHashtags">
-      <endpoints xmi:id="_4JPs3ageEe6NQORErMQNMg" name="listAll" path="/">
-        <responseBody xmi:id="_4JPs3qgeEe6NQORErMQNMg" type="Set(Videos)" name="videos"/>
+    <consumers xmi:id="_OWUwo6zNEe6cbaqwjrdfKA" name="hashtagConsumer" eventStreams="_OWUwO6zNEe6cbaqwjrdfKA"/>
+    <consumers xmi:id="_OWUwpKzNEe6cbaqwjrdfKA" name="trendingStreams" isStream="true" eventStreams="_OWUwNazNEe6cbaqwjrdfKA"/>
+    <controllers xmi:id="_OWUwpazNEe6cbaqwjrdfKA" name="trendingController" path="/trendingHashtags">
+      <endpoints xmi:id="_OWUwpqzNEe6cbaqwjrdfKA" name="listAll" path="/">
+        <responseBody xmi:id="_OWUwp6zNEe6cbaqwjrdfKA" type="List(Long)" name="videos"/>
       </endpoints>
     </controllers>
-    <controllers xmi:id="_4JPs36geEe6NQORErMQNMg" name="healthcheckControllers" path="/health">
-      <endpoints xmi:id="_4JPs4KgeEe6NQORErMQNMg" name="health" path="/">
-        <responseBody xmi:id="_4JPs4ageEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
+    <controllers xmi:id="_OWUwqKzNEe6cbaqwjrdfKA" name="healthcheckControllers" path="/health">
+      <endpoints xmi:id="_OWUwqazNEe6cbaqwjrdfKA" name="health" path="/">
+        <responseBody xmi:id="_OWUwqqzNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
       </endpoints>
     </controllers>
-    <dtos xmi:id="_4JPs4qgeEe6NQORErMQNMg" name="HashtagDTO">
-      <attributes xmi:id="_4JPs46geEe6NQORErMQNMg" type="String" name="name"/>
-    </dtos>
-    <dtos xmi:id="_4JPs5KgeEe6NQORErMQNMg" name="VideoDTO">
-      <attributes xmi:id="_4JPs5ageEe6NQORErMQNMg" type="String" name="title"/>
-      <attributes xmi:id="_4JPs5qgeEe6NQORErMQNMg" type="String" name="postedBy"/>
-    </dtos>
-    <repositories xmi:id="_4JPs56geEe6NQORErMQNMg" name="HashtagRepository" entity="_4JPs8KgeEe6NQORErMQNMg"/>
+    <repositories xmi:id="_OWUwq6zNEe6cbaqwjrdfKA" name="HashtagsRepository" entity="_OWUwuKzNEe6cbaqwjrdfKA"/>
   </microservices>
-  <microservices xmi:id="_4JPs6KgeEe6NQORErMQNMg" name="subscription-microservice" port="8082">
-    <entities xmi:id="_4JPs6ageEe6NQORErMQNMg" name="Video" dto="_4JPs-6geEe6NQORErMQNMg">
-      <attributes xmi:id="_4JPs6qgeEe6NQORErMQNMg" type="Long" name="id"/>
-      <attributes xmi:id="_4JPs66geEe6NQORErMQNMg" type="String" name="title"/>
-      <attributes xmi:id="_4JPs7KgeEe6NQORErMQNMg" type="Long" name="postedBy"/>
-      <attributes xmi:id="_4JPs7ageEe6NQORErMQNMg" type="Set[Users]" name="watchers"/>
+  <microservices xmi:id="_OWUwrKzNEe6cbaqwjrdfKA" name="subscription-microservice" port="8082" package="uk.ac.york.eng2.subscription">
+    <entities xmi:id="_OWUwrazNEe6cbaqwjrdfKA" name="Video" dto="_OWUwjazNEe6cbaqwjrdfKA">
+      <attributes xmi:id="_OWUwrqzNEe6cbaqwjrdfKA" type="Long" name="id"/>
+      <attributes xmi:id="_OWUwr6zNEe6cbaqwjrdfKA" type="String" name="title" nullable="false"/>
+      <attributes xmi:id="_OWUwsKzNEe6cbaqwjrdfKA" type="User" name="postedBy" relationship="ManyToOne" optional="false"/>
+      <attributes xmi:id="_OWUwsazNEe6cbaqwjrdfKA" type="Set[Hashtag]" name="hashtags" relationship="ManyToMany" fetchtype="EAGER"/>
+      <attributes xmi:id="_OWUwsqzNEe6cbaqwjrdfKA" type="Set[User]" name="watchers" relationship="ManyToMany" JsonIgnore="true" mappedBy="watchedVideos"/>
     </entities>
-    <entities xmi:id="_4JPs7qgeEe6NQORErMQNMg" name="User" dto="_4JPs_qgeEe6NQORErMQNMg">
-      <attributes xmi:id="_4JPs76geEe6NQORErMQNMg" type="Long" name="id"/>
+    <entities xmi:id="_OWUws6zNEe6cbaqwjrdfKA" name="User" dto="_OWUwkazNEe6cbaqwjrdfKA">
+      <attributes xmi:id="_OWUwtKzNEe6cbaqwjrdfKA" type="Long" name="id"/>
+      <attributes xmi:id="_OWUwtazNEe6cbaqwjrdfKA" type="String" name="name" nullable="false"/>
+      <attributes xmi:id="_OWUwtqzNEe6cbaqwjrdfKA" type="Set(Video)" name="watchedVideos" relationship="ManyToMany" JsonIgnore="true"/>
+      <attributes xmi:id="_OWUwt6zNEe6cbaqwjrdfKA" type="Set(Hashtag)" name="subscribtions" relationship="ManyToMany" JsonIgnore="true"/>
     </entities>
-    <entities xmi:id="_4JPs8KgeEe6NQORErMQNMg" name="Hashtag" dto="_4JPtAKgeEe6NQORErMQNMg">
-      <attributes xmi:id="_4JPs8ageEe6NQORErMQNMg" type="Long" name="id"/>
+    <entities xmi:id="_OWUwuKzNEe6cbaqwjrdfKA" name="Hashtag" dto="_OWUwk6zNEe6cbaqwjrdfKA">
+      <attributes xmi:id="_OWUwuazNEe6cbaqwjrdfKA" type="Long" name="id"/>
+      <attributes xmi:id="_OWUwuqzNEe6cbaqwjrdfKA" type="String" name="name" nullable="false"/>
+      <attributes xmi:id="_OWUwu6zNEe6cbaqwjrdfKA" type="Set(Video)" name="videos" relationship="ManyToMany" mappedBy="hashtags" fetchtype="EAGER"/>
+      <attributes xmi:id="_OWUwvKzNEe6cbaqwjrdfKA" type="Set(User)" name="subscribedToBy" relationship="ManyToMany" JsonIgnore="true"/>
     </entities>
-    <consumers xmi:id="_4JPs8qgeEe6NQORErMQNMg" name="subscriptionConsumer" eventStreams="_4JPsdqgeEe6NQORErMQNMg _4JPseageEe6NQORErMQNMg"/>
-    <consumers xmi:id="_4JPs86geEe6NQORErMQNMg" name="videoStream" isStream="true" eventStreams="_4JPsYageEe6NQORErMQNMg"/>
-    <producers xmi:id="_4JPs9KgeEe6NQORErMQNMg" name="subscriptionProducer" eventStreams="_4JPsdqgeEe6NQORErMQNMg _4JPseageEe6NQORErMQNMg"/>
-    <controllers xmi:id="_4JPs9ageEe6NQORErMQNMg" name="healthcheckControllers" path="health">
-      <endpoints xmi:id="_4JPs9qgeEe6NQORErMQNMg" name="health" path="/">
-        <responseBody xmi:id="_4JPs96geEe6NQORErMQNMg" type="HttpResponse[Void]" name="HTTPResponse"/>
+    <consumers xmi:id="_OWUwvazNEe6cbaqwjrdfKA" name="subscriptionConsumer" eventStreams="_OWUwQazNEe6cbaqwjrdfKA _OWUwQ6zNEe6cbaqwjrdfKA"/>
+    <consumers xmi:id="_OWUwvqzNEe6cbaqwjrdfKA" name="videoStream" isStream="true" eventStreams="_OWUwMazNEe6cbaqwjrdfKA"/>
+    <producers xmi:id="_OWUwv6zNEe6cbaqwjrdfKA" name="subscriptionProducer" eventStreams="_OWUwQazNEe6cbaqwjrdfKA _OWUwQ6zNEe6cbaqwjrdfKA"/>
+    <controllers xmi:id="_OWUwwKzNEe6cbaqwjrdfKA" name="healthcheckControllers" path="health">
+      <endpoints xmi:id="_OWUwwazNEe6cbaqwjrdfKA" name="health" path="/">
+        <responseBody xmi:id="_OWUwwqzNEe6cbaqwjrdfKA" type="HttpResponse[Void]" name="HttpResponse"/>
       </endpoints>
     </controllers>
-    <controllers xmi:id="_4JPs-KgeEe6NQORErMQNMg" name="subscriptionController" path="/subscription">
-      <endpoints xmi:id="_4JPs-ageEe6NQORErMQNMg" name="listAll" path="/">
-        <responseBody xmi:id="_4JPs-qgeEe6NQORErMQNMg" type="Set(Videos)" name="videos"/>
+    <controllers xmi:id="_OWUww6zNEe6cbaqwjrdfKA" name="subscriptionController" path="/subscription">
+      <endpoints xmi:id="_OWUwxKzNEe6cbaqwjrdfKA" name="listAllSubscriptions" path="/">
+        <responseBody xmi:id="_OWUwxazNEe6cbaqwjrdfKA" type="Set(Video)" name="videos"/>
+      </endpoints>
+      <endpoints xmi:id="_OWUwxqzNEe6cbaqwjrdfKA" name="subscribe" path="/{hashtagId}/{userId}" type="PUT">
+        <requestParams xmi:id="_OWUwx6zNEe6cbaqwjrdfKA" type="Long" name="hashtagId"/>
+        <requestParams xmi:id="_OWUwyKzNEe6cbaqwjrdfKA" type="Long" name="userId"/>
+        <responseBody xmi:id="_OWUwyazNEe6cbaqwjrdfKA" type="HttpResponse(Void)" name="HttpResponse"/>
+      </endpoints>
+      <endpoints xmi:id="_OWUwyqzNEe6cbaqwjrdfKA" name="unsubscribe" path="/{hashtagId}/{userId}" type="DELETE">
+        <requestParams xmi:id="_OWUwy6zNEe6cbaqwjrdfKA" type="Long" name="hashtagId"/>
+        <requestParams xmi:id="_OWUwzKzNEe6cbaqwjrdfKA" type="Long" name="userId"/>
+        <responseBody xmi:id="_OWUwzazNEe6cbaqwjrdfKA" type="HttpResponse(Void)" name="HttpResponse"/>
       </endpoints>
     </controllers>
-    <dtos xmi:id="_4JPs-6geEe6NQORErMQNMg" name="VideoDTO">
-      <attributes xmi:id="_4JPs_KgeEe6NQORErMQNMg" type="String" name="title"/>
-      <attributes xmi:id="_4JPs_ageEe6NQORErMQNMg" type="Long" name="postedBy"/>
-    </dtos>
-    <dtos xmi:id="_4JPs_qgeEe6NQORErMQNMg" name="UserDTO">
-      <attributes xmi:id="_4JPs_6geEe6NQORErMQNMg" type="String" name="name"/>
-    </dtos>
-    <dtos xmi:id="_4JPtAKgeEe6NQORErMQNMg" name="HashtagDTO">
-      <attributes xmi:id="_4JPtAageEe6NQORErMQNMg" type="String" name="name"/>
-    </dtos>
+    <repositories xmi:id="_OWUwzqzNEe6cbaqwjrdfKA" name="HashtagsRepository" entity="_OWUwuKzNEe6cbaqwjrdfKA"/>
+    <repositories xmi:id="_OWUwz6zNEe6cbaqwjrdfKA" name="UsersRepository" entity="_OWUws6zNEe6cbaqwjrdfKA"/>
   </microservices>
 </System>

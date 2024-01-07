@@ -3,39 +3,70 @@
 <system name="Social Media">
 	<eventStreams>
 	    <eventStream name="new-video">
-	        <keyType name="videoId" type="Long"/>
-	        <valueType name="video" type="Video"/>
+        <event>
+		    <event>
+		        <key name="videoId" type="Long"/>
+		        <value name="video" type="Video"/>
+	        </event>
+        </event>
 	    </eventStream>
 	    <eventStream name="like-video">
-	        <keyType name="userId" type="Long"/>
-	        <valueType name="videoId" type="Video"/>
+        <event>
+            <event>
+		        <key name="userId" type="Long"/>
+		        <value name="videoId" type="Video"/>
+	        </event>
+            </event>
 	    </eventStream>
 	    <eventStream name="dislike-video">
-            <keyType name="userId" type="Long"/>
-            <valueType name="videoId" type="Video"/>
+        <event>
+            <event>
+	            <key name="userId" type="Long"/>
+	            <value name="videoId" type="Video"/>
+            </event>
+            </event>
 	    </eventStream>
 	    <eventStream name="new-hashtag">
-	        <keyType name="hashtagId" type="Long"/>
-	        <valueType name="hashtag" type="Hashtag"/>
+        <event>
+            <event>
+		        <key name="hashtagId" type="Long"/>
+		        <value name="hashtag" type="Hashtag"/>
+	       </event>
+            </event>
 	    </eventStream>
 	    <eventStream name="new-user">
-	        <keyType name="userId" type="Long"/>
-	        <valueType name="user" type="User"/>
+        <event>
+            <event>
+		        <key name="userId" type="Long"/>
+		        <value name="user" type="User"/>
+	                   </event>
+            </event>
 	    </eventStream>
 	    <eventStream name="watch-video">
-            <keyType name="userId" type="Long"/>
-            <valueType name="videoId" type="Video"/>
+	       <event>
+            <event>
+	            <key name="userId" type="Long"/>
+	            <value name="videoId" type="Video"/>
+	                   </event>
+            </event>
 	    </eventStream>
 	    <eventStream name="subscribe-hashtag">
-	        <keyType name="userId" type="Long"/>
-	        <valueType name="hashtag" type="Hashtag"/>
+        <event>
+            <event>
+		        <key name="userId" type="Long"/>
+		        <value name="hashtag" type="Hashtag"/>
+	                   </event>
+            </event>
 	    </eventStream>
    		<eventStream name="unsubscribe-hashtag">
-            <keyType name="userId" type="Long"/>
-            <valueType name="hashtag" type="Hashtag"/>
+	     <event>
+            <event>
+	            <key name="userId" type="Long"/>
+	            <value name="hashtag" type="Hashtag"/>
+	       </event>
+            </event>
         </eventStream>
     </eventStreams>
-    
     <microservice name="video-microservice" port="8080" package="uk.ac.york.eng2.videos">
         <entity name="Video" dto="VideoDTO">
             <entityAttribute name="id" type="Long" generatedValue="True"/>
@@ -240,7 +271,16 @@
             	</responseBody>
             </endpoint>
 		</controller>
-
+        
+        <dto name="VideoDTO">        
+            <attribute name="title" type="String"/>
+            <attribute name="postedBy" type="Long"/>
+            <attribute name="hashtags" type="Set[HashtagDTO]"/>
+            
+        </dto>
+        <dto name="HashtagDTO">        
+            <attribute name="name" type="String"/>
+        </dto>
     </microservice>
     <microservice name="subscription-microservice" port="8082" package="uk.ac.york.eng2.subscription">
         <entity name="Video" dto="VideoDTO">
@@ -264,7 +304,19 @@
         </entity>
         <repository name="HashtagsRepository" entity="Hashtag"/>
         <repository name="UsersRepository" entity="User"/>
-
+        
+        <dto name="VideoDTO">        
+            <attribute name="title" type="String"/>
+            <attribute name="postedBy" type="Long"/>
+            <attribute name="hashtags" type="Set[HashtagDTO]"/>
+            
+        </dto>
+        <dto name="UserDTO">        
+            <attribute name="name" type="String"/>
+        </dto>
+        <dto name="HashtagDTO">        
+            <attribute name="name" type="String"/>
+        </dto>
         <consumer name="subscriptionConsumer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>
         
         <consumer name="videoStream" eventStreams="new-video" isStream = "True"/>

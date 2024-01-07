@@ -20,7 +20,7 @@ public interface [%=p.name.firstToUpperCase()%] {
     }
     %]
     @Topic("[%=e.name%]")
-    void [%=funcName%](@KafkaKey [%=e.key.getType()%] [%=e.key.name%], [%=e.value.getType()%] [%=e.value.name%]);
+    void [%=funcName%](@KafkaKey [%=e.event.key.getType()%] [%=e.event.key.name%], [%=e.event.value.getType()%] [%=e.event.value.name%]);
     [%}%]
 }
 

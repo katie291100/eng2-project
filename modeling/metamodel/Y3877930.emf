@@ -5,8 +5,21 @@ class System {
 	attr String name;
 	val EventStream[*] eventStreams;
 	val Microservice[*] microservices;
+	val CLI [*] clis;
 }
 
+class CLI {
+	attr String name;
+	attr String ~package;
+	ref Microservice[*] microservicesAccessed;
+	val Command[*] commands;
+}
+
+class Command{
+	attr String name;
+	attr String description;
+	val Attribute[*] parameters;
+}
 
 class Microservice {
 	attr String name;
@@ -36,7 +49,7 @@ class Endpoint{
 
 class Entity {
 	attr String name;
-	val EntityAttribute[*] attributes;
+	val EntityAttribute[+] attributes;
 	ref DTO dto;
 }
 
@@ -66,13 +79,13 @@ class EntityAttribute extends Attribute{
     attr Boolean insertable = true;
     attr Boolean updatable = true;
 	attr String columnDefinition = "";
-	
 }
+
 class Consumer{
 	attr String name;
 	attr Boolean isStream = false;
 	ref EventStream[*] eventStreams;
-}
+	}
 
 class Producer{
 	attr String name;
@@ -81,10 +94,13 @@ class Producer{
 
 class EventStream{
 	attr String name;
-	val KeyType key;
-	val ValueType value;
+	val Event[1] event;
 }
 
+class Event {
+	val KeyType key;
+    val ValueType value;
+}   
 class KeyType extends EventType{}
 class ValueType extends EventType{}
 

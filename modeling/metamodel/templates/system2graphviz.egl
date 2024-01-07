@@ -33,13 +33,13 @@ digraph G {
 			 
 			 [%for (e in m.producers){%]
 			 	[%for (t in e.eventStreams){%]
-			 		"[%=m.name%]" -> "[%=t.name%]" [color="#2A6C41" label="Produces to"]
+			 		"[%=m.name%]" -> "[%=t.name%]" [color="#082ea1" label="Produces to" style="dashed"]
 			 		
 			 	[%}%]
 			 [%}%]
 			 [%for (e in m.consumers){%]
 			 	[%for (t in e.eventStreams){%]
-			 		"[%=t.name%]" -> "[%=m.name%]" [color="#2A6C41" label="Consumes from"]
+			 		"[%=t.name%]" -> "[%=m.name%]" [color="#082ea1" label="Consumes from" style="dashed"]
 			 		
 			 	[%}%]
 			 [%}%]

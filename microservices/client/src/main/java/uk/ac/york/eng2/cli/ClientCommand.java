@@ -9,15 +9,15 @@ import uk.ac.york.eng2.cli.commands.*;
 @Command(name = "client", description = "...",
         mixinStandardHelpOptions = true,
         subcommands = {AddUserCommand.class,
-                PostVideoCommand.class,
-                LikeVideoCommand.class,
-                DislikeVideoCommand.class,
-                TrendingHashtagsCommand.class,
-        ListVideosCommand.class,
-        ListUsersCommand.class,
-        GetVideoCommand.class,
-        WatchVideoCommand.class,
-        GetUserCommand.class})
+                        PostVideoCommand.class,
+                        LikeVideoCommand.class,
+                        DislikeVideoCommand.class,
+                        TrendingHashtagsCommand.class,
+                        ListVideosCommand.class,
+                        ListUsersCommand.class,
+                        GetVideoCommand.class,
+                        WatchVideoCommand.class,
+                        GetUserCommand.class})
 public class ClientCommand implements Runnable {
 
     @Option(names = {"-v", "--verbose"}, description = "...")

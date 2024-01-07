@@ -17,7 +17,7 @@ digraph G {
 		
 	    [%=a.name%] [label="[%=a.name%]([%=a.type%])" fillcolor="6" shape=ellipse ]
 	    
-            [%=e.name%] -> [%=a.name%] [color="#2A6C41" label="has"]
+            [%=e.name%] -> [%=a.name%] [color="#2A6C41" style="dashed"]
 	    
 	[%}%]
 	

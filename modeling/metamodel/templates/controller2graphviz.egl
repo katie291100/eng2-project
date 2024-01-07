@@ -4,18 +4,18 @@ digraph G {
     colorscheme="pastel19"
     
 	splines=line
-	[%=c.name%] [fillcolor="1"]
+	[%=c.name%] [fillcolor="5"]
 	[%for (e in endpoints){%]
 		
 	    [%=e.name%] [label="[%=e.name%]([%=e.type%])" fillcolor="#95f0e7" ]
-   		[%=c.name%] -> [%=e.name%] [color="#2A6C41" ]
+   		[%=c.name%] -> [%=e.name%] []
 	    [%for (r in e.requestParams){%]
 	    	[%=r.name%][label="[%=r.name%]([%=r.type%])" fillcolor="6" shape=ellipse]
-	    	[%=r.name%] -> [%=e.name%] [label="requestParams"]
+	    	[%=r.name%] -> [%=e.name%] [color="#2A6C41" style="dashed"]
 	    [%}%]
 	    [%for (r in e.responseBody){%]
 	    	[%=r.name%][label="[%=r.name%]([%=r.type%])" fillcolor="6" shape=ellipse]
-	    	[%=e.name%] -> [%=r.name%] [label="responseBody"]
+	    	[%=e.name%] -> [%=r.name%] [ color="#2A6C41" style="dashed"]
 	     [%}%]	    
 	[%}%]
 }

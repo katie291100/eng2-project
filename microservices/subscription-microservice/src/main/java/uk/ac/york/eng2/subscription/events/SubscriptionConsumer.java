@@ -8,6 +8,7 @@ import uk.ac.york.eng2.subscription.domain.Hashtag;
 import uk.ac.york.eng2.subscription.domain.User;
 import uk.ac.york.eng2.subscription.domain.Video;
 import uk.ac.york.eng2.subscription.repositories.HashtagsRepositoryExtended;
+import uk.ac.york.eng2.subscription.repositories.UserRepositoryExtended;
 import uk.ac.york.eng2.subscription.repositories.UsersRepository;
 import uk.ac.york.eng2.subscription.repositories.VideoRepository;
 
@@ -20,7 +21,7 @@ public class SubscriptionConsumer {
     HashtagsRepositoryExtended hashtagRepo;
 
     @Inject
-    UsersRepository userRepo;
+    UserRepositoryExtended userRepo;
 
     @Inject
     VideoRepository videoRepo;

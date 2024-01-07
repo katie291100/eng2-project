@@ -4,17 +4,17 @@ digraph G {
   	colorscheme="pastel19"
     cluster=true;
 
-	[%=c.name%] [fillcolor="1"]
+	[%=c.name%] [fillcolor=[% if (isConsumer = true){%]"4" [%if (c.isStream = true) {%]shape="hexagon" [%}%][%}%][%else {%]"3"[%}%]]
 	[%for (a in eventStreams){%]
 		
 	    "[%=a.name%]" [label="[%=a.name%]" shape="box3d"]
 	   
 	    [% if (isConsumer = true){%]
-	       "[%=a.name%]" -> "[%=c.name%]" [color="#2A6C41" label="s([%=a.key.type%] [%=a.key.name%], \n [%=a.value.type%] [%=a.value.name%])"]
+	       "[%=a.name%]" -> "[%=c.name%]" [ label="([%=a.event.key.type%] [%=a.event.key.name%], \n [%=a.event.value.type%] [%=a.event.value.name%])" color="#082ea1"]
 	    
 	    [%}%]
 	    [%else{%]
-        "[%=c.name%]" -> "[%=a.name%]" [color="#2A6C41" label="([%=a.key.type%] [%=a.key.name%], \n [%=a.value.type%] [%=a.value.name%])"]	    
+        "[%=c.name%]" -> "[%=a.name%]" [label="([%=a.event.key.type%] [%=a.event.key.name%], \n [%=a.event.value.type%] [%=a.event.value.name%])" color="#082ea1"]	    
 	    [%}%]
 	    
 	[%}%]
