@@ -1,0 +1,61 @@
+configurations {
+    epsilon
+}
+
+version = "0.1"
+group = "uk.ac.york.eng2.assessment.y3877930"
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+    mavenCentral()
+}
+
+dependencies {
+    epsilon 'org.eclipse.epsilon:org.eclipse.epsilon.workflow:2.4.0'
+    epsilon 'org.eclipse.epsilon:org.eclipse.epsilon.workflow.emf:2.4.0'
+    epsilon ('org.eclipse.emfatic:org.eclipse.emfatic.core:1.1.0-SNAPSHOT') {
+        exclude group: 'org.eclipse.platform'
+    }
+}
+
+task setupEpsilonTasks {
+    // Set up the core Epsilon tasks
+    ant.taskdef(resource: 'org/eclipse/epsilon/workflow/tasks/tasks.xml', 
+        classpath: configurations.epsilon.asPath, loaderref: 'epsilon')
+    // Set up the Epsilon EMF tasks
+    ant.taskdef(resource: 'org/eclipse/epsilon/workflow/tasks/emf/tasks.xml', 
+        classpath: configurations.epsilon.asPath, loaderref: 'epsilon')
+    // Set logging level to info so that EOL's println() is not suppressed
+    ant.lifecycleLogLevel = 'INFO'
+}
+task cleanUpSrcGenFolders {
+    def rootFolder = file('../microservices') // Replace with your actual root folder path
+
+    // Iterate through subfolders
+    rootFolder.eachDir { subfolder ->
+        // Check if the subfolder has a 'src-gen' folder
+        def srcGenFolder = new File(subfolder, 'src-gen')
+
+        if (srcGenFolder.exists()) {
+            // Delete the 'src-gen' folder
+            project.delete srcGenFolder
+            println "Deleted src-gen folder in: ${subfolder}"
+        }
+    }
+
+}
+task run {
+    dependsOn tasks.cleanUpSrcGenFolders
+    dependsOn tasks.setupEpsilonTasks
+
+    // Load the library.flexmi EMF model
+    ant.'epsilon.emf.loadModel'(name: 'System', 
+        modelfile: 'uk/ac/york/eng2/assessment/y3877930/models/acme.flexmi', metamodelfile: 'uk/ac/york/eng2/assessment/y3877930/metamodel/Y3877930.emf')
+
+
+    // Run library.eol against it
+    ant.'epsilon.egl'(src: 'uk/ac/york/eng2/assessment/y3877930/m2t/Y3877930.egx', outputRoot: './../microservices'){
+        model(ref: 'System')
+    }
+}

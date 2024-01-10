@@ -65,7 +65,6 @@ micronaut {
         annotations("uk.ac.york.eng2.subscription.*")
     }
 }
-
 sourceSets {
     main.java.srcDirs = ['src/main/java', 'src-gen/main/java']
 }

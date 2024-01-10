@@ -21,7 +21,7 @@ public class User {
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<Hashtag> subscribtions ;
+    private Set<Hashtag> subscriptions ;
 
     
     
@@ -52,12 +52,12 @@ public class User {
     }
     
     
-    public Set<Hashtag> getSubscribtions() {
-        return subscribtions;
+    public Set<Hashtag> getSubscriptions() {
+        return subscriptions;
     }
 
-    public void setSubscribtions(Set<Hashtag> subscribtions) {
-        this.subscribtions = subscribtions;
+    public void setSubscriptions(Set<Hashtag> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 
     @Override
