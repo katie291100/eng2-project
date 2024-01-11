@@ -19,13 +19,21 @@ public class SubscriptionIdentifier {
     public Long getId() {
         return userId;
     }
+
+    public void setId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setHashtagId(Long hashtagId) {
+        this.hashtagId = hashtagId;
+    }
     public Long getHashtagId() {
-        return userId;
+        return hashtagId;
     }
 
     @Override
     public String toString() {
-        return "WindowedIdentifier [userId=" + userId + ", hashtagId=" + hashtagId + "]";
+        return "SubscriptionIdentifier [userId=" + userId + ", hashtagId=" + hashtagId + "]";
     }
 
     @Override

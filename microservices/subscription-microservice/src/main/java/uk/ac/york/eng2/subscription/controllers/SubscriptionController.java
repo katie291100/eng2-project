@@ -14,6 +14,7 @@ import org.apache.kafka.streams.state.ValueAndTimestamp;
 import uk.ac.york.eng2.subscription.domain.Video;
 import uk.ac.york.eng2.subscription.events.SubscriptionIdentifier;
 import uk.ac.york.eng2.subscription.events.SubscriptionStream;
+import uk.ac.york.eng2.subscription.events.SubscriptionValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,14 +37,27 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         HashMap<Long, Long> values = new HashMap<>();
 
         List<Long> videos = queryableStore.get(new SubscriptionIdentifier(userId, hashtagId));
-        System.out.println(queryableStore.all().toString());
-        System.out.println("THE THING");
+        System.out.println(queryableStore.approximateNumEntries());
+        System.out.println("THE THING2");
+        System.out.println(queryableStore.all().next());
+
         List<Long> video = queryableStore.all().next().value;
         return video;
     }
 
-    @Override
+    @Get("/")
     public Set<Video> listAllSubscriptions() {
+        SubscriptionValue subscriptionValue = new SubscriptionValue();
+        subscriptionValue.addVideoId(new ArrayList<Long>(List.of(1L, 2L, 3L)));
+        SubscriptionValue subscriptionValue2 = new SubscriptionValue();
+        subscriptionValue2.addVideoId(subscriptionValue.getVideoIds());
+        System.out.println(subscriptionValue2);
+        System.out.println(subscriptionValue);
+        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore = getStore();
+
+        System.out.println(queryableStore.approximateNumEntries());
+        queryableStore.all().forEachRemaining((value) -> System.out.println(value.key + " => " + value.value));
+
         return null;
     }
 
@@ -59,8 +73,7 @@ public class SubscriptionController implements SubscriptionControllerInterface{
 
     private ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> getStore() {
 
-        return interactiveQueryService.getQueryableStore(
-                "subscription-store", QueryableStoreTypes.<SubscriptionIdentifier, List<Long>>keyValueStore()).orElse(null);
+        return interactiveQueryService.getQueryableStore("subscription-store", QueryableStoreTypes.<SubscriptionIdentifier, List<Long>>keyValueStore()).orElse(null);
     }
 }
 

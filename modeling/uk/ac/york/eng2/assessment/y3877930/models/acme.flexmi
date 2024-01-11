@@ -295,7 +295,7 @@
             <entityAttribute name="id" type="Long"/>
             <entityAttribute name="name" type="String" nullable="false"/>
             <entityAttribute name="watchedVideos" type="Set(Video)" JsonIgnore="true" relationship="ManyToMany" />
-            <entityAttribute name="subscriptions" type="Set(Hashtag)" JsonIgnore="true" relationship="ManyToMany" />
+            <entityAttribute name="subscriptions" type="Set(Hashtag)" JsonIgnore="true" relationship="ManyToMany" fetch="EAGER" mappedBy="subscribedToBy" />
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
             <entityAttribute name="id" type="Long"/>
@@ -305,12 +305,13 @@
         </entity>
         <repository name="HashtagsRepository" entity="Hashtag"/>
         <repository name="UsersRepository" entity="User"/>
-        
+        <repository name="VideosRepository" entity="Video"/>
+
         <dto name="VideoDTO">        
             <attribute name="title" type="String"/>
             <attribute name="postedBy" type="Long"/>
             <attribute name="hashtags" type="Set[HashtagDTO]"/>
-            
+
         </dto>
         <dto name="UserDTO">        
             <attribute name="name" type="String"/>

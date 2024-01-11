@@ -12,14 +12,12 @@ public class User {
 	@Id
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Long id ;
-    @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
-    private String name ;
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Video> watchedVideos ;
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "subscribedToBy")
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Hashtag> subscriptions ;
 
@@ -32,16 +30,7 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-    
     
     public Set<Video> getWatchedVideos() {
         return watchedVideos;
@@ -64,7 +53,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id + ","+
-                "name=" + name + ","+
         '}';
     }
     
