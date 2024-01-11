@@ -37,6 +37,14 @@ public class SubscriptionConsumer {
             }
         }
 
+        if (userRepo.findById(video.getPostedBy().getId()).isEmpty()) {
+            user = new User();
+            user.setId(video.getPostedBy().getId());
+            userRepo.save(user);
+        } else {
+            user = userRepo.findById(id).get();
+        }
+
         if (videoRepo.findById(video.getId()).isEmpty()) {
             videoRepo.save(video);
         }

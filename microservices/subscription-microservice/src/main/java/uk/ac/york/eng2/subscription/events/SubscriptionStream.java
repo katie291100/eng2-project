@@ -159,16 +159,26 @@ public class SubscriptionStream {
                             aggregate.addVideoId(value);
                             return aggregate;
                         }, materialized)
-                .toStream().peek((key, value) -> System.out.println("key: " + key + " value-to-remove: " + value)).merge(builder.stream("video-output", Consumed.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(SubscriptionValue.class))))
-                .groupByKey(Grouped.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(SubscriptionValue.class)))
-                .reduce((value1, value2) -> {
+                .toStream().peek((key, value) -> System.out.println("key: " + key + " value-to-remove: " + value))
+                .join(builder.stream("video-output", Consumed.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(SubscriptionValue.class))).toTable(),
+                        (value1, value2) -> {
                     System.out.println("value1: " + value1 + " value2: " + value2);
-                    value2.getVideoIds().removeAll(value1.getVideoIds());
+                    List<Long> videos = value2.getVideoIds();
+                    videos.removeAll(value1.getVideoIds());
+                    value1.setVideoIds(videos);
                     System.out.println("value34: " + value2);
 
-                    return value2;
-                }, materialized2)
-                .toStream().peek((key, value) -> System.out.println("key: " + key + " value3: " + value));
+                    return value1;
+                })
+//                .groupByKey(Grouped.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(SubscriptionValue.class)))
+//                .reduce((value1, value2) -> {
+//                    System.out.println("value1: " + value1 + " value2: " + value2);
+//                    value2.getVideoIds().removeAll(value1.getVideoIds());
+//                    System.out.println("value34: " + value2);
+//
+//                    return value2;
+//                }, materialized2)
+                .peek((key, value) -> System.out.println("key: " + key + " value3: " + value));
 //        streamVideo.join(builder.table("video-output", Consumed.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(SubscriptionValue.class)),
 //                        materialized2), (value1, value2) -> {
 //                    value2.getVideoIds().removeAll(value1.getVideoIds());
