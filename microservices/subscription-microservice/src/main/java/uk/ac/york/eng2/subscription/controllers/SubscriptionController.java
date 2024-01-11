@@ -33,7 +33,7 @@ public class SubscriptionController implements SubscriptionControllerInterface{
 
     @Get("/{userId}/{hashtagId}")
     public List<Long> listVideosSubscription(Long userId, Long hashtagId) {
-        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore = getStore();
+        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore = getStore("watched-video-store");
         HashMap<Long, Long> values = new HashMap<>();
 
         List<Long> videos = queryableStore.get(new SubscriptionIdentifier(userId, hashtagId));
@@ -47,16 +47,20 @@ public class SubscriptionController implements SubscriptionControllerInterface{
 
     @Get("/")
     public Set<Video> listAllSubscriptions() {
-        SubscriptionValue subscriptionValue = new SubscriptionValue();
-        subscriptionValue.addVideoId(new ArrayList<Long>(List.of(1L, 2L, 3L)));
-        SubscriptionValue subscriptionValue2 = new SubscriptionValue();
-        subscriptionValue2.addVideoId(subscriptionValue.getVideoIds());
-        System.out.println(subscriptionValue2);
-        System.out.println(subscriptionValue);
-        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore = getStore();
+
+        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore = getStore("subscription-store");
+        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore2 = getStore("hashtag-video-store");
+        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore3 = getStore("watched-video-store");
 
         System.out.println(queryableStore.approximateNumEntries());
         queryableStore.all().forEachRemaining((value) -> System.out.println(value.key + " => " + value.value));
+
+        System.out.println("THE NEXT THING");
+        System.out.println(queryableStore2.approximateNumEntries());
+        queryableStore2.all().forEachRemaining((value) -> System.out.println(value.key + " => " + value.value));
+        System.out.println("THE NEXT THING3");
+
+        queryableStore3.all().forEachRemaining((value) -> System.out.println(value.key + " => " + value.value));
 
         return null;
     }
@@ -71,9 +75,9 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         return null;
     }
 
-    private ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> getStore() {
+    private ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> getStore(String name) {
 
-        return interactiveQueryService.getQueryableStore("subscription-store", QueryableStoreTypes.<SubscriptionIdentifier, List<Long>>keyValueStore()).orElse(null);
+        return interactiveQueryService.getQueryableStore(name, QueryableStoreTypes.<SubscriptionIdentifier, List<Long>>keyValueStore()).orElse(null);
     }
 }
 

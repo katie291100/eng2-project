@@ -16,8 +16,8 @@ public class SubscriptionValue {
     public SubscriptionValue(List<Long> videoIds) {
         this.videoIds = videoIds;
     }
-    public void addVideoId(List<Long>  videoIdNew) {
-        this.videoIds.addAll(videoIdNew);
+    public void addVideoId(Long  videoIdNew) {
+        this.videoIds.add(videoIdNew);
     }
     public List<Long> getVideoIds() {
         return videoIds;
