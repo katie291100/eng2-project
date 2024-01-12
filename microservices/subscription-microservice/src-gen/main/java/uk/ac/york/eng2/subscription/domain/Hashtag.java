@@ -63,8 +63,6 @@ public class Hashtag {
     public String toString() {
         return "Hashtag{" +
                 "id=" + id + ","+
-                "name=" + name + ","+
-                "videos=" + videos + ","+
         '}';
     }
     
