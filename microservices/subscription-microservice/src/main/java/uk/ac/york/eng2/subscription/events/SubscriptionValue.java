@@ -1,10 +1,12 @@
 package uk.ac.york.eng2.subscription.events;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.micronaut.serde.annotation.Serdeable;
 
 import java.util.List;
 
 @Serdeable
+@Serdeable.Serializable
 public class SubscriptionValue {
 
     private List<Long> videoIds = new java.util.ArrayList<>();
@@ -13,6 +15,7 @@ public class SubscriptionValue {
         // empty constructor for reflection
     }
 
+    @JsonCreator
     public SubscriptionValue(List<Long> videoIds) {
         this.videoIds = videoIds;
     }

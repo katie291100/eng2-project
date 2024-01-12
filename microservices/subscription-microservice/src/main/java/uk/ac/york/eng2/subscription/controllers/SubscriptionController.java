@@ -8,6 +8,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.runtime.EmbeddedApplication;
 import jakarta.inject.Inject;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.apache.kafka.streams.state.ValueAndTimestamp;
@@ -33,36 +34,37 @@ public class SubscriptionController implements SubscriptionControllerInterface{
 
     @Get("/{userId}/{hashtagId}")
     public List<Long> listVideosSubscription(Long userId, Long hashtagId) {
-        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore = getStore("watched-video-store");
-        HashMap<Long, Long> values = new HashMap<>();
+        ReadOnlyKeyValueStore<SubscriptionIdentifier, SubscriptionValue> queryableStore = getStore("hashtag-video-store-final");
+        ReadOnlyKeyValueStore<Long, Long> queryableStoreWatchers = interactiveQueryService.getQueryableStore("watch-video-store", QueryableStoreTypes.<Long, Long>keyValueStore()).orElse(null);
 
-        List<Long> videos = queryableStore.get(new SubscriptionIdentifier(userId, hashtagId));
-        System.out.println(queryableStore.approximateNumEntries());
-        System.out.println("THE THING2");
-        System.out.println(queryableStore.all().next());
-
-        List<Long> video = queryableStore.all().next().value;
-        return video;
+        SubscriptionValue video = queryableStore.get(new SubscriptionIdentifier(userId, hashtagId));
+        video.getVideoIds().sort(
+                (o1, o2) -> {
+                    Long o1Watchers = queryableStoreWatchers.get(o1);
+                    Long o2Watchers = queryableStoreWatchers.get(o2);
+                    if (o1Watchers == null) {
+                        o1Watchers = 0L;
+                    }
+                    if (o2Watchers == null) {
+                        o2Watchers = 0L;
+                    }
+                    return o2Watchers.compareTo(o1Watchers);
+                }
+        );
+        return video.getVideoIds();
     }
 
+
     @Get("/")
-    public Set<Video> listAllSubscriptions() {
+    public  List<SubscriptionRecord> listAllSubscriptions() {
+        ReadOnlyKeyValueStore<SubscriptionIdentifier, SubscriptionValue> queryableStore = getStore("hashtag-video-store-final");
 
-        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore = getStore("subscription-store");
-        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore2 = getStore("hashtag-video-store");
-        ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> queryableStore3 = getStore("watched-video-store");
+        List<SubscriptionRecord> videos = new ArrayList<>();
+        queryableStore.all().forEachRemaining((value) -> {
+            videos.add(new SubscriptionRecord(value.key.getId(), value.key.getHashtagId(), value.value.getVideoIds()));
+        });
 
-        System.out.println(queryableStore.approximateNumEntries());
-        queryableStore.all().forEachRemaining((value) -> System.out.println(value.key + " => " + value.value));
-
-        System.out.println("THE NEXT THING");
-        System.out.println(queryableStore2.approximateNumEntries());
-        queryableStore2.all().forEachRemaining((value) -> System.out.println(value.key + " => " + value.value));
-        System.out.println("THE NEXT THING3");
-
-        queryableStore3.all().forEachRemaining((value) -> System.out.println(value.key + " => " + value.value));
-
-        return null;
+        return videos;
     }
 
     @Put("/{hashtagId}/{userId}")
@@ -75,9 +77,9 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         return null;
     }
 
-    private ReadOnlyKeyValueStore<SubscriptionIdentifier, List<Long>> getStore(String name) {
+    private ReadOnlyKeyValueStore<SubscriptionIdentifier, SubscriptionValue> getStore(String name) {
 
-        return interactiveQueryService.getQueryableStore(name, QueryableStoreTypes.<SubscriptionIdentifier, List<Long>>keyValueStore()).orElse(null);
+        return interactiveQueryService.getQueryableStore(name, QueryableStoreTypes.<SubscriptionIdentifier, SubscriptionValue>keyValueStore()).orElse(null);
     }
 }
 

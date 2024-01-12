@@ -1,8 +1,10 @@
 package uk.ac.york.eng2.subscription.events;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
+@Serdeable.Serializable
 public class SubscriptionIdentifier {
 
     private Long userId, hashtagId;
@@ -11,6 +13,7 @@ public class SubscriptionIdentifier {
         // empty constructor for reflection
     }
 
+    @JsonCreator
     public SubscriptionIdentifier(Long userId, Long hashtagId) {
         this.userId = userId;
         this.hashtagId = hashtagId;

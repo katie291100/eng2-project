@@ -2,6 +2,7 @@ package uk.ac.york.eng2.subscription.events;
 
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
+import io.micronaut.configuration.kafka.annotation.OffsetReset;
 import io.micronaut.configuration.kafka.annotation.Topic;
 import jakarta.inject.Inject;
 import uk.ac.york.eng2.subscription.domain.Hashtag;
@@ -14,7 +15,7 @@ import uk.ac.york.eng2.subscription.repositories.VideosRepository;
 
 import java.util.Set;
 
-@KafkaListener(groupId = "SubscriptionConsumer")
+@KafkaListener(groupId = "SubscriptionConsumer", offsetReset = OffsetReset.EARLIEST)
 public class SubscriptionConsumer {
 
     @Inject

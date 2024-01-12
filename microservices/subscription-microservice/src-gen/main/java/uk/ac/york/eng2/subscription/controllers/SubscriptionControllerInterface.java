@@ -2,8 +2,12 @@ package uk.ac.york.eng2.subscription.controllers;
 
 import io.micronaut.http.*;
 import io.micronaut.http.annotation.*;
+import org.apache.kafka.streams.KeyValue;
 import uk.ac.york.eng2.subscription.domain.*;
 import uk.ac.york.eng2.subscription.dto.*;
+import uk.ac.york.eng2.subscription.events.SubscriptionIdentifier;
+import uk.ac.york.eng2.subscription.events.SubscriptionValue;
+
 import java.util.*;
 
 interface SubscriptionControllerInterface {
@@ -12,7 +16,7 @@ interface SubscriptionControllerInterface {
      * This is a GET request at "/"
      */
 	@Get("/")
-	Set<Video> listAllSubscriptions();
+	List<SubscriptionRecord> listAllSubscriptions();
 		
 		
 	 /**
