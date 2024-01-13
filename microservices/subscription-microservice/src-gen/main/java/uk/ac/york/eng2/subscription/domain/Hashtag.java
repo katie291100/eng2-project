@@ -3,7 +3,8 @@ package uk.ac.york.eng2.subscription.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
-import java.util.*;
+
+import java.util.Set;
 
 @Serdeable
 @Entity
@@ -14,11 +15,12 @@ public class Hashtag {
     private Long id ;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
     private String name ;
-	@ManyToMany(mappedBy="hashtags", fetch = FetchType.EAGER)
+    @JsonIgnore
+	@ManyToMany(mappedBy="hashtags", fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Video> videos ;
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy="subscriptions", fetch = FetchType.LAZY)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<User> subscribedToBy ;
 
@@ -63,6 +65,7 @@ public class Hashtag {
     public String toString() {
         return "Hashtag{" +
                 "id=" + id + ","+
+                "name=" + name + ","+
         '}';
     }
     

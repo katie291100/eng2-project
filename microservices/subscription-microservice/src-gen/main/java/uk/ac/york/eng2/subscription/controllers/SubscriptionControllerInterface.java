@@ -1,14 +1,11 @@
 package uk.ac.york.eng2.subscription.controllers;
 
-import io.micronaut.http.*;
-import io.micronaut.http.annotation.*;
-import org.apache.kafka.streams.KeyValue;
-import uk.ac.york.eng2.subscription.domain.*;
-import uk.ac.york.eng2.subscription.dto.*;
-import uk.ac.york.eng2.subscription.events.SubscriptionIdentifier;
-import uk.ac.york.eng2.subscription.events.SubscriptionValue;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Put;
 
-import java.util.*;
+import java.util.List;
 
 interface SubscriptionControllerInterface {
 	

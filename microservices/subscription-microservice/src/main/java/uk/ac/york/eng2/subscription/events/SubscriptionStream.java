@@ -1,34 +1,29 @@
 package uk.ac.york.eng2.subscription.events;
 
-import io.micronaut.configuration.kafka.serde.SerdeRegistry;
-import io.micronaut.core.annotation.NonNull;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.NewTopic;
 import io.micronaut.configuration.kafka.serde.CompositeSerdeRegistry;
 import io.micronaut.configuration.kafka.streams.ConfiguredStreamBuilder;
 import io.micronaut.configuration.kafka.streams.InteractiveQueryService;
 import io.micronaut.context.annotation.Factory;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
-
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
-import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.state.KeyValueStore;
-import org.apache.kafka.streams.state.QueryableStoreTypes;
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import uk.ac.york.eng2.subscription.domain.Hashtag;
 import uk.ac.york.eng2.subscription.domain.User;
 import uk.ac.york.eng2.subscription.domain.Video;
 import uk.ac.york.eng2.subscription.repositories.HashtagsRepositoryExtended;
 import uk.ac.york.eng2.subscription.repositories.UserRepositoryExtended;
-import uk.ac.york.eng2.subscription.repositories.UsersRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 @Factory
 public class SubscriptionStream {
@@ -44,8 +39,9 @@ public class SubscriptionStream {
 
 
     @Singleton
+    @SuppressWarnings("unchecked")
     @Named("subscription-stream")
-    public KStream<SubscriptionIdentifier, SubscriptionValue> newVideoStream(ConfiguredStreamBuilder builder) {
+    public KStream<SubscriptionIdentifier, List<Long>> newVideoStream(ConfiguredStreamBuilder builder) {
 
         Properties props = builder.getConfiguration();
         props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_V2);
@@ -61,11 +57,11 @@ public class SubscriptionStream {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Materialized<SubscriptionIdentifier, SubscriptionValue, KeyValueStore<Bytes, byte[]>> materialized = Materialized.as("subscription-store");
+        Materialized<SubscriptionIdentifier, List<Long>, KeyValueStore<Bytes, byte[]>> materialized = Materialized.as("subscription-store");
         materialized.withKeySerde(serdeRegistry.getSerde(SubscriptionIdentifier.class));
-        materialized.withValueSerde(serdeRegistry.getSerde(SubscriptionValue.class));
+        materialized.withValueSerde(Serdes.ListSerde(ArrayList.class, serdeRegistry.getSerde(Long.class)));
 
-        KStream<SubscriptionIdentifier, SubscriptionValue> streamVideo = builder.stream("new-video", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Video.class)))
+        KStream<SubscriptionIdentifier, List<Long>> streamVideo = builder.stream("new-video", Consumed.with(Serdes.Long(), serdeRegistry.getSerde(Video.class)))
                 .flatMap((key, value) -> {
                     List<KeyValue<Long, Long>> hashtagMap = new ArrayList<>();
                     System.out.println("map: " + value);
@@ -91,20 +87,21 @@ public class SubscriptionStream {
                     return subscriptionMap;
                 })
                 .groupByKey(Grouped.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(Long.class)))
-                .aggregate(SubscriptionValue::new,
+                .aggregate(ArrayList::new,
                         (key, value, aggregate) -> {
-                            aggregate.addVideoId(value);
+                            aggregate.add(value);
                             return aggregate;
                         }, materialized)
                 .toStream().peek((key, value) -> System.out.println("key: " + key + " value: " + value));
 
-        streamVideo.to("video-output", Produced.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(SubscriptionValue.class))); // custom serde for List<Long>
+        streamVideo.to("video-output", Produced.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), Serdes.ListSerde(ArrayList.class, serdeRegistry.getSerde(Long.class)))); // custom serde for List<Long>
         return streamVideo;
     }
 
     @Singleton
+    @SuppressWarnings("unchecked")
     @Named("hashtag-stream")
-    public KStream<SubscriptionIdentifier, SubscriptionValue> hashtagVideoStream(ConfiguredStreamBuilder builder) {
+    public KStream<SubscriptionIdentifier, List<Long>> hashtagVideoStream(ConfiguredStreamBuilder builder) {
 
         Properties props = builder.getConfiguration();
         props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_V2);
@@ -125,13 +122,13 @@ public class SubscriptionStream {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Materialized<SubscriptionIdentifier, SubscriptionValue, KeyValueStore<Bytes, byte[]>> materialized = Materialized.as("hashtag-video-store");
+        Materialized<SubscriptionIdentifier, List<Long>, KeyValueStore<Bytes, byte[]>> materialized = Materialized.as("hashtag-video-store");
         materialized.withKeySerde(serdeRegistry.getSerde(SubscriptionIdentifier.class));
-        materialized.withValueSerde(serdeRegistry.getSerde(SubscriptionValue.class));
+        materialized.withValueSerde(Serdes.ListSerde(ArrayList.class, serdeRegistry.getSerde(Long.class)));
 
-        Materialized<SubscriptionIdentifier, SubscriptionValue, KeyValueStore<Bytes, byte[]>> materialized2 = Materialized.as("hashtag-video-store-final");
+        Materialized<SubscriptionIdentifier, List<Long>, KeyValueStore<Bytes, byte[]>> materialized2 = Materialized.as("hashtag-video-store-final");
         materialized2.withKeySerde(serdeRegistry.getSerde(SubscriptionIdentifier.class));
-        materialized2.withValueSerde(serdeRegistry.getSerde(SubscriptionValue.class));
+        materialized2.withValueSerde(Serdes.ListSerde(ArrayList.class, serdeRegistry.getSerde(Long.class)));
 
         Materialized<Long, Long, KeyValueStore<Bytes, byte[]>> materializedWatchCount = Materialized.as("watch-video-store");
         materializedWatchCount.withKeySerde(serdeRegistry.getSerde(Long.class));
@@ -143,7 +140,7 @@ public class SubscriptionStream {
                 .count(materializedWatchCount).toStream().peek((key, value) -> System.out.println("key: " + key + " value: " + value));
 
 
-        KStream<SubscriptionIdentifier, SubscriptionValue> subscriptionStream = streamVideo.flatMap((key, value) -> {
+        KStream<SubscriptionIdentifier, List<Long>> subscriptionStream = streamVideo.flatMap((key, value) -> {
                     List<KeyValue<SubscriptionIdentifier, Long>> hashtagMap = new ArrayList<>();
                     System.out.println("map: " + value);
                     User user = userRepository.findById(key).orElse(null);
@@ -161,31 +158,30 @@ public class SubscriptionStream {
                         for (Hashtag hashtag : userNext.getSubscriptions()) {
                             SubscriptionIdentifier subscriptionIdentifier = new SubscriptionIdentifier(userNext.getId(), hashtag.getId());
 
-                            hashtagMap.add(new KeyValue<>(subscriptionIdentifier, 0L));
+                            hashtagMap.add(new KeyValue<>(subscriptionIdentifier,0L));
                         }
                     }
 
 
                     return hashtagMap;
                 }).groupByKey(Grouped.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(Long.class)))
-                .aggregate(SubscriptionValue::new,
+                .aggregate(ArrayList::new,
                         (key, value, aggregate) -> {
-                            aggregate.addVideoId(value);
+                            aggregate.add(value);
 
                             return aggregate;
                         }, materialized)
                 .toStream().peek((key, value) -> System.out.println("key: " + key + " value-to-remove: " + value))
-                .join(builder.stream("video-output", Consumed.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), serdeRegistry.getSerde(SubscriptionValue.class))).toTable(),
+                .join(builder.stream("video-output", Consumed.with(serdeRegistry.getSerde(SubscriptionIdentifier.class), Serdes.ListSerde(ArrayList.class, serdeRegistry.getSerde(Long.class)))).toTable(),
                         (key, value1, value2) -> {
                             System.out.println("key10: " + key);
                             System.out.println("value10: " + value1 + " value20: " + value2);
-                            List<Long> videos = value2.getVideoIds();
-                            videos.removeAll(value1.getVideoIds());
-                            videos.remove(0L);
-                            value1.setVideoIds(videos);
-                            System.out.println("value34: " + value2);
+                            List<Long> video2 = (List<Long>) value2;
+                            video2.removeAll((List<Long>)value1);
+                            video2.remove(0L);
+                            System.out.println("value34: " + video2);
 
-                            return value1;
+                            return video2;
                         })
 
                 .peek((key, value) -> System.out.println("key: " + key + " value3: " + value));

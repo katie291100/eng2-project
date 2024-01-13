@@ -48,11 +48,11 @@ jar{
 
 run{
     systemProperties([
-            'datasources.default.url': 'jdbc:mariadb://localhost:3308/subscription',
-            'datasources.default.username': 'todo',
-            'datasources.default.password': 'todosecret',
-            'kafka.bootstrap.servers': 'localhost:9094,localhost:9095,localhost:9096',
-            'micronaut.server.port': '8082'
+        'datasources.default.url': 'jdbc:mariadb://localhost:3308/subscription',
+        'datasources.default.username': 'todo',
+        'datasources.default.password': 'todosecret',
+        'kafka.bootstrap.servers': 'localhost:9094,localhost:9095,localhost:9096',
+        'micronaut.server.port': '8082'
     ])
 }
 

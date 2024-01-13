@@ -10,10 +10,6 @@ import uk.ac.york.eng2.subscription.domain.User;
 import uk.ac.york.eng2.subscription.domain.Video;
 import uk.ac.york.eng2.subscription.repositories.HashtagsRepositoryExtended;
 import uk.ac.york.eng2.subscription.repositories.UserRepositoryExtended;
-import uk.ac.york.eng2.subscription.repositories.UsersRepository;
-import uk.ac.york.eng2.subscription.repositories.VideosRepository;
-
-import java.util.Set;
 
 @KafkaListener(groupId = "SubscriptionConsumer", offsetReset = OffsetReset.EARLIEST)
 public class SubscriptionConsumer {
@@ -24,8 +20,6 @@ public class SubscriptionConsumer {
     @Inject
     UserRepositoryExtended userRepo;
 
-    @Inject
-    VideosRepository videoRepo;
 
     @Topic("new-video")
     void watchConsumer(@KafkaKey long id, Video video) {
@@ -38,17 +32,7 @@ public class SubscriptionConsumer {
             }
         }
 
-        if (userRepo.findById(video.getPostedBy().getId()).isEmpty()) {
-            user = new User();
-            user.setId(video.getPostedBy().getId());
-            userRepo.save(user);
-        } else {
-            user = userRepo.findById(id).get();
-        }
 
-        if (videoRepo.findById(video.getId()).isEmpty()) {
-            videoRepo.save(video);
-        }
     }
 
 

@@ -1,4 +1,4 @@
-package uk.ac.york.eng2.trendingHashtags;
+package uk.ac.york.eng2.trendingHashtags.events;
 
 import static org.junit.jupiter.api.Assertions.*;
 

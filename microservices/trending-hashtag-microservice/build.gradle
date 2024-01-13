@@ -52,7 +52,7 @@ run{
             'datasources.default.username': 'todo',
             'datasources.default.password': 'todosecret',
             'kafka.bootstrap.servers': 'localhost:9094,localhost:9095,localhost:9096',
-            'micronaut.server.port': '8080'
+            'micronaut.server.port': '8081'
     ])
 }
 

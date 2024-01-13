@@ -3,7 +3,8 @@ package uk.ac.york.eng2.subscription.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
-import java.util.*;
+
+import java.util.Set;
 
 @Serdeable
 @Entity
@@ -14,8 +15,6 @@ public class Video {
     private Long id ;
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
     private String title ;
-	@ManyToOne(fetch = FetchType.LAZY, optional=false)
-    private User postedBy ;
 	@ManyToMany(fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Hashtag> hashtags ;
@@ -42,16 +41,7 @@ public class Video {
     public void setTitle(String title) {
         this.title = title;
     }
-    
-    
-    public User getPostedBy() {
-        return postedBy;
-    }
 
-    public void setPostedBy(User postedBy) {
-        this.postedBy = postedBy;
-    }
-    
     
     public Set<Hashtag> getHashtags() {
         return hashtags;
@@ -75,7 +65,6 @@ public class Video {
         return "Video{" +
                 "id=" + id + ","+
                 "title=" + title + ","+
-                "postedBy=" + postedBy + ","+
                 "hashtags=" + hashtags + ","+
         '}';
     }

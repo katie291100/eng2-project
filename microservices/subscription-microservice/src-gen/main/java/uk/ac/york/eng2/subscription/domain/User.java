@@ -3,7 +3,8 @@ package uk.ac.york.eng2.subscription.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
-import java.util.*;
+
+import java.util.Set;
 
 @Serdeable
 @Entity
@@ -19,7 +20,7 @@ public class User {
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Video> watchedVideos ;
 	@JsonIgnore
-	@ManyToMany(mappedBy="subscribedToBy", fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Hashtag> subscriptions ;
 

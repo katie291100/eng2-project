@@ -1,6 +1,7 @@
 package uk.ac.york.eng2.subscription.controllers;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.serde.annotation.Serdeable;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public class SubscriptionRecord {
 
     private Long userId;
     private Long hashtagId;
+
+    @NonNull
     private List<Long> videoIds = new java.util.ArrayList<>();
 
     public SubscriptionRecord() {
@@ -18,9 +21,9 @@ public class SubscriptionRecord {
     }
 
     @JsonCreator
-    public SubscriptionRecord(Long userId, Long hashtagId, List<Long> videoIds) {
-        this.setUserId(userId);
-        this.setHashtagId(hashtagId);
+    public SubscriptionRecord(Long userId, Long hashtagId, List<Long> videoIds ) {
+        this.userId = userId;
+        this.hashtagId = hashtagId;
         this.videoIds = videoIds;
     }
     public void addVideoId(Long  videoIdNew) {
@@ -35,14 +38,19 @@ public class SubscriptionRecord {
 
     @Override
     public String toString() {
-        return "SubscriptionRecord[" + videoIds.toString() +"]";
+        return "SubscriptionRecord{" +
+                "userId=" + userId +
+                ", hashtagId=" + hashtagId +
+                ", videoIds=" + videoIds +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (o instanceof SubscriptionRecord) {
             SubscriptionRecord other = (SubscriptionRecord) o;
-            return this.videoIds.equals(other.videoIds);
+
+            return this.videoIds.equals(other.videoIds) && this.userId.equals(other.userId) && this.hashtagId.equals(other.hashtagId);
         }
         return false;
     }

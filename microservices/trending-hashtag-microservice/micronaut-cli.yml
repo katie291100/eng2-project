@@ -1,5 +1,5 @@
 applicationType: default
-defaultPackage: com.york.eng2
+defaultPackage: uk.ac.york.eng2.trendingHashtags
 testFramework: junit
 sourceLanguage: java
 buildTool: gradle

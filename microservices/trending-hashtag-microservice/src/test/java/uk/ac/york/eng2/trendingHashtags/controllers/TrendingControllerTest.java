@@ -1,23 +1,11 @@
-package uk.ac.york.eng2.trendingHashtags;
+package uk.ac.york.eng2.trendingHashtags.controllers;
 
-import io.micronaut.configuration.kafka.annotation.KafkaClient;
-import io.micronaut.configuration.kafka.annotation.KafkaKey;
-import io.micronaut.configuration.kafka.annotation.Topic;
-import io.micronaut.configuration.kafka.streams.InteractiveQueryService;
-import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import org.apache.kafka.clients.admin.KafkaAdminClient;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.state.KeyValueIterator;
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
-import org.apache.kafka.streams.state.ValueAndTimestamp;
 
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 import uk.ac.york.eng2.trendingHashtags.domain.Hashtag;
 import uk.ac.york.eng2.trendingHashtags.domain.Video;
 import uk.ac.york.eng2.trendingHashtags.events.TestProducerUtil;

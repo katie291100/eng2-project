@@ -1,0 +1,6 @@
+trendingHashtags:
+  url: /subscriptions
+kafka:
+  default:
+    embedded:
+      enabled: true
