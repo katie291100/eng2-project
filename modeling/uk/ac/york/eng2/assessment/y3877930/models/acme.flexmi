@@ -290,7 +290,6 @@
         <entity name="Video" dto="VideoDTO">
             <entityAttribute name="id" type="Long"/>
             <entityAttribute name="title" type="String" nullable="false"/>
-            <entityAttribute name="postedBy" type="User" relationship="ManyToOne" optional="false"/>
             <entityAttribute name="hashtags" type="Set[Hashtag]" fetchType="EAGER" relationship="ManyToMany"/>
             <entityAttribute name="watchers" type="Set[User]" JsonIgnore="true" relationship="ManyToMany"
                              mappedBy="watchedVideos"/>
@@ -300,18 +299,17 @@
             <entityAttribute name="name" type="String" nullable="false"/>
             <entityAttribute name="watchedVideos" type="Set(Video)" JsonIgnore="true" relationship="ManyToMany"/>
             <entityAttribute name="subscriptions" type="Set(Hashtag)" JsonIgnore="true" relationship="ManyToMany"
-                             fetch="EAGER" mappedBy="subscribedToBy"/>
+                             fetch="EAGER"/>
         </entity>
         <entity name="Hashtag" dto="HashtagDTO">
             <entityAttribute name="id" type="Long"/>
             <entityAttribute name="name" type="String" nullable="false"/>
             <entityAttribute name="videos" type="Set(Video)" relationship="ManyToMany" mappedBy="hashtags"
-                             fetch="EAGER"/>
-            <entityAttribute name="subscribedToBy" type="Set(User)" JsonIgnore="true" relationship="ManyToMany"/>
+                             fetch="EAGER" JsonIgnore="true"/>
+            <entityAttribute name="subscribedToBy" type="Set(User)" JsonIgnore="true" relationship="ManyToMany" mappedBy="subscriptions"/>
         </entity>
         <repository name="HashtagsRepository" entity="Hashtag"/>
         <repository name="UsersRepository" entity="User"/>
-        <repository name="VideosRepository" entity="Video"/>
 
         <dto name="VideoDTO">
             <attribute name="title" type="String"/>
@@ -340,7 +338,7 @@
         <controller name="subscriptionController" path="/subscription">
             <endpoint name="listAllSubscriptions" type="GET" path="/">
                 <responseBody>
-                    <attribute name="videos" type="Set(Video)"/>
+                    <attribute name="videos" type="List(SubscriptionRecord)"/>
                 </responseBody>
             </endpoint>
             <endpoint name="subscribe" type="PUT" path="/{hashtagId}/{userId}">

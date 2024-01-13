@@ -3,8 +3,7 @@ package uk.ac.york.eng2.subscription.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
-
-import java.util.Set;
+import java.util.*;
 
 @Serdeable
 @Entity

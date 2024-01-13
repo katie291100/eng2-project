@@ -3,8 +3,7 @@ package uk.ac.york.eng2.subscription.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
-
-import java.util.Set;
+import java.util.*;
 
 @Serdeable
 @Entity
@@ -41,7 +40,7 @@ public class Video {
     public void setTitle(String title) {
         this.title = title;
     }
-
+    
     
     public Set<Hashtag> getHashtags() {
         return hashtags;

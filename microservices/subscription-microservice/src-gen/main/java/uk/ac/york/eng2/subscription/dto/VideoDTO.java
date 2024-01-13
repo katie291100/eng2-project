@@ -1,7 +1,8 @@
 package uk.ac.york.eng2.subscription.dto;
 
+import io.micronaut.http.annotation.Body;
 import io.micronaut.serde.annotation.Serdeable;
-
+import uk.ac.york.eng2.subscription.domain.*;
 import java.util.Set;
 
 @Serdeable

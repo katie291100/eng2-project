@@ -53,7 +53,7 @@ public class TrendingHashtagsCommandTest {
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
             .withExposedService("video-microservice", 8080)
-            .withExposedService("trending-hashtag-microservice", 8081)
+            .withExposedService("trending-hashtag-microservice", 8080)
             .withLogConsumer("trending-hashtag-microservice", (outputFrame) -> {
             System.out.println(outputFrame.getUtf8String());
           });

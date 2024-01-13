@@ -3,6 +3,7 @@ package uk.ac.york.eng2.commands;
 import io.micronaut.configuration.picocli.PicocliRunner;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.env.Environment;
+import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.ClassRule;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest
 public class AddUserCommandTest {
+
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
   @Inject
@@ -32,8 +34,8 @@ public class AddUserCommandTest {
 
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
-          .withExposedService("video-microservice", 8080, Wait.forHttp("/healthcheck").forStatusCode(200))
-          .withExposedService("trending-hashtag-microservice", 8081, Wait.forHttp("/healthcheck").forStatusCode(200))
+          .withExposedService("video-microservice", 8080, Wait.forHttp("/health").forStatusCode(200))
+          .withExposedService("trending-hashtag-microservice", 8080, Wait.forHttp("/health").forStatusCode(200))
           .withLogConsumer("trending-hashtag-microservice", (outputFrame) -> {
             System.out.println(outputFrame.getUtf8String());
           });
