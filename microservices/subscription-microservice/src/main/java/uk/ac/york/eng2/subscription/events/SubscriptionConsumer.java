@@ -23,7 +23,6 @@ public class SubscriptionConsumer {
 
     @Topic("new-video")
     void watchConsumer(@KafkaKey Long id, Video video) {
-        User user;
         System.out.println("video " + video.getId() + " by user: " + id);
 
         for (Hashtag hashtag : video.getHashtags()) {
@@ -31,9 +30,16 @@ public class SubscriptionConsumer {
                 hashtagRepo.save(hashtag);
             }
         }
-
-
     }
+
+    @Topic("new-hashtag")
+    void hashtagConsumer(@KafkaKey Long id, Hashtag hashtag) {
+        System.out.println("hashtag " + hashtag.getId());
+         if (hashtagRepo.findById(hashtag.getId()).isEmpty()) {
+                hashtagRepo.save(hashtag);
+         }
+    }
+
 
 
     @Topic("new-user")

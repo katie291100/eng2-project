@@ -21,8 +21,8 @@ public interface SubscriptionClient {
     @Put("/{hashtagId}/{userId}")
     HttpResponse<Void> subscribe(Long hashtagId, Long userId);
 
-    @Delete("/{userId}/{hashtagId}")
-    HttpResponse<Void> unsubscribe(Long userId, Long hashtagId);
+    @Delete("/{hashtagId}/{userId}")
+    HttpResponse<Void> unsubscribe(Long hashtagId, Long userId);
 
     @Get("/user/{userId}")
     List<SubscriptionRecord> listUserSubscriptions(Long userId);

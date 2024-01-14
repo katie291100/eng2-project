@@ -63,8 +63,8 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         return subscriptionRecords;
     }
 
-    @Put("/{userId}/{hashtagId}")
-    public HttpResponse<Void> subscribe(Long userId, Long hashtagId) {
+    @Put("/{hashtagId}/{userId}")
+    public HttpResponse<Void> subscribe(Long hashtagId, Long userId) {
         System.out.println("OOPS1");
 
         if (hashtagId == null || userId == null) {
@@ -72,6 +72,8 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         }
         System.out.println("OOPS2");
 
+        usersRepository.findAll().forEach((user) -> System.out.println(user));
+        hashtagsRepository.findAll().forEach((user) -> System.out.println(user));
         User user = usersRepository.findById(userId).orElse(null);
         Hashtag hashtag = hashtagsRepository.findById(hashtagId).orElse(null);
         if (user == null || hashtag == null) {
@@ -96,13 +98,15 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         if (hashtagId == null || userId == null) {
             return HttpResponse.badRequest();
         }
+        usersRepository.findAll().forEach((user) -> System.out.println(user));
+        hashtagsRepository.findAll().forEach((user) -> System.out.println(user));
+
         User user = usersRepository.findById(userId).orElse(null);
         Hashtag hashtag = hashtagsRepository.findById(hashtagId).orElse(null);
         if (user == null || hashtag == null) {
             return HttpResponse.notFound();
         }
         Set<Hashtag> subscriptions = user.getSubscriptions();
-
         subscriptions.remove(hashtag);
         user.setSubscriptions(subscriptions);
 

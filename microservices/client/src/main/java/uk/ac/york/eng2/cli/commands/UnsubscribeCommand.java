@@ -10,6 +10,8 @@ import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.domain.Hashtag;
 import uk.ac.york.eng2.cli.domain.User;
 
+import static java.lang.Thread.sleep;
+
 @CommandLine.Command(
         name = "unsubscribe",
         description = "unsubscribe to a hashtag",
@@ -26,9 +28,10 @@ public class UnsubscribeCommand implements Runnable {
     private SubscriptionClient subscriptionClient;
 
     @CommandLine.Parameters(index = "0")
-    private Long userId;
-    @CommandLine.Parameters(index = "1")
     private Long hashtagId;
+    @CommandLine.Parameters(index = "1")
+    private Long userId;
+
 
     @Override
     public void run() {
@@ -44,7 +47,12 @@ public class UnsubscribeCommand implements Runnable {
             System.out.println("Hashtag with id " + hashtagId + " does not exist");
             return;
         }
-        HttpResponse<Void> result = subscriptionClient.unsubscribe(userId, hashtagId);
+        try {
+            sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        HttpResponse<Void> result = subscriptionClient.unsubscribe(hashtagId, userId);
         if (result.code() == 200) {
             System.out.println("Successfully unsubscribed user " + userId + " from hashtag " + hashtagId);
         }

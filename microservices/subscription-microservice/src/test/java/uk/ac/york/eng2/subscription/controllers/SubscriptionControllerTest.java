@@ -312,7 +312,7 @@ class SubscriptionControllerTest {
         user.setId(16L);
         user.setName("test");
         userRepository.save(user);
-        HttpResponse<Void> result = subscriptionClient.subscribe(15L, 16L);
+        HttpResponse<Void> result = subscriptionClient.subscribe(16L, 15L);
 
         assertEquals(HttpStatus.CREATED, result.getStatus());
         assertEquals("/subscription/15/16", result.getHeaders().get("location"));
@@ -333,16 +333,16 @@ class SubscriptionControllerTest {
         user.setId(16L);
         user.setName("test");
         userRepository.save(user);
-        HttpResponse<Void> result = subscriptionClient.subscribe(15L, 16L);
+        HttpResponse<Void> result = subscriptionClient.subscribe(16L, 15L);
 
-        assertEquals(HttpStatus.CREATED, result.getStatus());
+        assertEquals( result.getStatus(), HttpStatus.CREATED);
         assertEquals("/subscription/15/16", result.getHeaders().get("location"));
 
         user = userRepository.findById(16L).orElse(null);
         assert user != null;
         assertEquals(Set.of(hashtag), user.getSubscriptions());
 
-        result = subscriptionClient.unsubscribe(15L, 16L);
+        result = subscriptionClient.unsubscribe(16L, 15L);
 
         user = userRepository.findById(16L).orElse(null);
         assert user != null;

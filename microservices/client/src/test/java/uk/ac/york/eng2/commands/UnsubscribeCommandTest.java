@@ -12,30 +12,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.ComposeContainer;
-import org.testcontainers.shaded.org.awaitility.Awaitility;
 import uk.ac.york.eng2.cli.clients.HashtagsClient;
-import uk.ac.york.eng2.cli.clients.TrendingClient;
 import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.clients.VideosClient;
 import uk.ac.york.eng2.cli.commands.SubscribeCommand;
 import uk.ac.york.eng2.cli.commands.TrendingHashtagsCommand;
-import uk.ac.york.eng2.cli.commands.WatchVideoCommand;
-import uk.ac.york.eng2.cli.domain.Hashtag;
-import uk.ac.york.eng2.cli.domain.User;
-import uk.ac.york.eng2.cli.domain.Video;
+import uk.ac.york.eng2.cli.commands.UnsubscribeCommand;
 import uk.ac.york.eng2.cli.dto.HashtagDTO;
 import uk.ac.york.eng2.cli.dto.UserDTO;
-import uk.ac.york.eng2.cli.dto.VideoDTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-import java.time.Duration;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Uses test containers to run the microservices.
  */
 @MicronautTest
-public class SubscribeCommandTest {
+public class UnsubscribeCommandTest {
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
   @Inject
@@ -89,7 +78,7 @@ public class SubscribeCommandTest {
 
 
   @Test
-  public void subscribeNoUser() throws InterruptedException {
+  public void unsubscribeNoUser() throws InterruptedException {
     System.setOut(new PrintStream(baos));
 
     HashtagDTO hashtagDTO = new HashtagDTO("test");
@@ -97,14 +86,14 @@ public class SubscribeCommandTest {
     Long hashtagId = Long.parseLong(hashtagResponse.header("location").split("/")[2]);
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       String[] args = new String[] {hashtagId.toString(), "0" };
-      PicocliRunner.run(SubscribeCommand.class, ctx, args);
+      PicocliRunner.run(UnsubscribeCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("User with id 0 does not exist\n"));
     }
   }
 
   @Test
-  public void subscribeNoHashtag() throws InterruptedException {
+  public void unsubscribeNoHashtag() throws InterruptedException {
     System.setOut(new PrintStream(baos));
 
     UserDTO userDTO = new UserDTO("TestUser");
@@ -113,17 +102,15 @@ public class SubscribeCommandTest {
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       String[] args = new String[] {"0", userId.toString()};
-      PicocliRunner.run(SubscribeCommand.class, ctx, args);
+      PicocliRunner.run(UnsubscribeCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("Hashtag with id 0 does not exist\n"));
     }
   }
 
-
   @Test
-  public void subscribeUserHashtag() throws InterruptedException {
+  public void unsubscribeUserHashtag() throws InterruptedException {
     System.setOut(new PrintStream(baos));
-    sleep(10000);
 
     UserDTO userDTO = new UserDTO("TestUser");
     HttpResponse<Void> response = userClient.add(userDTO);
@@ -132,13 +119,13 @@ public class SubscribeCommandTest {
     HashtagDTO hashtagDTO = new HashtagDTO("test2");
     HttpResponse<Void> hashtagResponse = hashtagClient.add(hashtagDTO);
     Long hashtagId = Long.parseLong(hashtagResponse.header("location").split("/")[2]);
-    sleep(10000);
+
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       String[] args = new String[] {hashtagId.toString(), userId.toString()};
-      PicocliRunner.run(SubscribeCommand.class, ctx, args);
+      PicocliRunner.run(UnsubscribeCommand.class, ctx, args);
 
-      assertTrue(baos.toString().contains("Successfully subscribed user " + userId + " to hashtag " + hashtagId + ": #test2\n"));
+      assertTrue(baos.toString().contains("Successfully unsubscribed user " + userId + " from hashtag " + hashtagId));
     }
   }
-
+  
 }

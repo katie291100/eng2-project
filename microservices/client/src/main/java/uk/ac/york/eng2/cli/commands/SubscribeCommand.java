@@ -30,9 +30,9 @@ public class SubscribeCommand implements Runnable {
     private SubscriptionClient subscriptionClient;
 
     @CommandLine.Parameters(index = "0")
-    private Long userId;
-    @CommandLine.Parameters(index = "1")
     private Long hashtagId;
+    @CommandLine.Parameters(index = "1")
+    private Long userId;
 
 
     @Override
@@ -50,11 +50,13 @@ public class SubscribeCommand implements Runnable {
             return;
         }
 
-        HttpResponse<Void> result = subscriptionClient.subscribe(1L, 2L);
+        HttpResponse<Void> result = subscriptionClient.subscribe(hashtagId, userId);
         System.out.println(result);
         System.out.println(result.code());
         System.out.println(result.status());
         System.out.println(result.body());
+
+
         if (result.code() == 201) {
             System.out.println("Successfully subscribed user " + userId + " to hashtag " + hashtagId + ": #" + hashtag.getName());
         }
