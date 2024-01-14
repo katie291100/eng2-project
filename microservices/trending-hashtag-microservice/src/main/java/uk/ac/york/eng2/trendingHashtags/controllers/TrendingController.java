@@ -6,6 +6,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import jakarta.inject.Inject;
 import jakarta.persistence.Tuple;
+import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.apache.kafka.streams.state.ValueAndTimestamp;

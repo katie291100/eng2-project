@@ -62,7 +62,6 @@ public class AddUserCommandTest {
   @Test
   public void canCreateUser() {
     System.setOut(new PrintStream(baos));
-
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       String[] args = new String[] {"Test User"};
       PicocliRunner.run(AddUserCommand.class, ctx, args);

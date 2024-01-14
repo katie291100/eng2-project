@@ -22,7 +22,7 @@ public class SubscriptionConsumer {
 
 
     @Topic("new-video")
-    void watchConsumer(@KafkaKey long id, Video video) {
+    void watchConsumer(@KafkaKey Long id, Video video) {
         User user;
         System.out.println("video " + video.getId() + " by user: " + id);
 
@@ -37,8 +37,8 @@ public class SubscriptionConsumer {
 
 
     @Topic("new-user")
-    void userConsumer(@KafkaKey long id, User user) {
-
+    void userConsumer(@KafkaKey Long id, User user) {
+        System.out.println("user created " + user.getId());
         if (userRepo.findById(id).isEmpty()) {
             userRepo.save(user);
         }

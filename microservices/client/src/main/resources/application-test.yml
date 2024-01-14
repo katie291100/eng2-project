@@ -7,7 +7,7 @@ logging:
     io.micronaut.context.env.DefaultEnvironment: WARN
 hashtags:
   url:
-    ${env.HASHTAGS_URL:`http://localhost:9081/hashtags`}
+    "http://localhost:9080/hashtags"
 videos:
   url:
     "http://localhost:9080/videos"
@@ -17,3 +17,6 @@ users:
 trending:
   url:
     "http://localhost:9081/trendingHashtags"
+subscription:
+  url:
+    "http://localhost:9082/subscriptions"

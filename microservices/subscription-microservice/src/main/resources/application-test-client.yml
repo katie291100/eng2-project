@@ -4,12 +4,12 @@ micronaut:
   serde:
     maximum-nesting-depth: 100
   server:
-    port: 8082
+    port: 8080
 jpa:
   default:
     entity-scan:
       packages:
-        - uk.ac.york.eng2.trendingHashtags.domain
+        - uk.ac.york.eng2.subscription.domain
     properties:
       hibernate:
         hbm2ddl:
@@ -23,9 +23,9 @@ datasources:
     driver-class-name: org.mariadb.jdbc.Driver
     db-type: mariadb
     dialect: MYSQL
-    url: jdbc:mariadb://${DB_HOST:db2-test}:3306/${DB_NAME:subscription}
-    username: todo
-    password: todosecret
+    url: jdbc:mariadb://${DB_HOST:db3-test}:3306/${DB_NAME:subscription}
+    username: ${DB_USER:todo}
+    password: ${DB_PASSWORD:todosecret}
 kafka:
   bootstrap:
     servers:

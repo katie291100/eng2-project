@@ -63,15 +63,20 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         return subscriptionRecords;
     }
 
-    @Transactional
-    @Put("/{hashtagId}/{userId}")
-    public HttpResponse<Void> subscribe(Long hashtagId, Long userId) {
+    @Put("/{userId}/{hashtagId}")
+    public HttpResponse<Void> subscribe(Long userId, Long hashtagId) {
+        System.out.println("OOPS1");
+
         if (hashtagId == null || userId == null) {
             return HttpResponse.badRequest();
         }
+        System.out.println("OOPS2");
+
         User user = usersRepository.findById(userId).orElse(null);
         Hashtag hashtag = hashtagsRepository.findById(hashtagId).orElse(null);
         if (user == null || hashtag == null) {
+            System.out.println("OOPS3");
+
             return HttpResponse.notFound();
         }
         Set<Hashtag> subscriptions = user.getSubscriptions();
