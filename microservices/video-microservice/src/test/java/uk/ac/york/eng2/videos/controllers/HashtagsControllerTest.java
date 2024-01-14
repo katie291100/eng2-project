@@ -44,8 +44,16 @@ public class HashtagsControllerTest {
     void setup() {
         hashtagsRepo.deleteAll();
     }
+
     @Test
-    public void testListHashtags() {
+    public void testListHashtagsNoneHashtags() {
+
+        Iterable<Hashtag> hashtags = client.list();
+        assertFalse(hashtags.iterator().hasNext());
+    }
+
+    @Test
+    public void testListHashtagsHasHashtagValid() {
         HashtagDTO hashtagDTO = new HashtagDTO();
         hashtagDTO.setName("hashtag1");
         client.add(hashtagDTO);
@@ -55,7 +63,7 @@ public class HashtagsControllerTest {
     }
 
     @Test
-    public void testGetHashtag() {
+    public void testGetHashtagHashtagValid() {
         Hashtag hashtag = new Hashtag();
         hashtag.setName("hashtag2");
         hashtagsRepo.save(hashtag);
@@ -64,7 +72,13 @@ public class HashtagsControllerTest {
     }
 
     @Test
-    public void testAddHashtag() {
+    public void testGetHashtagHashtagInvalid() {
+        Hashtag retrievedHashtag = client.getHashtag(0L);
+        assertNull(retrievedHashtag);
+    }
+
+    @Test
+    public void testAddHashtagValid() {
         HashtagDTO hashtagDTO = new HashtagDTO();
         hashtagDTO.setName("hashtag3");
         HttpResponse<Void> response = client.add(hashtagDTO);

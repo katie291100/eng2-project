@@ -55,7 +55,7 @@ public class KafkaProductionTest {
 
 
     @Test
-    public void addVideoUser() {
+    public void testAddVideoProduced() {
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video");
 
@@ -72,7 +72,7 @@ public class KafkaProductionTest {
     }
 
     @Test
-    public void likeVideoUser() {
+    public void testLikeVideoProduced() {
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video");
 
@@ -88,7 +88,7 @@ public class KafkaProductionTest {
     }
 
     @Test
-    public void dislikeVideoUser() {
+    public void testDislikeVideoProduced() {
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video");
 

@@ -7,10 +7,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.ClassRule;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.shaded.org.awaitility.Awaitility;
 import uk.ac.york.eng2.cli.clients.HashtagsClient;
@@ -44,6 +41,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests for the {@link TrendingHashtagsCommand} command.
  * Uses test containers to run the microservices.
  */
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @MicronautTest
 public class SubscribeCommandTest {
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -96,6 +95,7 @@ public class SubscribeCommandTest {
     HttpResponse<Void> hashtagResponse = hashtagClient.add(hashtagDTO);
     Long hashtagId = Long.parseLong(hashtagResponse.header("location").split("/")[2]);
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {hashtagId.toString(), "0" };
       PicocliRunner.run(SubscribeCommand.class, ctx, args);
 
@@ -112,6 +112,7 @@ public class SubscribeCommandTest {
     Long userId = Long.parseLong(response.header("location").split("/")[2]);
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"0", userId.toString()};
       PicocliRunner.run(SubscribeCommand.class, ctx, args);
 
@@ -134,6 +135,7 @@ public class SubscribeCommandTest {
     Long hashtagId = Long.parseLong(hashtagResponse.header("location").split("/")[2]);
     sleep(10000);
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {hashtagId.toString(), userId.toString()};
       PicocliRunner.run(SubscribeCommand.class, ctx, args);
 

@@ -26,7 +26,7 @@ public class GetUserCommand implements Runnable {
         if (id != null){
             User user = userClient.getUser(id);
             if (user == null){
-                System.out.println("Video with id " + id + " does not exist");
+                System.out.println("User with id " + id + " does not exist");
                 return;
             }
             System.out.println(user.getId() + " - " + user.getName());

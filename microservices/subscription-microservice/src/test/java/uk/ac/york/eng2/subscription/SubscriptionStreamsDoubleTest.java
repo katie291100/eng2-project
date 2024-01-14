@@ -72,7 +72,7 @@ public class SubscriptionStreamsDoubleTest {
      * Test that the topology is correct at startup.
      */
     @Test
-    public void topologyCheckEmpty() {
+    public void testSubscriptionStreamEmpty() {
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
             TestInputTopic<Long, Video> inputTopic =
                     testDriver.createInputTopic(
@@ -88,7 +88,7 @@ public class SubscriptionStreamsDoubleTest {
      * Test that the topology keeps track of videos correctly when a video is created and a subscription exists.
      */
     @Test
-    public void topologyCheck() {
+    public void testSubscriptionStreamVideoCreatedSubscriptionExists() {
 
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
             TestInputTopic<Long, Video> inputTopic =
@@ -130,10 +130,10 @@ public class SubscriptionStreamsDoubleTest {
     }
 
     /**
-     * Test that the topology keeps track of multipole videos correctly when videos created and a subscription exists.
+     * Test that the topology keeps track of multiple videos correctly when videos created and a subscription exists.
      */
     @Test
-    public void topologyCheckMultiple() {
+    public void testSubscriptionStreamMultipleVideoCreatedSubscriptionExists() {
 
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
             TestInputTopic<Long, Video> inputTopic =
@@ -179,7 +179,7 @@ public class SubscriptionStreamsDoubleTest {
      * Test that the topology keeps track of multipole videos correctly when videos created and a subscription exists.
      */
     @Test
-    public void topologyCheckMultipleBeforeSub() {
+    public void testSubscriptionStreamMultipleVideoCreatedBeforeSubscriptionExistsNotShow() {
 
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
             TestInputTopic<Long, Video> inputTopic =

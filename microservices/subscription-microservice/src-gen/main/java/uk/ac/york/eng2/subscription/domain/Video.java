@@ -17,10 +17,7 @@ public class Video {
 	@ManyToMany(fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Hashtag> hashtags ;
-	@JsonIgnore
-	@ManyToMany(mappedBy="watchedVideos", fetch = FetchType.LAZY)
-    @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<User> watchers ;
+
 
     
     
@@ -48,15 +45,6 @@ public class Video {
 
     public void setHashtags(Set<Hashtag> hashtags) {
         this.hashtags = hashtags;
-    }
-    
-    
-    public Set<User> getWatchers() {
-        return watchers;
-    }
-
-    public void setWatchers(Set<User> watchers) {
-        this.watchers = watchers;
     }
 
     @Override

@@ -6,7 +6,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-@MicronautTest
+@MicronautTest(environments = "no_streams")
 class SubscriptionMicroserviceTest {
 
     @Inject

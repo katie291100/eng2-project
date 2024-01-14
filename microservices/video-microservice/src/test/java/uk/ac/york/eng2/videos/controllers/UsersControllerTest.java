@@ -46,7 +46,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testListUsers() {
+    public void testListUsersUserExists() {
         User user = new User();
         user.setName("test name");
         userRepo.save(user);
@@ -55,7 +55,13 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testGetUser() {
+    public void testListUsersNoUsers() {
+        Iterable<User> users = client.listUser();
+        assertFalse(users.iterator().hasNext());
+    }
+
+    @Test
+    public void testGetUserValidExists() {
         User user = new User();
         user.setName("test name");
         userRepo.save(user);
@@ -64,13 +70,13 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testGetUserNotFound() {
+    public void testGetUserNotFoundError() {
         User user = client.getUser(1L);
         assertNull(user);
     }
 
     @Test
-    public void testGetWatchedByUser() {
+    public void testGetWatchedByUserUserExistsVideoReturned() {
         User user = new User();
         user.setName("test name");
         user = userRepo.save(user);
@@ -90,13 +96,13 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testGetWatchedByUserNotFound() {
+    public void testGetWatchedByUserNotFoundError() {
         Set<Video> videos = client.getWatchedByUser(1L);
         assertNull(videos);
     }
 
     @Test
-    public void testAddUser() {
+    public void testListUsers() {
         UserDTO userDTO = new UserDTO();
         userDTO.setName("test name");
         client.addUser(userDTO);
@@ -130,7 +136,7 @@ public class UsersControllerTest {
 //    }
 
     @Test
-    public void testWatchedVideo() {
+    public void testGetWatchedByUserValidUserValidVideo() {
         User user = new User();
         user.setName("test name");
         user = userRepo.save(user);
@@ -149,7 +155,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testWatchedVideoNotFound() {
+    public void testGetWatchedByUserNotFound() {
         Set<Video> videos = client.getWatchedByUser(1L);
         assertNull(videos);
     }

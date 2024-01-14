@@ -242,13 +242,13 @@
         </controller>
     </microservice>
     <microservice name="trending-hashtag-microservice" port="8081" package="uk.ac.york.eng2.trendingHashtags">
-        <entity name="Hashtag" dto="HashtagDTO">
+        <entity name="Hashtag">
             <entityAttribute name="id" type="Long"/>
             <entityAttribute name="name" type="String" nullable="false"/>
             <entityAttribute name="videos" type="Set(Video)" relationship="ManyToMany" mappedBy="hashtags"/>
 
         </entity>
-        <entity name="Video" dto="VideoDTO">
+        <entity name="Video">
             <entityAttribute name="id" type="Long"/>
             <entityAttribute name="title" type="String" nullable="false"/>
             <entityAttribute name="likes" type="Long"/>
@@ -276,32 +276,21 @@
             </endpoint>
         </controller>
 
-        <dto name="VideoDTO">
-            <attribute name="title" type="String"/>
-            <attribute name="postedBy" type="Long"/>
-            <attribute name="hashtags" type="Set[HashtagDTO]"/>
-
-        </dto>
-        <dto name="HashtagDTO">
-            <attribute name="name" type="String"/>
-        </dto>
     </microservice>
     <microservice name="subscription-microservice" port="8082" package="uk.ac.york.eng2.subscription">
-        <entity name="Video" dto="VideoDTO">
+        <entity name="Video">
             <entityAttribute name="id" type="Long"/>
             <entityAttribute name="title" type="String" nullable="false"/>
             <entityAttribute name="hashtags" type="Set[Hashtag]" fetchType="EAGER" relationship="ManyToMany"/>
-            <entityAttribute name="watchers" type="Set[User]" JsonIgnore="true" relationship="ManyToMany"
-                             mappedBy="watchedVideos"/>
+
         </entity>
-        <entity name="User" dto="UserDTO">
+        <entity name="User">
             <entityAttribute name="id" type="Long"/>
             <entityAttribute name="name" type="String" nullable="false"/>
-            <entityAttribute name="watchedVideos" type="Set(Video)" JsonIgnore="true" relationship="ManyToMany"/>
             <entityAttribute name="subscriptions" type="Set(Hashtag)" JsonIgnore="true" relationship="ManyToMany"
                              fetch="EAGER"/>
         </entity>
-        <entity name="Hashtag" dto="HashtagDTO">
+        <entity name="Hashtag">
             <entityAttribute name="id" type="Long"/>
             <entityAttribute name="name" type="String" nullable="false"/>
             <entityAttribute name="videos" type="Set(Video)" relationship="ManyToMany" mappedBy="hashtags"
@@ -311,18 +300,6 @@
         <repository name="HashtagsRepository" entity="Hashtag"/>
         <repository name="UsersRepository" entity="User"/>
 
-        <dto name="VideoDTO">
-            <attribute name="title" type="String"/>
-            <attribute name="postedBy" type="Long"/>
-            <attribute name="hashtags" type="Set[HashtagDTO]"/>
-
-        </dto>
-        <dto name="UserDTO">
-            <attribute name="name" type="String"/>
-        </dto>
-        <dto name="HashtagDTO">
-            <attribute name="name" type="String"/>
-        </dto>
         <consumer name="subscriptionConsumer" eventStreams="subscribe-hashtag, unsubscribe-hashtag"/>
 
         <consumer name="videoStream" eventStreams="new-video" isStream="True"/>

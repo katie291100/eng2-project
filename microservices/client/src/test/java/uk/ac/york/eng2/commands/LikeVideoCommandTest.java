@@ -10,6 +10,7 @@ import org.junit.ClassRule;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
 import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.clients.VideosClient;
 import uk.ac.york.eng2.cli.commands.LikeVideoCommand;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -87,11 +89,12 @@ public class LikeVideoCommandTest {
   }
 
   @Test
-  public void cannotGetUser() {
+  public void testLikeVideoInvalidUserIdError() {
 
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"0", "0"};
       PicocliRunner.run(LikeVideoCommand.class, ctx, args);
 
@@ -100,11 +103,12 @@ public class LikeVideoCommandTest {
   }
 
   @Test
-  public void cannotGetVideo() {
+  public void testLikeVideoInvalidVideoIdError() {
 
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {userId.toString(), "0"};
       PicocliRunner.run(LikeVideoCommand.class, ctx, args);
 
@@ -114,9 +118,10 @@ public class LikeVideoCommandTest {
 
 
   @Test
-  public void canLike() {
+  public void testLikeVideoValidVideoValidUser() {
     System.setOut(new PrintStream(baos));
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"", "hashtag2"};
       PicocliRunner.run(LikeVideoCommand.class, userId.toString(), videoId.toString());
 

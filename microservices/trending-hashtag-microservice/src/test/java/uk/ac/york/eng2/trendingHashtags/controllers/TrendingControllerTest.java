@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @MicronautTest(transactional = false)
 public class TrendingControllerTest {
@@ -42,8 +43,9 @@ public class TrendingControllerTest {
 
     @AfterAll public void cleanUp() { kStreams.close(); }
 
+    @Order(0)
     @Test
-    public void testOneVideoLiked() throws InterruptedException {
+    public void testListAfterValidVideoHashtag() throws InterruptedException {
         Video video = new Video();
         video.setId(1L);
         Hashtag hashtag = new Hashtag();
@@ -57,35 +59,41 @@ public class TrendingControllerTest {
         assertTrue(result.contains(2L));
     }
 
-
+    @Order(1)
     @Test
-    public void testTwoVideoLiked() throws InterruptedException {
+    public void testListAfterValidVideoHashtagOrderByLikes() throws InterruptedException {
         Video video = new Video();
-        video.setId(1L);
+        video.setId(3L);
         Hashtag hashtag = new Hashtag();
-        hashtag.setId(2L);
-        hashtag.setName("test");
+        hashtag.setId(4L);
+        hashtag.setName("test1");
+        hashtagsRepository.save(hashtag);
         video.setHashtags(Set.of(hashtag));
 
         Video video2 = new Video();
-        video2.setId(2L);
+        video2.setId(5L);
         video2.setTitle("test2");
         Hashtag hashtag2 = new Hashtag();
-        hashtag2.setId(3L);
+        hashtag2.setId(6L);
         hashtag2.setName("test1");
+        hashtagsRepository.save(hashtag2);
         video2.setHashtags(Set.of(hashtag2));
+        sleep(5000);
 
-        testProducerUtil.likeVideo(1L, video);
-        testProducerUtil.likeVideo(1L, video2);
+        testProducerUtil.likeVideo(3L, video);
+        testProducerUtil.likeVideo(5L, video2);
+        testProducerUtil.likeVideo(3L, video);
+        testProducerUtil.likeVideo(5L, video2);
 
         sleep(30000);
         List<Long> result = trendingClient.list();
-        assertEquals(result.contains(2L), true);
-        assertEquals(result.contains(3L), true);
+        assertEquals(result.contains(4L), true);
+        assertEquals(result.contains(6L), true);
     }
 
+    @Order(3)
     @Test
-    public void testMoreThanTenHashtagss() throws InterruptedException {
+    public void testListAfterValidVideoMultipleHashtagOrderByLikes() throws InterruptedException {
         Hashtag hashtag1 = new Hashtag();
         hashtag1.setName("test");
         hashtag1.setId(13L);

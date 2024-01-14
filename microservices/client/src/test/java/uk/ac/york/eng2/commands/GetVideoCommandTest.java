@@ -11,6 +11,7 @@ import org.junit.jupiter.api.*;
 
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
 import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.clients.VideosClient;
 import uk.ac.york.eng2.cli.commands.GetVideoCommand;
@@ -23,6 +24,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -86,10 +88,11 @@ public class GetVideoCommandTest {
   }
 
   @Test
-  public void cannotGetById() {
+  public void testGetVideoByIdInvalidIdError() {
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"-id", "0"};
       PicocliRunner.run(GetVideoCommand.class, ctx, args);
 
@@ -98,10 +101,11 @@ public class GetVideoCommandTest {
   }
 
   @Test
-  public void canGetById() {
+  public void testGetVideoByIdValidId() {
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"-id", videoId.toString()};
       PicocliRunner.run(GetVideoCommand.class, ctx, args);
 
@@ -110,10 +114,11 @@ public class GetVideoCommandTest {
   }
 
   @Test
-  public void canGetByHashtag() {
+  public void testGetVideoByHashtagValid() {
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"-hashtag", "hashtag2"};
       PicocliRunner.run(GetVideoCommand.class, ctx, args);
 
@@ -121,10 +126,11 @@ public class GetVideoCommandTest {
     }
   }
   @Test
-  public void cannotGetByHashtag() {
+  public void testGetVideoByHashtagInvalidError() {
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"-hashtag", "notahashtag"};
       PicocliRunner.run(GetVideoCommand.class, ctx, args);
 
@@ -133,10 +139,11 @@ public class GetVideoCommandTest {
   }
 
   @Test
-  public void cannotGetByUserNotExist() {
+  public void testGetVideoByUserInvalidError() {
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"-postedBy", "0"};
       PicocliRunner.run(GetVideoCommand.class, ctx, args);
 
@@ -145,13 +152,14 @@ public class GetVideoCommandTest {
   }
 
   @Test
-  public void cannotGetByUserNotPosted() {
+  public void testGetVideoByUserValidNoVideosError() {
     System.setOut(new PrintStream(baos));
     UserDTO userDTO = new UserDTO("TestUser2");
     HttpResponse<Void> response = usersClient.add(userDTO);
     Long userIdNew = Long.parseLong(response.header("location").split("/")[2]);
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"-postedBy", userIdNew.toString()};
       PicocliRunner.run(GetVideoCommand.class, ctx, args);
 
@@ -160,10 +168,11 @@ public class GetVideoCommandTest {
   }
 
   @Test
-  public void getByUserPosted() {
+  public void testGetVideoByUserValid() {
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"-postedBy", userId.toString()};
       PicocliRunner.run(GetVideoCommand.class, ctx, args);
 

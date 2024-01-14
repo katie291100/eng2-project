@@ -93,13 +93,13 @@ public class VideosControllerTest {
 
 
     @Test
-    public void testGetNoVideos() {
+    public void testListNoVideos() {
         Iterable<Video> iterBooks = client.list();
         assertFalse(iterBooks.iterator().hasNext());
     }
 
     @Test
-    public void testAddVideo() {
+    public void testAddVideoValidUser() {
         System.out.println("Test add video");
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video");
@@ -115,7 +115,7 @@ public class VideosControllerTest {
     }
 
     @Test
-    public void testAddVideoWithHashtags(){
+    public void testAddVideoWithNewHashtags(){
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video");
         HashSet<HashtagDTO> hashtags = new HashSet<>();
@@ -137,7 +137,7 @@ public class VideosControllerTest {
     }
 
     @Test
-    public void testAddVideoNoUser() {
+    public void testAddVideoNoUserError() {
         VideoDTO videoDTO = new VideoDTO();
         videoDTO.setTitle("Test Video");
 
@@ -152,7 +152,7 @@ public class VideosControllerTest {
     }
 
     @Test
-    public void testGetVideo() {
+    public void testGetVideoValidVideo() {
 
         Video video1 = new Video();
         video1.setTitle("Test Video1");
@@ -229,7 +229,7 @@ public class VideosControllerTest {
 //    }
 
     @Test
-    public void testListVideosByHashtag(){
+    public void testListVideosByHashtagValid(){
         Video video = new Video();
         video.setTitle("Test Video");
         video.setPostedBy(poster);
@@ -252,7 +252,7 @@ public class VideosControllerTest {
     }
 
     @Test
-    public void testListVideosByHashtagNoHashtag(){
+    public void testListVideosByHashtagValidNoHashtag(){
         Video video = new Video();
         video.setTitle("Test Video");
         video.setPostedBy(poster);
@@ -269,7 +269,7 @@ public class VideosControllerTest {
     }
 
     @Test
-    public void testLikeVideo() {
+    public void testLikeVideoValidVideos() {
         Video video = new Video();
         video.setTitle("Test Video");
         video.setPostedBy(poster);
@@ -288,14 +288,14 @@ public class VideosControllerTest {
     }
 
     @Test
-    public void testLikeVideoNoVideo() {
+    public void testLikeVideoInvalidNoVideo() {
         HttpResponse<Void> response = client.likeVideo(1L, poster.getId());
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
     }
 
     @Test
-    public void testLikeVideoNoUser() {
+    public void testLikeVideoInvalidNoUser() {
         Video video = new Video();
         video.setTitle("Test Video");
         video.setPostedBy(poster);
@@ -307,7 +307,7 @@ public class VideosControllerTest {
     }
 
     @Test
-    public void testDislikeVideo() {
+    public void testDislikeVideoValid() {
         Video video = new Video();
         video.setTitle("Test Video");
         video.setPostedBy(poster);
@@ -329,14 +329,14 @@ public class VideosControllerTest {
     }
 
     @Test
-    public void testDislikeVideoNoVideo() {
+    public void testDislikeVideoInvalidNoVideo() {
         HttpResponse<Void> response = client.dislikeVideo(1L, poster.getId());
         assertTrue(dislikeVideo.isEmpty());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatus());
     }
 
     @Test
-    public void testDislikeVideoNoUser() {
+    public void testDislikeVideoInvalidNoUser() {
         Video video = new Video();
         video.setTitle("Test Video");
         video.setPostedBy(poster);

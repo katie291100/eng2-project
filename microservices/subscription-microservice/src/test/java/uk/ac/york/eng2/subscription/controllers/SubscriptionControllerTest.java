@@ -60,7 +60,7 @@ class SubscriptionControllerTest {
 
 
     @Test
-    void listAllVideosSubscription() throws InterruptedException {
+    void testListAllSubscriptionsValid() throws InterruptedException {
 
         Video video = new Video();
         video.setId(1L);
@@ -102,7 +102,7 @@ class SubscriptionControllerTest {
 
 
     @Test
-    void sortedNextVideos() throws InterruptedException {
+    void testSortedNextVideosThreeVideosValid() throws InterruptedException {
         ReadOnlyKeyValueStore<Long, Long> store = new ReadOnlyKeyValueStore<Long, Long>() {
             @Override
             public Long get(Long key) {
@@ -143,7 +143,39 @@ class SubscriptionControllerTest {
 
 
     @Test
-    void sortedNextVideosTooMany() throws InterruptedException {
+    void testSortedNextVideosNoVideosValid() throws InterruptedException {
+        ReadOnlyKeyValueStore<Long, Long> store = new ReadOnlyKeyValueStore<Long, Long>() {
+            @Override
+            public Long get(Long key) {
+
+                return null;
+            }
+
+            @Override
+            public KeyValueIterator<Long, Long> range(Long from, Long to) {
+                return null;
+            }
+
+            @Override
+            public KeyValueIterator<Long, Long> all() {
+                return null;
+            }
+
+            @Override
+            public long approximateNumEntries() {
+                return 0;
+            }
+
+        };
+        ArrayList<Long> list = new ArrayList<>();
+
+        List<Long> sortedList= SubscriptionController.sortedNextVideos(list, store);
+
+        assertTrue(sortedList.isEmpty());
+    }
+
+    @Test
+    void testSortedNextVideosTooManyVideosValid() {
         ReadOnlyKeyValueStore<Long, Long> store = new ReadOnlyKeyValueStore<Long, Long>() {
             @Override
             public Long get(Long key) {
@@ -204,9 +236,9 @@ class SubscriptionControllerTest {
     }
 
     @Test
-    void getSubscription() throws InterruptedException {
+    void testListVideosSubscriptionValid() throws InterruptedException {
         Video video = new Video();
-        video.setId(5L);
+        video.setId(50L);
         Hashtag hashtag = new Hashtag();
         hashtag.setId(6L);
         hashtag.setName("test");
@@ -235,7 +267,7 @@ class SubscriptionControllerTest {
         sleep(20000);
         List<Long> result = subscriptionClient.listVideosSubscription(user.getId(), hashtag.getId());
 
-        assertEquals(List.of(5L, 9L), result);
+        assertEquals(List.of(50L, 9L), result);
     }
 
 
@@ -260,7 +292,7 @@ class SubscriptionControllerTest {
     }
 
     @Test
-    void getSubscriptionDoesNotExist() throws InterruptedException {
+    void testListVideosSubscriptionNoneValid() throws InterruptedException {
 
         Hashtag hashtag = new Hashtag();
         hashtag.setId(12L);
@@ -278,7 +310,7 @@ class SubscriptionControllerTest {
         assertEquals(new ArrayList<>(), result);
     }
     @Test
-    void getSubscriptionUserDoesNotExist() throws InterruptedException {
+    void testListVideosSubscriptionUserInvalidError() throws InterruptedException {
 
         Hashtag hashtag = new Hashtag();
         hashtag.setId(12L);
@@ -291,7 +323,7 @@ class SubscriptionControllerTest {
         assertEquals(null, result);
     }
     @Test
-    void getSubscriptionHashtagDoesNotExist() throws InterruptedException {
+    void testListVideosSubscriptionHashtagInvalidError() throws InterruptedException {
         User user = new User();
         user.setId(14L);
         user.setName("test");
@@ -302,7 +334,7 @@ class SubscriptionControllerTest {
         assertEquals(null, result);
     }
     @Test
-    void subscribe() {
+    void testSubscribeUserHashtagValid() {
         Hashtag hashtag = new Hashtag();
         hashtag.setId(15L);
         hashtag.setName("test");
@@ -323,7 +355,7 @@ class SubscriptionControllerTest {
     }
 
     @Test
-    void unsubscribe() {
+    void testUnsubscribeUserHashtagValid() {
         Hashtag hashtag = new Hashtag();
         hashtag.setId(15L);
         hashtag.setName("test");
@@ -353,7 +385,7 @@ class SubscriptionControllerTest {
 
 
     @Test
-    void listUserSubscriptions() throws InterruptedException {
+    void testListUserSubscriptionsValid() throws InterruptedException {
         Video video = new Video();
         video.setId(17L);
         Hashtag hashtag = new Hashtag();

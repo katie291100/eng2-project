@@ -62,7 +62,7 @@ public class TrendingStreamsDoubleTest {
      * Test that the topology is correct at startup.
      */
     @Test
-    public void topologyCheckEmpty() {
+    public void testTrendingHashtagTopologyEmpty() {
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
             TestInputTopic<Long, Video> inputTopic =
                     testDriver.createInputTopic(
@@ -78,7 +78,7 @@ public class TrendingStreamsDoubleTest {
      * Test that the topology keeps track of likes correctly when a video with one hashtag is liked 3 times.
      */
     @Test
-    public void topologyCheck() {
+    public void testTrendingHashtagTopologyCountLike() {
 
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
             TestInputTopic<Long, Video> inputTopic =
@@ -110,7 +110,7 @@ public class TrendingStreamsDoubleTest {
      */
 
     @Test
-    public void multiHashtagTopologyCheck() {
+    public void testTrendingHashtagTopologyMultipleHashtags() {
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
             TestInputTopic<Long, Video> inputTopic =
                     testDriver.createInputTopic(
@@ -150,7 +150,7 @@ public class TrendingStreamsDoubleTest {
         }
     }
     @Test
-    public void multiWindowTopologyCheck() {
+    public void testTrendingHashtagTopologyMultipleHashtagsWindowed() {
         try (TopologyTestDriver testDriver = new TopologyTestDriver(builder.build(), props)) {
             TestInputTopic<Long, Video> inputTopic =
                     testDriver.createInputTopic(

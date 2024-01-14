@@ -15,10 +15,6 @@ public class User {
     @Column(unique=false, nullable=false, insertable=true, updatable=true, columnDefinition="")    
     private String name ;
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
-    @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
-    private Set<Video> watchedVideos ;
-	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Hashtag> subscriptions ;
@@ -41,16 +37,7 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
-    public Set<Video> getWatchedVideos() {
-        return watchedVideos;
-    }
 
-    public void setWatchedVideos(Set<Video> watchedVideos) {
-        this.watchedVideos = watchedVideos;
-    }
-    
     
     public Set<Hashtag> getSubscriptions() {
         return subscriptions;
