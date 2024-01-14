@@ -18,7 +18,6 @@ public class Video {
     @Column(unique=false, nullable=true, insertable=true, updatable=true, columnDefinition="")    
     private Set<Hashtag> hashtags ;
 
-
     
     
     public Long getId() {

@@ -3,7 +3,6 @@ package uk.ac.york.eng2.subscription.controllers;
 import io.micronaut.http.*;
 import io.micronaut.http.annotation.*;
 import uk.ac.york.eng2.subscription.domain.*;
-import uk.ac.york.eng2.subscription.dto.*;
 import java.util.*;
 
 interface SubscriptionControllerInterface {

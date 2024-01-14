@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @MicronautTest(transactional = false)
 class SubscriptionControllerTest {
 
-    @InjectMocks
     @Inject
     SubscriptionClient  subscriptionClient;
 

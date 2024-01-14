@@ -25,6 +25,17 @@ rule Model2Controller
     parameters: Map{"package"= c.eContainer().package}
 
 }
+//
+////Generates controller interface
+//rule Model2ControllerAbstract
+//	transform c : Controller {
+//
+//	template : "templates/Model2ControllerAbstract.egl"
+//
+//	target : c.eContainer().name + "/src-gen/main/java/" + c.eContainer().getPackageFiles() + "/controllers/"+ c.name.firstToUpperCase()+"Abstract.java"
+//    parameters: Map{"package"= c.eContainer().package}
+//
+//}
 
 //Generates producer
 rule Model2Producer

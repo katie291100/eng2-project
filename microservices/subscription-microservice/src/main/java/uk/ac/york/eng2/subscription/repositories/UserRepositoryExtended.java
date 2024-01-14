@@ -11,7 +11,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepositoryExtended extends UsersRepository {
 
-        @Join(value = "watchedVideos", type = Join.Type.LEFT_FETCH)
         @Join(value = "subscriptions", type = Join.Type.LEFT_FETCH)
         Optional<User> findById(Long id);
         @Join(value = "subscriptions", type = Join.Type.LEFT_FETCH)
