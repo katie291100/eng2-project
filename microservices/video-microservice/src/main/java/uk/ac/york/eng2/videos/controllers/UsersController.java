@@ -70,7 +70,7 @@ public class UsersController {
 //    }
     @Put("/{id}/watchedVideo/{videoId}")
     @Transactional
-    public HttpResponse<Void> watchVideo(long id, long videoId) {
+    public HttpResponse<Void> watchVideo(Long id, Long videoId) {
         User user = repo.findById(id).orElse(null);
         Video video = videoRepo.findById(videoId).orElse(null);
         if (user == null || video == null) {

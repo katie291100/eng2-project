@@ -29,9 +29,10 @@ public class SubscriptionVideosCommand implements Runnable {
     private SubscriptionClient subscriptionClient;
 
     @CommandLine.Parameters(index = "0")
-    private Long userId;
-    @CommandLine.Parameters(index = "1")
     private Long hashtagId;
+    @CommandLine.Parameters(index = "1")
+    private Long userId;
+
 
     @Override
     public void run() {
@@ -49,7 +50,7 @@ public class SubscriptionVideosCommand implements Runnable {
         }
         List<Long> result = subscriptionClient.listVideosSubscription(userId, hashtagId);
         if (result.isEmpty()) {
-            System.out.println("User " + userId + " has no videos to watch for hashtag " + hashtagId + " - #" + hashtag.getName());
+            System.out.println("User " +  userId + " has no videos to watch for hashtag " + hashtagId + " - #" + hashtag.getName());
         }
         else{
             System.out.println("User " + userId + " has the following videos to watch for hashtag " + hashtagId + " - #" + hashtag.getName() + ":");

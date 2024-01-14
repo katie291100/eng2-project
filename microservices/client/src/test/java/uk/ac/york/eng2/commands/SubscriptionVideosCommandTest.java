@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.ComposeContainer;
 import uk.ac.york.eng2.cli.clients.HashtagsClient;
+import uk.ac.york.eng2.cli.clients.SubscriptionClient;
 import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.clients.VideosClient;
 import uk.ac.york.eng2.cli.commands.SubscriptionVideosCommand;
@@ -20,13 +21,16 @@ import uk.ac.york.eng2.cli.commands.TrendingHashtagsCommand;
 import uk.ac.york.eng2.cli.commands.UnsubscribeCommand;
 import uk.ac.york.eng2.cli.dto.HashtagDTO;
 import uk.ac.york.eng2.cli.dto.UserDTO;
+import uk.ac.york.eng2.cli.dto.VideoDTO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Objects;
+import java.util.Set;
 
 import static java.lang.Thread.sleep;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -46,6 +50,9 @@ public class SubscriptionVideosCommandTest {
   @Inject
   HashtagsClient hashtagClient;
 
+  @Inject
+  SubscriptionClient subscriptionClient;
+
 
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
@@ -63,7 +70,6 @@ public class SubscriptionVideosCommandTest {
           return;
       }
       System.out.println("Warning: Not using test containers, using local services, TrendingHashtag tests will likely fail");
-
   }
 
   @BeforeEach
@@ -109,23 +115,48 @@ public class SubscriptionVideosCommandTest {
   }
 
   @Test
-  public void unsubscribeUserHashtag() throws InterruptedException {
+  public void subscriptionVideosUserHashtag() throws InterruptedException {
     System.setOut(new PrintStream(baos));
-    sleep(60000);
 
     UserDTO userDTO = new UserDTO("TestUser");
     HttpResponse<Void> response = userClient.add(userDTO);
     Long userId = Long.parseLong(response.header("location").split("/")[2]);
 
-    HashtagDTO hashtagDTO = new HashtagDTO("test2");
+    UserDTO userDTO2 = new UserDTO("TestUser");
+    HttpResponse<Void> response2 = userClient.add(userDTO2);
+    Long userId2 = Long.parseLong(response2.header("location").split("/")[2]);
+
+    HashtagDTO hashtagDTO = new HashtagDTO("test3");
     HttpResponse<Void> hashtagResponse = hashtagClient.add(hashtagDTO);
     Long hashtagId = Long.parseLong(hashtagResponse.header("location").split("/")[2]);
-    sleep(60000);
+    sleep(10000);
+
+    HttpResponse<Void> r = subscriptionClient.subscribe(hashtagId, userId);
+
+    VideoDTO videoDTO = new VideoDTO();
+    videoDTO.setTitle("test2");
+    videoDTO.setPostedBy(userId2);
+    videoDTO.setHashtags(Set.of(new HashtagDTO("test3")));
+    HttpResponse<Void> videoResponse = videosClient.add(videoDTO);
+    Long videoId = Long.parseLong(videoResponse.header("location").split("/")[2]);
+
+
+    VideoDTO videoDTO2 = new VideoDTO();
+    videoDTO2.setTitle("test3");
+    videoDTO2.setPostedBy(userId2);
+    videoDTO2.setHashtags(Set.of(new HashtagDTO("test3")));
+    HttpResponse<Void> videoResponse2 = videosClient.add(videoDTO);
+    Long videoId2 = Long.parseLong(videoResponse2.header("location").split("/")[2]);
+
+    userClient.watchedVideo(userId2, videoId);
+    sleep(10000);
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       String[] args = new String[] {hashtagId.toString(), userId.toString()};
       PicocliRunner.run(SubscriptionVideosCommand.class, ctx, args);
 
-      assertTrue(baos.toString().contains("Successfully unsubscribed user" + userId + "from hashtag  " + hashtagId + ": #test2\n"));
+      assertTrue(baos.toString().contains("User " + userId + " has the following videos to watch for hashtag " + hashtagId + " - #test3:"));
+      assertTrue(baos.toString().contains("Video " + videoId + " - test2"));
+      assertFalse(baos.toString().contains("Video " + videoId + " - test3"));
     }
   }
   
