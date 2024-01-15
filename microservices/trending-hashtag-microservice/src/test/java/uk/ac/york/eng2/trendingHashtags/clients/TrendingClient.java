@@ -1,4 +1,4 @@
-package uk.ac.york.eng2.trendingHashtags.controllers;
+package uk.ac.york.eng2.trendingHashtags.clients;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;

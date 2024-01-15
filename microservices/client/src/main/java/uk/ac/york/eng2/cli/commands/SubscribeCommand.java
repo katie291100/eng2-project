@@ -28,20 +28,38 @@ public class SubscribeCommand implements Runnable {
 
     @Inject
     private SubscriptionClient subscriptionClient;
-
-    @CommandLine.Parameters(index = "0")
+    @CommandLine.Option(names = "-id")
     private Long hashtagId;
-    @CommandLine.Parameters(index = "1")
+    @CommandLine.Option(names = "-name")
+    private String hashtagName;
+    @CommandLine.Parameters(index = "0")
     private Long userId;
 
 
     @Override
     public void run() {
-
+        if (hashtagId == null && hashtagName == null) {
+            System.out.println("Please provide a hashtag id or name");
+            return;
+        }
         User user = userClient.getUser(userId);
         if (user == null) {
             System.out.println("User with id " + userId + " does not exist");
             return;
+        }
+        if (hashtagId == null) {
+            Iterable<Hashtag> hashtagsAll = hashtagsClient.list();
+
+            for (Hashtag hashtag : hashtagsAll) {
+                if (hashtag.getName().equals(hashtagName)) {
+                    hashtagId = hashtag.getId();
+                    break;
+                }
+            }
+            if (hashtagId == null) {
+                System.out.println("Hashtag with name " + hashtagName + " does not exist");
+                return;
+            }
         }
 
         Hashtag hashtag = hashtagsClient.getHashtag(hashtagId);
@@ -51,10 +69,6 @@ public class SubscribeCommand implements Runnable {
         }
 
         HttpResponse<Void> result = subscriptionClient.subscribe(hashtagId, userId);
-        System.out.println(result);
-        System.out.println(result.code());
-        System.out.println(result.status());
-        System.out.println(result.body());
 
 
         if (result.code() == 201) {

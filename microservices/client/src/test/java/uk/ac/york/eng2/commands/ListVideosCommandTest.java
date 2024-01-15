@@ -39,10 +39,7 @@ public class ListVideosCommandTest {
   UsersClient userClient;
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
-          .withExposedService("video-microservice", 8080, Wait.forHttp("/health").forStatusCode(200))
-          .withLogConsumer("trending-hashtag-microservice", (outputFrame) -> {
-            System.out.println(outputFrame.getUtf8String());
-          });
+          .withExposedService("video-microservice", 8080, Wait.forHttp("/health").forStatusCode(200));
 
   @BeforeAll
   public static void waitForServices() {

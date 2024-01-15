@@ -1,20 +1,20 @@
 # This file has been automatically generated
 [%
-	var volumes : List<String>;
-	volumes=new List;
-	var topics : Set<String>;
-	for (m in s.microservices){
-	    for (p in m.producers){
-	        for (e in p.eventStreams){
-	            topics.add(e.name);
-	        }
-	    }
-	    for (p in m.consumers){
-	        for (e in p.eventStreams){
-	            topics.add(e.name);
-	        }
-	    }
-	}
+  var volumes : List<String>;
+  volumes=new List;
+  var topics : Set<String>;
+  for (m in s.microservices){
+      for (p in m.producers){
+          for (e in p.eventStreams){
+              topics.add(e.name);
+          }
+      }
+      for (p in m.consumers){
+          for (e in p.eventStreams){
+              topics.add(e.name);
+          }
+      }
+  }
 %]
 services:
     kafka-0:
@@ -130,6 +130,11 @@ services:
           MICRONAUT_ENVIRONMENTS: prod
         [%if (m.repositories.size() > 0){%]
           DB_HOST: db-[%=m.name%]
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+          timeout: 10s
+          retries: 3
         depends_on:
           db-[%=m.name%]:
             condition:
@@ -146,14 +151,14 @@ services:
           timeout: 10s
           retries: 3
         [%}%]  
-	[%}%]
-	   
+  [%}%]
+     
     
 volumes:
-	kafka_0_data:
-	kafka_1_data:
-	kafka_2_data:
-    [%for (v in volumes) {%]
-    [%=v%]:
-    [%}%]
+  kafka_0_data:
+  kafka_1_data:
+  kafka_2_data:
+  [%for (v in volumes) {%]
+  [%=v%]:
+  [%}%]
     

@@ -6,6 +6,7 @@ import org.apache.kafka.streams.KafkaStreams;
 
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.*;
+import uk.ac.york.eng2.trendingHashtags.clients.TrendingClient;
 import uk.ac.york.eng2.trendingHashtags.domain.Hashtag;
 import uk.ac.york.eng2.trendingHashtags.domain.Video;
 import uk.ac.york.eng2.trendingHashtags.events.TestProducerUtil;

@@ -111,6 +111,11 @@ services:
           KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
           MICRONAUT_ENVIRONMENTS: prod
           DB_HOST: db-video-microservice
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+          timeout: 10s
+          retries: 3
         depends_on:
           db-video-microservice:
             condition:
@@ -135,6 +140,11 @@ services:
           KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
           MICRONAUT_ENVIRONMENTS: prod
           DB_HOST: db-trending-hashtag-microservice
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+          timeout: 10s
+          retries: 3
         depends_on:
           db-trending-hashtag-microservice:
             condition:
@@ -159,6 +169,11 @@ services:
           KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
           MICRONAUT_ENVIRONMENTS: prod
           DB_HOST: db-subscription-microservice
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+          timeout: 10s
+          retries: 3
         depends_on:
           db-subscription-microservice:
             condition:
@@ -174,13 +189,13 @@ services:
           timeout: 10s
           retries: 3
   
-	   
+     
     
 volumes:
-	kafka_0_data:
-	kafka_1_data:
-	kafka_2_data:
-    mariadb_data-video-microservice:
-    mariadb_data-trending-hashtag-microservice:
-    mariadb_data-subscription-microservice:
+  kafka_0_data:
+  kafka_1_data:
+  kafka_2_data:
+  mariadb_data-video-microservice:
+  mariadb_data-trending-hashtag-microservice:
+  mariadb_data-subscription-microservice:
     

@@ -61,7 +61,7 @@ public class TrendingStreams {
                 .flatMap((key, value) -> {
 
                     if (hashtagsRepository.findById(value.getId()).orElse(null) == null){
-                        hashtagsRepository.save(value); //TODO: check if this is correct, value is id null
+                        hashtagsRepository.save(value);
 
                     }
                     System.out.println("liked-hashtag");
@@ -86,8 +86,6 @@ public class TrendingStreams {
                         windowedHashtagId.window().end()));
 
         stream.selectKey((key, value) -> key.getId()).toTable(materialized);
-
-        stream.to("trending-hashtag", Produced.with(serdeRegistry.getSerde(WindowedIdentifier.class), Serdes.Long()));
 
         return stream;
     }

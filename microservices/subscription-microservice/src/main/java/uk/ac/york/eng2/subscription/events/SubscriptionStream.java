@@ -54,6 +54,11 @@ public class SubscriptionStream {
                         new NewTopic("new-video", 6, (short) 1)
                 ));
             }
+            if (!client.listTopics().names().get().contains("video-output")) {
+                client.createTopics(List.of(
+                        new NewTopic("video-output", 6, (short) 1)
+                ));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

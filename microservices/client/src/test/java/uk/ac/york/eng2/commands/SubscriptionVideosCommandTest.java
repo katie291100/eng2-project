@@ -95,7 +95,7 @@ public class SubscriptionVideosCommandTest {
     Long hashtagId = Long.parseLong(hashtagResponse.header("location").split("/")[2]);
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
-      String[] args = new String[] {hashtagId.toString(), "0" };
+      String[] args = new String[] { "0", "-id", hashtagId.toString() };
       PicocliRunner.run(SubscriptionVideosCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("User with id 0 does not exist\n"));
@@ -112,7 +112,7 @@ public class SubscriptionVideosCommandTest {
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
-      String[] args = new String[] {"0", userId.toString()};
+      String[] args = new String[] {userId.toString(), "-id", "0"};
       PicocliRunner.run(SubscriptionVideosCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("Hashtag with id 0 does not exist\n"));
@@ -159,7 +159,7 @@ public class SubscriptionVideosCommandTest {
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
-      String[] args = new String[] {hashtagId.toString(), userId.toString()};
+      String[] args = new String[] { userId.toString(), "-id", hashtagId.toString()};
       PicocliRunner.run(SubscriptionVideosCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("User " + userId + " has the following videos to watch for hashtag " + hashtagId + " - #test3:"));

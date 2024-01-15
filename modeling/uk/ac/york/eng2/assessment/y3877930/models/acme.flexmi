@@ -67,7 +67,95 @@
             </event>
         </eventStream>
     </eventStreams>
-    <cli name="" microservicesAccessed="video-microservice, trending-hashtag-microservice, subscription-microservice"/>
+    <cli name="Client" microservicesAccessed="video-microservice, trending-hashtag-microservice, subscription-microservice">
+        <command name="AddUser">
+            <attribute>
+                <attribute name="name" type="String"/>
+            </attribute>
+        </command>
+        <command name="DislikeVideo">
+            <attribute>
+                <attribute name="userId" type="Long"/>
+                <attribute name="videoId" type="Long"/>
+            </attribute>
+        </command>
+        <command name="GetUser">
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+        </command>
+        <command name="GetUserSubscriptionCommand">
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+        </command>
+        <command name="GetVideo">
+            <attribute>
+                <attribute name="postedBy" type="Long"/>
+            </attribute>
+            <attribute>
+                <attribute name="hashtag" type="String"/>
+            </attribute>
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+        </command>
+        <command name="GetWatchedByUser">
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+        </command>
+        <command name="LikeVideo">
+            <attribute>
+                <attribute name="videoId" type="Long"/>
+            </attribute>
+        </command>
+        <command name="ListUsers"/>
+        <command name="ListVideos"/>
+        <command name="PostVideo">
+            <attribute>
+                <attribute name="title" type="String"/>
+            </attribute>
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+            <attribute>
+                <attribute name="hashtags" type="List(String)"/>
+            </attribute>
+        </command>
+        <command name="Subscribe">
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+            <attribute>
+                <attribute name="hashtag" type="String"/>
+            </attribute>
+        </command>
+        <command name="Unsubscribe">
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+            <attribute>
+                <attribute name="hashtag" type="String"/>
+            </attribute>
+        </command>
+        <command name="WatchVideo">
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+            <attribute>
+                <attribute name="videoId" type="Long"/>
+            </attribute>
+        </command>
+        <command name = "SubscriptionVideos">
+            <attribute>
+                <attribute name="userId" type="Long"/>
+            </attribute>
+        </command>
+        <command name = "TrendingHashtags"/>
+    </cli>
+
+
     <microservice name="video-microservice" port="8080" package="uk.ac.york.eng2.videos">
         <entity name="Video" dto="VideoDTO">
             <entityAttribute name="id" type="Long" generatedValue="True"/>

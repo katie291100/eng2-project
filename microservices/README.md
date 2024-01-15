@@ -2,6 +2,8 @@
 
 This directory contains the source code for the microservices that make up the video social media system.
 
+For a quickguide on how to run the microservices, see the [QUICKSTART](../QUICKSTART.md) file.
+
 ## Contents
 - [Microservices](#microservices)
   - [Prerequisites](#prerequisites)
@@ -25,9 +27,6 @@ You must have the following installed and active on your system:
 - [Java 17](https://adoptium.net/en-GB/temurin/releases/?version=17)
 - [Gradle](https://gradle.org/)
 - (Recommended) A Java IDE eg. [Intellij](https://www.jetbrains.com/idea/)
-
-The following environment variables can be set  locally:
-- 'USE_TEST_CONTAINERS' - Defaults to true - set to 'false' to use your local docker containers for CLI/integration tests (see below for more info)
 
 Docker Daemon must be running.
 
@@ -465,7 +464,60 @@ Example response:
 
 ## Subscription Service
 
-[//]: # (TODO: Add info here)
+The Subscription Service is responsible for allowing users to subscribe to hashtags. It does this by listening to the `video-posted` topic on Kafka and keeping track of the subscriptions accordingly.
+
+The Subscription Service exposes the following endpoints:
+- [Subscription endpoints](#subscription-endpoints)
+    - [GET `/subscriptions`](#get-subscriptions---list-all-subscriptions)
+    - [PUT `/subscriptions/{hashtagId}/{userId}`](#put-subscriptionshashtagiduserid---subscribe)
+    - [GET `/subscriptions/{userId}/{hashtagId}`](#get-subscriptionsuseridhashtagid---list-videos-subscription)
+    - [DELETE `/subscriptions/{hashtagId}/{userId}`](#delete-subscriptionshashtagiduserid---unsubscribe)
+    - [GET `/subscriptions/user/{userId}`](#get-subscriptionsuseruserid---list-user-subscriptions)  
+
+#### GET '/subscriptions' - List all subscriptions
+Returns a list of all subscriptions in the system. \
+Example Curl Request:
+```shell
+curl -i -X GET http://localhost:8082/subscriptions
+```
+Example response:
+```json
+[
+  {
+    "userId": 1,
+    "hashtagId": 2,
+    "videos": [3,4,5]
+  }
+]
+```
+
+#### PUT `/subscriptions/{hashtagId}/{userId}` - Subscribe
+Subscribes a user with the given `userId` to the hashtag with the given `hashtagId`.
+
+```shell
+curl -i -X PUT http://localhost:8082/subscriptions/1/2
+```
+
+#### GET `/subscriptions/{userId}/{hashtagId}` - List videos subscription
+Returns a list of videos with the given `hashtagId` that the user with the given `userId` is subscribed to.
+
+```shell
+curl -i -X GET http://localhost:8082/subscriptions/1/2
+```
+
+#### DELETE `/subscriptions/{hashtagId}/{userId}` - Unsubscribe
+Unsubscribes a user with the given `userId` from the hashtag with the given `hashtagId`.
+
+```shell
+curl -i -X DELETE http://localhost:8082/subscriptions/1/2
+```
+
+#### GET `/subscriptions/user/{userId}` - List user subscriptions
+Returns a list of hashtags that the user with the given `userId` is subscribed to.
+
+```shell
+curl -i -X GET http://localhost:8082/subscriptions/user/1
+```
 
 
 ## CLI Client Usage

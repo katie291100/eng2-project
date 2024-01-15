@@ -13,6 +13,7 @@ import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import uk.ac.york.eng2.subscription.domain.Hashtag;
 import uk.ac.york.eng2.subscription.domain.User;
 import uk.ac.york.eng2.subscription.events.SubscriptionIdentifier;
+import uk.ac.york.eng2.subscription.events.SubscriptionProducer;
 import uk.ac.york.eng2.subscription.repositories.HashtagsRepositoryExtended;
 import uk.ac.york.eng2.subscription.repositories.UserRepositoryExtended;
 
@@ -33,6 +34,9 @@ public class SubscriptionController implements SubscriptionControllerInterface{
 
     @Inject
     HashtagsRepositoryExtended hashtagsRepository;
+
+    @Inject
+    SubscriptionProducer subscriptionProducer;
 
     @Get("/{userId}/{hashtagId}")
     public List<Long> listVideosSubscription(Long userId, Long hashtagId) {
@@ -89,6 +93,7 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         System.out.println("user: " + user.getSubscriptions());
 
         usersRepository.update(user);
+        subscriptionProducer.subscribeHashtag(userId, hashtag);
         System.out.println("user: " + usersRepository.findById(userId).orElse(null).getSubscriptions());
         return HttpResponse.created(URI.create("/subscription/" + hashtagId + "/" + userId));
     }
@@ -109,8 +114,8 @@ public class SubscriptionController implements SubscriptionControllerInterface{
         Set<Hashtag> subscriptions = user.getSubscriptions();
         subscriptions.remove(hashtag);
         user.setSubscriptions(subscriptions);
-
         usersRepository.update(user);
+        subscriptionProducer.unsubscribeHashtag(userId, hashtag);
         return HttpResponse.ok();
     }
 

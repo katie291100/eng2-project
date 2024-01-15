@@ -1,4 +1,4 @@
-package uk.ac.york.eng2.trendingHashtags.controllers;
+package uk.ac.york.eng2.videos.controllers;
 
 import io.micronaut.http.HttpStatus;
 import io.micronaut.runtime.EmbeddedApplication;
@@ -6,11 +6,11 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
-import uk.ac.york.eng2.trendingHashtags.clients.HealthcheckClient;
+import uk.ac.york.eng2.videos.clients.HealthcheckClient;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MicronautTest(environments = "no_streams")
 class HealthcheckControllerTest {

@@ -27,11 +27,14 @@ public class SubscriptionVideosCommand implements Runnable {
 
     @Inject
     private SubscriptionClient subscriptionClient;
-
-    @CommandLine.Parameters(index = "0")
+    @CommandLine.Option(names = "-id")
     private Long hashtagId;
-    @CommandLine.Parameters(index = "1")
+    @CommandLine.Option(names = "-name")
+    private String hashtagName;
+    @CommandLine.Parameters(index = "0")
     private Long userId;
+
+
 
 
     @Override
@@ -41,6 +44,20 @@ public class SubscriptionVideosCommand implements Runnable {
         if (user == null) {
             System.out.println("User with id " + userId + " does not exist");
             return;
+        }
+        if (hashtagId == null) {
+            Iterable<Hashtag> hashtagsAll = hashtagsClient.list();
+
+            for (Hashtag hashtag : hashtagsAll) {
+                if (hashtag.getName().equals(hashtagName)) {
+                    hashtagId = hashtag.getId();
+                    break;
+                }
+            }
+            if (hashtagId == null) {
+                System.out.println("Hashtag with name " + hashtagName + " does not exist");
+                return;
+            }
         }
 
         Hashtag hashtag = hashtagsClient.getHashtag(hashtagId);

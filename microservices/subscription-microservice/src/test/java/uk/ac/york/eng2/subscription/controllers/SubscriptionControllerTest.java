@@ -9,7 +9,7 @@ import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.*;
-import org.mockito.InjectMocks;
+import uk.ac.york.eng2.subscription.clients.SubscriptionClient;
 import uk.ac.york.eng2.subscription.domain.Hashtag;
 import uk.ac.york.eng2.subscription.domain.User;
 import uk.ac.york.eng2.subscription.domain.Video;
@@ -17,7 +17,6 @@ import uk.ac.york.eng2.subscription.events.TestProducerUtil;
 import uk.ac.york.eng2.subscription.repositories.HashtagsRepositoryExtended;
 import uk.ac.york.eng2.subscription.repositories.UserRepositoryExtended;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -31,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SubscriptionControllerTest {
 
     @Inject
-    SubscriptionClient  subscriptionClient;
+    SubscriptionClient subscriptionClient;
 
     @Inject
     HashtagsRepositoryExtended hashtagsRepository;

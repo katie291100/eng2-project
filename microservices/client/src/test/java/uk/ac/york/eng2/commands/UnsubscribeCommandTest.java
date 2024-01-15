@@ -84,7 +84,7 @@ public class UnsubscribeCommandTest {
     Long hashtagId = Long.parseLong(hashtagResponse.header("location").split("/")[2]);
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
-      String[] args = new String[] {hashtagId.toString(), "0" };
+      String[] args = new String[] { "0", "-id", hashtagId.toString() };
       PicocliRunner.run(UnsubscribeCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("User with id 0 does not exist\n"));
@@ -101,7 +101,7 @@ public class UnsubscribeCommandTest {
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
-      String[] args = new String[] {"0", userId.toString()};
+      String[] args = new String[] {userId.toString(),  "-id","0"};
       PicocliRunner.run(UnsubscribeCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("Hashtag with id 0 does not exist\n"));
@@ -122,7 +122,7 @@ public class UnsubscribeCommandTest {
     sleep(10000);
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
       Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
-      String[] args = new String[] {hashtagId.toString(), userId.toString()};
+      String[] args = new String[] {userId.toString(), "-id", hashtagId.toString()};
       PicocliRunner.run(UnsubscribeCommand.class, ctx, args);
 
       assertTrue(baos.toString().contains("Successfully unsubscribed user " + userId + " from hashtag " + hashtagId));

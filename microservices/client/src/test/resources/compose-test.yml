@@ -45,7 +45,6 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
       MICRONAUT_ENVIRONMENTS: test-client
     healthcheck:
-      # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       timeout: 10s
       retries: 3
