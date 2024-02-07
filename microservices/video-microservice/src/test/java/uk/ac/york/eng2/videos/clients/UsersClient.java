@@ -13,7 +13,7 @@ import java.util.Set;
 @Client("/users")
 public interface UsersClient {
     @Get("/")
-    Iterable<User> list();
+    Iterable<User> listUser();
 
     @Get("/{id}")
     @Transactional
@@ -24,7 +24,7 @@ public interface UsersClient {
     Set<Video> getWatchedByUser(long id);
 
     @Post("/")
-    HttpResponse<Void> add(@Body UserDTO userDetails);
+    HttpResponse<Void> addUser(@Body UserDTO userDetails);
 
 //    @Put("/{id}")
 //    @Transactional

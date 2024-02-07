@@ -1,0 +1,201 @@
+# This file has been automatically generated
+services:
+    kafka-0:
+        image: docker.io/bitnami/kafka:3.6.1
+        restart: unless-stopped
+        environment:
+          # KRaft settings
+          - KAFKA_CFG_NODE_ID=0
+          - KAFKA_CFG_PROCESS_ROLES=controller,broker
+          - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
+          - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
+          # Listeners
+          - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+          - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+          - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+          - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+          - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+          # Default topic settings
+          - KAFKA_CFG_NUM_PARTITIONS=6
+          - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=3
+          # Disable auto-creating topics
+          - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+          # JMX port for metrics
+          - JMX_PORT=9997
+          - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka-0 -Dcom.sun.management.jmxremote.rmi.port=9997
+        volumes:
+          - kafka_0_data:/bitnami/kafka
+        healthcheck:
+          test: [ 'CMD-SHELL', 'unset KAFKA_JMX_OPTS; export JMX_PORT=9999; kafka-topics.sh --bootstrap-server localhost:9092 --topic hc --create --if-not-exists && kafka-topics.sh --bootstrap-server localhost:9092 --topic hc --describe' ]
+          timeout: 10s
+          retries: 3
+    kafka-1:
+        image: docker.io/bitnami/kafka:3.6.1
+        restart: unless-stopped
+        environment:
+          # KRaft settings
+          - KAFKA_CFG_NODE_ID=1
+          - KAFKA_CFG_PROCESS_ROLES=controller,broker
+          - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
+          - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
+          # Listeners
+          - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+          - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+          - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+          - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+          - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+          # Default topic settings
+          - KAFKA_CFG_NUM_PARTITIONS=6
+          - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=3
+          # Disable auto-creating topics
+          - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+          # JMX port for metrics
+          - JMX_PORT=9997
+          - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka-1 -Dcom.sun.management.jmxremote.rmi.port=9997
+        volumes:
+          - kafka_1_data:/bitnami/kafka
+    
+    kafka-2:
+        image: docker.io/bitnami/kafka:3.6.1
+        restart: unless-stopped
+        environment:
+          # KRaft settings
+          - KAFKA_CFG_NODE_ID=2
+          - KAFKA_CFG_PROCESS_ROLES=controller,broker
+          - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
+          - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
+          # Listeners
+          - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+          - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+          - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+          - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+          - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+          # Default topic settings
+          - KAFKA_CFG_NUM_PARTITIONS=6
+          - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=3
+          # Disable auto-creating topics
+          - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+          # JMX port for metrics
+          - JMX_PORT=9997
+          - KAFKA_JMX_OPTS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka-2 -Dcom.sun.management.jmxremote.rmi.port=9997
+        volumes:
+          - kafka_2_data:/bitnami/kafka
+    init-kafka:
+        image: docker.io/bitnami/kafka:3.6.1
+        depends_on:
+          - kafka-0
+        entrypoint: [ '/bin/sh', '-c' ]
+        command: |
+          "
+          # blocks until kafka is reachable
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --list
+    
+          echo -e 'Creating kafka topics'
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-video --replication-factor 3 --partitions 3
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-user --replication-factor 3 --partitions 3
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic dislike-video --replication-factor 3 --partitions 3
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic unsubscribe-hashtag --replication-factor 3 --partitions 3
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic watch-video --replication-factor 3 --partitions 3
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic new-hashtag --replication-factor 3 --partitions 3
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic subscribe-hashtag --replication-factor 3 --partitions 3
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --create --if-not-exists --topic like-video --replication-factor 3 --partitions 3
+          echo -e 'Successfully created the following topics:'
+          kafka-topics.sh --bootstrap-server kafka-0:9092 --list
+          "
+    video-microservice:
+        image: video-microservice:latest
+        restart: unless-stopped
+        ports:
+            - 8080:8080
+        environment:
+          KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+          MICRONAUT_ENVIRONMENTS: prod
+          DB_HOST: db-video-microservice
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+          timeout: 10s
+          retries: 3
+        depends_on:
+          db-video-microservice:
+            condition:
+                service_healthy
+    db-video-microservice:
+        image: mariadb:11
+        restart: unless-stopped
+        volumes:
+          - mariadb_data-video-microservice:/var/lib/mysql
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
+          timeout: 10s
+          retries: 3
+  
+    trending-hashtag-microservice:
+        image: trending-hashtag-microservice:latest
+        restart: unless-stopped
+        ports:
+            - 8081:8080
+        environment:
+          KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+          MICRONAUT_ENVIRONMENTS: prod
+          DB_HOST: db-trending-hashtag-microservice
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+          timeout: 10s
+          retries: 3
+        depends_on:
+          db-trending-hashtag-microservice:
+            condition:
+                service_healthy
+    db-trending-hashtag-microservice:
+        image: mariadb:11
+        restart: unless-stopped
+        volumes:
+          - mariadb_data-trending-hashtag-microservice:/var/lib/mysql
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
+          timeout: 10s
+          retries: 3
+  
+    subscription-microservice:
+        image: subscription-microservice:latest
+        restart: unless-stopped
+        ports:
+            - 8082:8080
+        environment:
+          KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+          MICRONAUT_ENVIRONMENTS: prod
+          DB_HOST: db-subscription-microservice
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+          timeout: 10s
+          retries: 3
+        depends_on:
+          db-subscription-microservice:
+            condition:
+                service_healthy
+    db-subscription-microservice:
+        image: mariadb:11
+        restart: unless-stopped
+        volumes:
+          - mariadb_data-subscription-microservice:/var/lib/mysql
+        healthcheck:
+          # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+          test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
+          timeout: 10s
+          retries: 3
+  
+     
+    
+volumes:
+  kafka_0_data:
+  kafka_1_data:
+  kafka_2_data:
+  mariadb_data-video-microservice:
+  mariadb_data-trending-hashtag-microservice:
+  mariadb_data-subscription-microservice:
+    

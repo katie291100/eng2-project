@@ -7,12 +7,10 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.ClassRule;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
 import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.clients.VideosClient;
 import uk.ac.york.eng2.cli.commands.ListVideosCommand;
@@ -24,10 +22,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @MicronautTest
 public class ListVideosCommandTest {
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -39,11 +39,7 @@ public class ListVideosCommandTest {
   UsersClient userClient;
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
-          .withExposedService("video-microservice", 8080, Wait.forHttp("/healthcheck").forStatusCode(200))
-          .withExposedService("trending-hashtag-microservice", 8081, Wait.forHttp("/healthcheck").forStatusCode(200))
-          .withLogConsumer("trending-hashtag-microservice", (outputFrame) -> {
-            System.out.println(outputFrame.getUtf8String());
-          });
+          .withExposedService("video-microservice", 8080, Wait.forHttp("/health").forStatusCode(200));
 
   @BeforeAll
   public static void waitForServices() {
@@ -63,8 +59,9 @@ public class ListVideosCommandTest {
   public static void stopEnvironment() {
     environment.stop();
   }
+
   @Test
-  public void ListAfterCreateUser() {
+  public void testListVideosWithVideoValid() {
     System.setOut(new PrintStream(baos));
 
     UserDTO userDTO = new UserDTO("TestUser");
@@ -82,6 +79,7 @@ public class ListVideosCommandTest {
 
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       PicocliRunner.run(ListVideosCommand.class, ctx);
       sleep(1000);
       for (Video video : videos) {

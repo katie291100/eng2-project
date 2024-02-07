@@ -1,0 +1,120 @@
+//There 'should' be at least one microservice.
+context `System` {
+    critique AtleastOneMicroservice {
+        check: self.microservices.size() > 0
+        message: "The system must have more than one microservice."
+    }
+     constraint HasName {
+        check: self.name != ""
+        message: "A systen needs a name."
+    }
+}
+
+//Every event stream needs to have at least one publisher and one subscriber (assumption this should be warning).
+context EventStream {
+    critique HasProducer {
+        check: Producer.all.exists(t | t.eventStreams.includes(self))
+        message: "The EventStream " + self.name + " should have one or more producers."
+    }
+    critique HasConsumer {
+        check: Consumer.all.exists(t | t.eventStreams.includes(self))
+        message: "The EventStream " + self.name + " should have one or more consumers."
+    }
+    constraint HasName {
+        check: self.name != ""
+        message: "An eventstream needs a name."
+    }
+}
+
+//Every microservice 'needs' at least one “health” resource using the HTTP GET method and taking no parameters, for reporting if it is working correctly.
+context Microservice {
+    constraint HasHealthcheck {
+        check: self.controllers.exists(c | c.endpoints.exists(e | e.isHealthcheck()))
+        message: "The Microservice " + self.name + " needs a health endpoint (GET, no request paramaters, returns HTTPResponse and starts with 'health')."
+    }
+    constraint HasName {
+        check: self.name != ""
+        message: "A microservice needs a name."
+    }
+}
+
+//Every entity needs an ID attribute.
+context Entity {
+    constraint HasID {
+        check: self.attributes.exists(e | e.name.equals("id"))
+        message: "The entity " + self.name + " needs an id attribute."
+    }
+    constraint HasName {
+        check: self.name != ""
+        message: "The entity needs a name."
+    }
+}
+//Every attribute needs a type
+context Attribute {
+    constraint HasType {
+        check: self.type != ""
+        message: "The attribute " + self.name + " needs a type."
+    }
+    constraint HasName {
+        check: self.name != ""
+        message: "All attributes need a name."
+    }
+}
+
+//Every dto needs a non-empty name
+context DTO {
+    constraint HasName {
+        check: self.name != ""
+        message: "Every DTO needs a name."
+    }
+}
+//Every controller needs a non-empty name
+context Controller {
+    constraint HasName {
+        check: self.name != ""
+        message: "Every controller needs a name."
+    }
+}
+
+//Every Endpoint needs a non-empty name
+context Endpoint {
+    constraint HasName {
+        check: self.name != ""
+        message: "Every Endpoint needs a name."
+    }
+}
+//Every Repository needs a non-empty name
+context Repository {
+    constraint HasName {
+        check: self.name != ""
+        message: "Every Repository needs a name."
+    }
+}
+
+//Every Consumer needs a non-empty name
+context Consumer {
+    constraint HasName {
+        check: self.name != ""
+        message: "Every Consumer needs a name."
+    }
+}
+
+//Every Producer needs a non-empty name
+context Producer {
+    constraint HasName {
+        check: self.name != ""
+        message: "Every Producer needs a name."
+    }
+}
+
+//Every EventStream needs a non-empty name
+context EventStream {
+    constraint HasName {
+        check: self.name != ""
+        message: "Every EventStream needs a name."
+    }
+}
+
+operation Endpoint isHealthcheck() {
+	return (self.type.name == "GET" and self.name.toLowerCase().startsWith("health") and self.requestParams.size==0 and self.responseBody.type.startsWith("HttpResponse"));
+}

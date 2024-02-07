@@ -7,7 +7,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.runtime.EmbeddedApplication;
 import jakarta.inject.Inject;
 
-@Controller("/healthcheck")
+@Controller("/health")
 public class HealthcheckController{
 
     @Inject

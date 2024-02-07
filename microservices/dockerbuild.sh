@@ -44,12 +44,10 @@ cd video-microservice || exit
 echo "Building Docker image for Video Microservice (VM)..."
 ./gradlew dockerBuild
 
-echo "Docker build process completed for all services."
-
-
+cd ..
 # Navigate to the /subscription-microservice directory and build the Docker image
-#cd subscription-microservice || exit
-#echo "Building Docker image for Subscription Microservice (VM)..."
-#./gradlew dockerBuild
-#
-#echo "Docker build process completed for all services."
+cd subscription-microservice || exit
+echo "Building Docker image for Subscription Microservice (VM)..."
+./gradlew dockerBuild
+
+echo "Docker build process completed for all services."

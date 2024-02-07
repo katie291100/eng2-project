@@ -7,18 +7,16 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.runtime.EmbeddedApplication;
 import jakarta.inject.Inject;
 
-@Controller("/healthcheck")
-public class HealthcheckController {
+@Controller("/health")
+public class HealthcheckController implements HealthcheckControllersInterface{
 
     @Inject
     EmbeddedApplication<?> application;
 
-    @Get("/")
-    public HttpResponse<Void> check(){
+    @Override
+    public HttpResponse<Void> health() {
         if (application.isRunning()){
             return HttpResponse.ok();
         }
-        return HttpResponse.serverError();
-    }
-
+        return HttpResponse.serverError();    }
 }

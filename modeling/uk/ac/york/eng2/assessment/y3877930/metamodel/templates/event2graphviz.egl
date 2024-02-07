@@ -1,0 +1,22 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque", colorscheme="pastel19"]
+  	colorscheme="pastel19"
+    cluster=true;
+
+	[%=c.name%] [fillcolor=[% if (isConsumer = true){%]"4" [%if (c.isStream = true) {%]shape="hexagon" [%}%][%}%][%else {%]"3"[%}%]]
+	[%for (a in eventStreams){%]
+		
+	    "[%=a.name%]" [label="[%=a.name%]" shape="box3d"]
+	   
+	    [% if (isConsumer = true){%]
+	       "[%=a.name%]" -> "[%=c.name%]" [ label="([%=a.event.key.type%] [%=a.event.key.name%], \n [%=a.event.value.type%] [%=a.event.value.name%])" color="#082ea1"]
+	    
+	    [%}%]
+	    [%else{%]
+        "[%=c.name%]" -> "[%=a.name%]" [label="([%=a.event.key.type%] [%=a.event.key.name%], \n [%=a.event.value.type%] [%=a.event.value.name%])" color="#082ea1"]	    
+	    [%}%]
+	    
+	[%}%]
+	
+}

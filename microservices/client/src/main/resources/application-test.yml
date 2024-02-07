@@ -17,3 +17,6 @@ users:
 trending:
   url:
     "http://localhost:9081/trendingHashtags"
+subscription:
+  url:
+    "http://localhost:9082/subscriptions"

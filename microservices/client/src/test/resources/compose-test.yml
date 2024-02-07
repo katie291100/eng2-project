@@ -11,8 +11,6 @@ services:
       MARIADB_DATABASE: &dbname videos
     volumes:
       - mariadb_data-test:/var/lib/mysql
-    ports:
-      - 4306:3306
     healthcheck:
       # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
       test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
@@ -27,8 +25,6 @@ services:
       MARIADB_DATABASE: hashtags
     volumes:
       - mariadb_data2-test:/var/lib/mysql
-    ports:
-      - 4307:3306
     healthcheck:
       # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
       test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
@@ -49,8 +45,7 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
       MICRONAUT_ENVIRONMENTS: test-client
     healthcheck:
-      # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
-      test: ["CMD", "curl", "-f", "http://localhost:8080/healthcheck"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       timeout: 10s
       retries: 3
     depends_on:
@@ -60,7 +55,7 @@ services:
   trending-hashtag-microservice:
     image: trending-hashtag-microservice:latest
     ports:
-      - 9081:8081
+      - 9081:8080
     environment:
       DB_HOST:  db2-test
       DB_USER: *dbuser
@@ -70,14 +65,47 @@ services:
       MICRONAUT_ENVIRONMENTS: test-client
     healthcheck:
       # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
-      test: [ "CMD", "curl", "-f", "http://localhost:8081/healthcheck" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
       timeout: 10s
       retries: 3
     depends_on:
       db2-test:
         condition: service_healthy
-
-
+  subscription-microservice:
+    image: subscription-microservice:latest
+    ports:
+      - 9082:8080
+    environment:
+      DB_HOST: db3-test
+      DB_USER: *dbuser
+      DB_PASSWORD: *dbpass
+      DB_NAME: subscription
+      KAFKA_BOOTSTRAP_SERVERS: kafka-0:9092,kafka-1:9092,kafka-2:9092
+      MICRONAUT_ENVIRONMENTS: test-client
+    healthcheck:
+      # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      timeout: 10s
+      retries: 3
+    depends_on:
+      db3-test:
+        condition: service_healthy
+  db3-test:
+    image: mariadb:11
+    environment:
+      MARIADB_USER: *dbuser
+      MARIADB_PASSWORD: *dbpass
+      MARIADB_ROOT_PASSWORD: iamroot
+      MARIADB_DATABASE: subscription
+    volumes:
+      - mariadb_data3-test:/var/lib/mysql
+    healthcheck:
+      # https://github.com/docker-library/healthcheck/blob/master/mysql/Dockerfile.mariadb
+      test: [ 'CMD', 'healthcheck.sh', '--su=mysql', '--connect', '--innodb_initialized' ]
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - db-test
   kafka-0:
     image: docker.io/bitnami/kafka:3.6.1
     restart: unless-stopped
@@ -159,3 +187,4 @@ volumes:
   kafka_1_data-test:
   kafka_2_data-test:
   mariadb_data2-test:
+  mariadb_data3-test:

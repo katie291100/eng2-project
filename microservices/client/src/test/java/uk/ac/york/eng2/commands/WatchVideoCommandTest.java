@@ -10,6 +10,7 @@ import org.junit.ClassRule;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
 import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.clients.VideosClient;
 import uk.ac.york.eng2.cli.commands.WatchVideoCommand;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -40,8 +42,8 @@ public class WatchVideoCommandTest {
 
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
-          .withExposedService("video-microservice", 8080, Wait.forHttp("/healthcheck").forStatusCode(200))
-          .withExposedService("trending-hashtag-microservice", 8081, Wait.forHttp("/healthcheck").forStatusCode(200))
+          .withExposedService("video-microservice", 8080, Wait.forHttp("/health").forStatusCode(200))
+          .withExposedService("trending-hashtag-microservice", 8080, Wait.forHttp("/health").forStatusCode(200))
           .withLogConsumer("trending-hashtag-microservice", (outputFrame) -> {
             System.out.println(outputFrame.getUtf8String());
           });
@@ -87,11 +89,12 @@ public class WatchVideoCommandTest {
   }
 
   @Test
-  public void cannotGetUser() {
+  public void testWatchVideoInvalidUserError() {
 
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"0", "0"};
       PicocliRunner.run(WatchVideoCommand.class, ctx, args);
 
@@ -100,11 +103,12 @@ public class WatchVideoCommandTest {
   }
 
   @Test
-  public void cannotGetVideo() {
+  public void testWatchVideoInvalidVideoError() {
 
     System.setOut(new PrintStream(baos));
 
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {userId.toString(), "0"};
       PicocliRunner.run(WatchVideoCommand.class, ctx, args);
 
@@ -114,9 +118,10 @@ public class WatchVideoCommandTest {
 
 
   @Test
-  public void canLike() {
+  public void testWatchVideoValid() {
     System.setOut(new PrintStream(baos));
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       PicocliRunner.run(WatchVideoCommand.class, userId.toString(), videoId.toString());
 
       assertTrue(baos.toString().contains("Successfully watched video with id " + videoId));

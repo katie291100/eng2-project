@@ -11,22 +11,22 @@ import java.util.Set;
 import uk.ac.york.eng2.videos.domain.*;
 import uk.ac.york.eng2.videos.dto.*;
 import uk.ac.york.eng2.videos.events.UserProducer;
-import uk.ac.york.eng2.videos.repositories.UsersRepository;
-import uk.ac.york.eng2.videos.repositories.VideosRepository;
+import uk.ac.york.eng2.videos.repositories.UsersRepositoryExtended;
+import uk.ac.york.eng2.videos.repositories.VideosRepositoryExtended;
 
 @Controller("/users")
 public class UsersController {
     @Inject
-    private UsersRepository repo;
+    private UsersRepositoryExtended repo;
 
     @Inject
-    private VideosRepository videoRepo;
+    private VideosRepositoryExtended videoRepo;
 
     @Inject
     private UserProducer kafkaClient;
 
     @Get("/")
-    public Iterable<User> list() {
+    public Iterable<User> listUsers() {
         return repo.findAll();
     }
 
@@ -48,7 +48,7 @@ public class UsersController {
 
     @Post("/")
     @Transactional
-    public HttpResponse<Void> add(@Body UserDTO userDetails) {
+    public HttpResponse<Void> addUser(@Body UserDTO userDetails) {
         User newUser = new User();
         newUser.setName(userDetails.getName());
         repo.save(newUser);
@@ -70,13 +70,15 @@ public class UsersController {
 //    }
     @Put("/{id}/watchedVideo/{videoId}")
     @Transactional
-    public HttpResponse<Void> watchVideo(long id, long videoId) {
+    public HttpResponse<Void> watchVideo(Long id, Long videoId) {
         User user = repo.findById(id).orElse(null);
         Video video = videoRepo.findById(videoId).orElse(null);
         if (user == null || video == null) {
             return HttpResponse.notFound();
         }
-        user.addWatchedVideo(video);
+        Set<Video> videosWatchedByUser = user.getWatchedVideos();
+        videosWatchedByUser.add(video);
+        user.setWatchedVideos(videosWatchedByUser);
         repo.save(user);
         kafkaClient.watchVideo(user.getId(), video);
         return HttpResponse.ok();

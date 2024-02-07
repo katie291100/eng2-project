@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
@@ -18,20 +17,23 @@ import uk.ac.york.eng2.videos.dto.HashtagDTO;
 import uk.ac.york.eng2.videos.dto.VideoDTO;
 import uk.ac.york.eng2.videos.events.HashtagProducer;
 import uk.ac.york.eng2.videos.events.VideoProducer;
-import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
-import uk.ac.york.eng2.videos.repositories.UsersRepository;
-import uk.ac.york.eng2.videos.repositories.VideosRepository;
+import uk.ac.york.eng2.videos.repositories.HashtagsRepositoryExtended;
+import uk.ac.york.eng2.videos.repositories.UsersRepositoryExtended;
+import uk.ac.york.eng2.videos.repositories.VideosRepositoryExtended;
 
 @Controller("/videos")
 public class VideosController {
     @Inject
-    private VideosRepository repo;
+    private VideosRepositoryExtended repo;
     @Inject
-    private UsersRepository userRepo;
+    private UsersRepositoryExtended userRepo;
     @Inject
     private VideoProducer kafkaClient;
     @Inject
-    private HashtagsRepository hashtagRepo;
+    private HashtagsRepositoryExtended hashtagRepo;
+
+    @Inject
+    private HashtagProducer hashtagProducer;
 
     @Get("/")
     public List<Video> listVideos() {
@@ -81,6 +83,7 @@ public class VideosController {
                     hashtagEntity = new Hashtag();
                     hashtagEntity.setName(hashtag.getName());
                     hashtagRepo.save(hashtagEntity);
+                    hashtagProducer.newHashtag(hashtagEntity.getId(), hashtagEntity);
                 }
                 hashtags.add(hashtagEntity);
             }
@@ -97,7 +100,7 @@ public class VideosController {
 
         video.setPostedBy(poster);
         repo.save(video);
-        kafkaClient.postVideo(video.getPostedBy().getId(), video);
+        kafkaClient.newVideo(video.getPostedBy().getId(), video);
         return HttpResponse.created(URI.create("/Video/" + video.getId()));
     }
 //

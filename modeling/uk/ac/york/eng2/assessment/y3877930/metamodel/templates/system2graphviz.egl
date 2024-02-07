@@ -1,0 +1,68 @@
+digraph G {
+    node[shape=rectangle, fontname=Tahoma, fontsize=10, style="filled",
+        gradientangle="270", fillcolor="bisque"]
+    rankdir="TB"
+		[%for (m in microservices){%]
+		 "[%=m.name%]" [label = "[%=m.name%]" fillcolor="azure2"]
+		[%}%]
+	    [%for (c in s.clis){%]
+	        "[%=c.name%]" [label = "[%=c.name%]" fillcolor="#c9fff3"]
+	        [%for (am in c.microservicesAccessed){%]
+	           "[%=am.name%]" -> "[%=c.name%]" [color="green"  style="dashed"]
+	        [%}%]
+	    [%}%]
+
+    	 subgraph kafka {
+	  	cluster=true;
+	    color="9";
+	    label="Topics"
+		[%for (m in microservices){%]
+
+			 
+			 [%for (e in m.producers){%]
+			 	[%for (t in e.eventStreams){%]
+			 		"[%=t.name%]" [shape="box3d"]
+			 		
+			 	[%}%]
+			 [%}%]
+			 [%for (e in m.consumers){%]
+			 	[%for (t in e.eventStreams){%]
+			 		"[%=t.name%]"[shape="box3d"] 		
+			 	[%}%]
+			 [%}%]
+			 
+			
+		[%}%]	
+		}	
+		[%for (m in microservices){%]
+
+			 
+			 [%for (e in m.producers){%]
+			 	[%for (t in e.eventStreams){%]
+			 		"[%=m.name%]" -> "[%=t.name%]" [color="#082ea1" style="dashed"]
+			 		
+			 	[%}%]
+			 [%}%]
+			 [%for (e in m.consumers){%]
+			 	[%for (t in e.eventStreams){%]
+			 		"[%=t.name%]" -> "[%=m.name%]" [color="#082ea1"  style="dashed"]
+			 		
+			 	[%}%]
+			 [%}%]
+			 
+			
+		[%}%]	
+		
+}
+
+[%
+operation isLayerActive(id : String) {
+    var layer = layers.selectOne(l|l.id = id);
+    if (layer.isDefined()) {
+        return layer.active;
+    }
+    else {
+        return true;
+    }
+}
+%]

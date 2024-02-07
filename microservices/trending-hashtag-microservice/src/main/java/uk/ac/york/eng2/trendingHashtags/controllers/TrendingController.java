@@ -6,6 +6,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import jakarta.inject.Inject;
 import jakarta.persistence.Tuple;
+import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.apache.kafka.streams.state.ValueAndTimestamp;
@@ -15,26 +16,22 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller("/trendingHashtags")
-public class TrendingController {
+public class TrendingController implements TrendingControllerInterface{
     
     @Inject
     InteractiveQueryService interactiveQueryService;
 
     @Get("/")
-    public List<Long> list() {
-        System.out.println("TrendingController.list() starting");
+    public List<Long> listAll() {
         ReadOnlyKeyValueStore<Long, ValueAndTimestamp<Long>>  queryableStore = getStore();
         HashMap<Long, Long> values = new HashMap<>();
-        System.out.println("TrendingController.list() starting2");
 
         queryableStore.all().forEachRemaining((keyValue) -> {
             values.put(keyValue.key, keyValue.value.value());
         });
-        System.out.println("TrendingController.list() starting3");
 
         List<Long> keys = new ArrayList<>(values.keySet());
         keys.sort((o1, o2) -> values.get(o2).compareTo(values.get(o1)));
-        System.out.println("TrendingController.list() starting4");
 
         if (values.keySet().size() > 10) {
             return keys.subList(0,10);

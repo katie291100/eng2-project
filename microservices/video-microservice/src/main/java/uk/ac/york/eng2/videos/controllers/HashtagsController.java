@@ -8,12 +8,9 @@ import io.micronaut.http.annotation.Post;
 import jakarta.inject.Inject;
 
 import uk.ac.york.eng2.videos.domain.Hashtag;
-import uk.ac.york.eng2.videos.domain.User;
 import uk.ac.york.eng2.videos.dto.HashtagDTO;
-import uk.ac.york.eng2.videos.dto.UserDTO;
 import uk.ac.york.eng2.videos.events.HashtagProducer;
-import uk.ac.york.eng2.videos.repositories.HashtagsRepository;
-import uk.ac.york.eng2.videos.repositories.UsersRepository;
+import uk.ac.york.eng2.videos.repositories.HashtagsRepositoryExtended;
 
 import java.net.URI;
 
@@ -21,13 +18,13 @@ import java.net.URI;
 public class HashtagsController {
 
     @Inject
-    HashtagsRepository repo;
+    HashtagsRepositoryExtended repo;
 
     @Inject
     HashtagProducer kafkaClient;
 
     @Get("/")
-    public Iterable<Hashtag> list() {
+    public Iterable<Hashtag> listHashtags() {
         return repo.findAll();
     }
 

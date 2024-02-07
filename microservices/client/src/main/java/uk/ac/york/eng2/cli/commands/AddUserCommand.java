@@ -20,7 +20,7 @@ public class AddUserCommand implements Runnable {
 
     @Override
     public void run() {
-        UserDTO newUser = new UserDTO("testUser");
+        UserDTO newUser = new UserDTO(name);
         HttpResponse<Void> result = client.add(newUser);
         Long userId = result.code() == HttpStatus.CREATED.getCode() ? Long.parseLong(result.header("location").split("/")[2]) : null;
 

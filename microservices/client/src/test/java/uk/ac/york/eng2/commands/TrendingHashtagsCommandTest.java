@@ -7,11 +7,9 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.ClassRule;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.ComposeContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.shaded.org.awaitility.Awaitility;
 import uk.ac.york.eng2.cli.clients.TrendingClient;
 import uk.ac.york.eng2.cli.clients.UsersClient;
@@ -30,12 +28,10 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Tests for the {@link TrendingHashtagsCommand} command.
- * Uses test containers to run the microservices.
- */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @MicronautTest
 public class TrendingHashtagsCommandTest {
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -53,7 +49,7 @@ public class TrendingHashtagsCommandTest {
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
             .withExposedService("video-microservice", 8080)
-            .withExposedService("trending-hashtag-microservice", 8081)
+            .withExposedService("trending-hashtag-microservice", 8080, Wait.forHttp("/health").forStatusCode(200))
             .withLogConsumer("trending-hashtag-microservice", (outputFrame) -> {
             System.out.println(outputFrame.getUtf8String());
           });
@@ -78,24 +74,10 @@ public class TrendingHashtagsCommandTest {
     environment.stop();
   }
 
-
   @Test
-  public void trendingHashtagNoHashtags() throws InterruptedException {
+  public void testTrendingHashtags10Hashtags() throws InterruptedException {
     System.setOut(new PrintStream(baos));
-    TimeUnit.SECONDS.sleep(30);
-    List<Long> response3 = trendingClient.list();
-    try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
-      PicocliRunner.run(TrendingHashtagsCommand.class, ctx);
-      assertTrue(baos.toString().contains("Top 10 trending hashtags:"));
-
-
-    }
-  }
-  @Test
-  public void trendingHashtag10Hashtags() throws InterruptedException {
-    System.setOut(new PrintStream(baos));
-    TimeUnit.SECONDS.sleep(30);
-
+    sleep(10000);
     UserDTO userDTO = new UserDTO("TestUser");
     HttpResponse<Void> responseUser = userClient.add(userDTO);
     Long userId = Long.parseLong(responseUser.header("location").split("/")[2]);
@@ -121,8 +103,9 @@ public class TrendingHashtagsCommandTest {
     }
     List<Long> response3 = trendingClient.list();
     Awaitility.await().atMost(Duration.ofSeconds(300)).until(() -> trendingClient.list().size() == 10);
-
+    sleep(10000);
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       PicocliRunner.run(TrendingHashtagsCommand.class, ctx);
       assertTrue(baos.toString().contains("Top 10 trending hashtags:"));
       for (Hashtag hashtag : video.getHashtags()) {

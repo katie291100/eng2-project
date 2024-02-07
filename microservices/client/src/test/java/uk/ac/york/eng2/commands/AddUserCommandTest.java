@@ -3,15 +3,14 @@ package uk.ac.york.eng2.commands;
 import io.micronaut.configuration.picocli.PicocliRunner;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.env.Environment;
+import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.ClassRule;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
 import uk.ac.york.eng2.cli.clients.UsersClient;
 import uk.ac.york.eng2.cli.commands.AddUserCommand;
 
@@ -19,11 +18,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @MicronautTest
 public class AddUserCommandTest {
+
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
   @Inject
@@ -32,8 +35,8 @@ public class AddUserCommandTest {
 
   @ClassRule
   public static ComposeContainer environment = new ComposeContainer(new File("src/test/resources/compose-test.yml"))
-          .withExposedService("video-microservice", 8080, Wait.forHttp("/healthcheck").forStatusCode(200))
-          .withExposedService("trending-hashtag-microservice", 8081, Wait.forHttp("/healthcheck").forStatusCode(200))
+          .withExposedService("video-microservice", 8080, Wait.forHttp("/health").forStatusCode(200))
+          .withExposedService("trending-hashtag-microservice", 8080, Wait.forHttp("/health").forStatusCode(200))
           .withLogConsumer("trending-hashtag-microservice", (outputFrame) -> {
             System.out.println(outputFrame.getUtf8String());
           });
@@ -58,10 +61,10 @@ public class AddUserCommandTest {
     environment.stop();
   }
   @Test
-  public void canCreateUser() {
+  public void testAddUserValidUserCanCreate() {
     System.setOut(new PrintStream(baos));
-
     try (ApplicationContext ctx = ApplicationContext.run(Environment.CLI, Environment.TEST)) {
+      Awaitility.await().atMost(30, TimeUnit.SECONDS).until(ctx::isRunning);
       String[] args = new String[] {"Test User"};
       PicocliRunner.run(AddUserCommand.class, ctx, args);
       assertTrue(baos.toString().contains("Successfully created user with name Test User\n" +
